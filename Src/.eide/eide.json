@@ -3,7 +3,6 @@
   "type": "ARM",
   "dependenceList": [],
   "srcDirs": [
-    "Test/Src",
     "Library/Src",
     "Core",
     "Drivers"
@@ -62,8 +61,7 @@
           "Drivers/STM32H7xx_HAL_Driver/Inc/Legacy",
           "Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "Drivers/CMSIS/Include",
-          "Library/Inc",
-          "Test/Inc"
+          "Library/Inc"
         ],
         "libList": [],
         "defineList": [
