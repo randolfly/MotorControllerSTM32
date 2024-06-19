@@ -24,7 +24,7 @@ static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
 static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs);
 static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len);
 
-static int16_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len);
+static int32_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len);
 static uint16_t get_unparsed_frame_len(uint16_t frame_len, uint16_t buff_len, uint16_t start, uint16_t end);
 static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len);
 static void buf_put_data(uint8_t *buf, uint16_t ring_buf_len, uint16_t w_ofs, uint8_t *data, uint16_t data_len);
@@ -249,9 +249,9 @@ static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_l
  * @param  buf_len: buffer length
  * @param  start: start index of the buffer
  * @param  target_len: target length of the frame(need to find)
- * @return int16_t: -1: not found, other: found index
+ * @return int32_t: -1: not found, other: found index
  */
-static int16_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len)
+static int32_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len)
 {
     uint16_t i = 0;
     for (i = 0; i < (target_len - 3); i++) {
@@ -276,7 +276,7 @@ static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
     uint16_t cmd                     = NULL_CMD;
     protocol_frame_parsed_result.cmd = cmd;
     uint16_t unparsed_len            = 0;
-    int16_t header_ofs               = -1;
+    int32_t header_ofs               = -1;
     uint8_t checksum                 = 0;
 
     unparsed_len = get_unparsed_frame_len(parser.frame_len, PROTOCOL_RECURSIVE_BUFFER_SIZE, parser.read_offset, parser.write_offset);
