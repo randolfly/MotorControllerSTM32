@@ -1,5 +1,4 @@
 #include "protocol.h"
-#include <string.h>
 #include <stdio.h>
 
 #ifdef TEST

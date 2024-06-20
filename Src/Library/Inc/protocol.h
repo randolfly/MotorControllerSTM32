@@ -13,6 +13,7 @@
 
 // defined for non-stm32 project
 #include "type_def_protocol.h"
+#include <string.h>
 
 #ifdef STM32H743xx
 #include "main.h"

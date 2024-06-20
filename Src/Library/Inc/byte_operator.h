@@ -11,7 +11,12 @@
 #ifndef __BYTE_OPERATOR_H__
 #define __BYTE_OPERATOR_H__
 
+#include <string.h>
 #include "type_def_protocol.h"
+
+#ifdef STM32H743xx
+#include "main.h"
+#endif
 
 /**
  * @brief transfer float to uint8_t array
