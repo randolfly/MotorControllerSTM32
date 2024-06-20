@@ -17,7 +17,7 @@ static protocol_frame protocol_frame_parsed_result = {0};
 static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest);
 static void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest);
 static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest);
-static uint8_t get_frame_data(uint8_t *buf, uint16_t r_ofs, unsigned int index);
+static uint8_t get_frame_data(uint8_t *buf, uint16_t r_ofs, uint16_t index);
 static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs);
 static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs);
 static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
@@ -177,7 +177,7 @@ static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest)
  * @param  index: index of the data in the frame
  * @return uint8_t: data value
  */
-static uint8_t get_frame_data(uint8_t *buf, uint16_t r_ofs, unsigned int index)
+static uint8_t get_frame_data(uint8_t *buf, uint16_t r_ofs, uint16_t index)
 {
     return buf[(r_ofs + index) % PROTOCOL_RECURSIVE_BUFFER_SIZE] & 0xFF;
 }
@@ -323,7 +323,7 @@ static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
                                       PROTOCOL_RECURSIVE_BUFFER_SIZE - parser.read_offset);
         checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer, parser.frame_len - PROTOCOL_FRAME_CHECKSUM_SIZE + parser.read_offset - PROTOCOL_RECURSIVE_BUFFER_SIZE);
     } else {
-        checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer + parser.read_offset, parser.frame_len - PROTOCOL_RECURSIVE_BUFFER_SIZE);
+        checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer + parser.read_offset, parser.frame_len - PROTOCOL_FRAME_CHECKSUM_SIZE);
     }
 
     uint8_t tmp_checksum = 0;
@@ -340,8 +340,8 @@ static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
             memcpy(data, parser.recursive_buffer_pointer + parser.read_offset, parser.frame_len);
         }
         *data_len = parser.frame_len;
-        cmd       = get_frame_cmd(parser.recursive_buffer_pointer, parser.read_offset);
-        deserialize_frame_data_from_dest(parser.recursive_buffer_pointer + parser.read_offset,
+        cmd       = get_frame_cmd(data, 0);
+        deserialize_frame_data_from_dest(data,
                                          &protocol_frame_parsed_result);
         parser.read_offset = (parser.read_offset + parser.frame_len) % PROTOCOL_RECURSIVE_BUFFER_SIZE;
     } else {

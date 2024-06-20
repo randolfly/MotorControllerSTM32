@@ -1,1 +1,21 @@
 [
+{
+  "directory": "d:\\doc\\code\\C\\MotorControllerSTM32\\Src",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/ILibrary\\Inc", "/ITest\\Inc", "/DTEST", "/DNON_STM32", "/DNDEBUG", "/Fobuild\\.objs\\test-byte_operator\\windows\\x64\\release\\Library\\Src\\byte_operator.c.obj", "Library\\Src\\byte_operator.c", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt", "-imsvc", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include"],
+  "file": "Library\\Src\\byte_operator.c"
+},
+{
+  "directory": "d:\\doc\\code\\C\\MotorControllerSTM32\\Src",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/ILibrary\\Inc", "/ITest\\Inc", "/DTEST", "/DNON_STM32", "/DNDEBUG", "/Fobuild\\.objs\\test-byte_operator\\windows\\x64\\release\\Test\\Src\\byte_operator_test.c.obj", "Test\\Src\\byte_operator_test.c", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt", "-imsvc", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include"],
+  "file": "Test\\Src\\byte_operator_test.c"
+},
+{
+  "directory": "d:\\doc\\code\\C\\MotorControllerSTM32\\Src",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/ILibrary\\Inc", "/ITest\\Inc", "/DTEST", "/DNON_STM32", "/DNDEBUG", "/Fobuild\\.objs\\test-protocol\\windows\\x64\\release\\Library\\Src\\protocol.c.obj", "Library\\Src\\protocol.c", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt", "-imsvc", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include"],
+  "file": "Library\\Src\\protocol.c"
+},
+{
+  "directory": "d:\\doc\\code\\C\\MotorControllerSTM32\\Src",
+  "arguments": ["C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/ILibrary\\Inc", "/ITest\\Inc", "/DTEST", "/DNON_STM32", "/DNDEBUG", "/Fobuild\\.objs\\test-protocol\\windows\\x64\\release\\Test\\Src\\protocol_test.c.obj", "Test\\Src\\protocol_test.c", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt", "-imsvc", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include"],
+  "file": "Test\\Src\\protocol_test.c"
+}]
