@@ -31,12 +31,29 @@ MU_TEST(uint8_array_to_float_test)
     mu_check(test_float == 1.0f);
 }
 
+MU_TEST(uint8_array_float_array_convert_test)
+{
+    float eps = 1e-5;
+    // the latter test can be carried with random float array
+    float float_array[] = {1.0f, 1e-8f, 0.1f, 0.001f, 1.0f, 0.0f, 22222.29f, 1990129012121.4f, 211212e10f};
+    // uint8_t size_float_array                  = sizeof(float_array) / sizeof(float_array[0]);
+    float test_array[9]        = {0};
+    uint8_t uint8_array[9 * 4] = {0};
+    float_array_to_uint8_array(float_array, uint8_array, 9);
+    uint8_array_to_float_array(uint8_array, test_array, 9 * 4);
+
+    for (uint16_t i = 0; i < 9; i++) {
+        mu_check(abs(float_array[i] - test_array[i]) < eps);
+    }
+}
+
 MU_TEST_SUITE(test_suite)
 {
     MU_SUITE_CONFIGURE(&test_setup, &test_teardown);
 
     MU_RUN_TEST(float_to_uint8_array_test);
     MU_RUN_TEST(uint8_array_to_float_test);
+    MU_RUN_TEST(uint8_array_float_array_convert_test);
 }
 
 int main()

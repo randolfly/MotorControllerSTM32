@@ -31,4 +31,20 @@ void float_to_uint8_array(float src_float, uint8_t *dst);
  */
 float uint8_array_to_float(uint8_t *src_byte_array);
 
+/**
+ * @brief transfer float array to uint8_t array
+ * @param  src_float_array: src float array
+ * @param  dst: target uint8_t array
+ * @param  len: length of float array
+ */
+void float_array_to_uint8_array(float *src_float_array, uint8_t *dst, uint16_t float_len);
+
+/**
+ * @brief transfer float array to uint8_t array
+ * @param  src_byte_array: src byte array
+ * @param  dst: target float array
+ * @param  len: length of byte array
+ */
+void uint8_array_to_float_array(uint8_t *src_byte_array, float *dst, uint16_t byte_len);
+
 #endif // !__BYTE_OPERATOR_H__
