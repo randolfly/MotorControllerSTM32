@@ -48,30 +48,14 @@ void protocol_data_receive(uint8_t *data, uint16_t len)
     parser.write_offset = (parser.write_offset + len) % PROTOCOL_RECURSIVE_BUFFER_SIZE;
 }
 
-int32_t protocol_data_handler(void)
+uint16_t protocol_data_handler(void)
 {
     uint8_t frame_data[PROTOCOL_FRAME_MAX_SIZE];
     uint16_t frame_len = 0;
     uint16_t cmd_type  = NULL_CMD;
 
     cmd_type = protocol_frame_parse(frame_data, &frame_len);
-    switch (cmd_type) {
-        case NULL_CMD: {
-
-            printf("NULL_CMD\n");
-            return NULL_CMD;
-        }
-
-        case SEND_VEL_PID_CMD: {
-
-            printf("SEND_VEL_PID_CMD\n");
-            return SEND_VEL_PID_CMD;
-        }
-
-        default:
-            printf("default\n");
-            return -1;
-    }
+    return cmd_type;
 }
 
 uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
@@ -125,13 +109,15 @@ void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame)
 
 void deserialize_frame_data(protocol_frame *frame)
 {
-    frame->header   = protocol_frame_parsed_result.header;
-    frame->motor_id = protocol_frame_parsed_result.motor_id;
-    frame->len      = protocol_frame_parsed_result.len;
-    frame->cmd      = protocol_frame_parsed_result.cmd;
-    memcpy(frame->data,
-           protocol_frame_parsed_result.data,
-           frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
+    frame->header            = protocol_frame_parsed_result.header;
+    frame->motor_id          = protocol_frame_parsed_result.motor_id;
+    frame->len               = protocol_frame_parsed_result.len;
+    frame->cmd               = protocol_frame_parsed_result.cmd;
+    uint16_t param_data_size = frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE;
+    if (frame->data != NULL && (param_data_size > 0)) {
+        memcpy(frame->data,
+               protocol_frame_parsed_result.data, param_data_size);
+    }
     frame->checksum = protocol_frame_parsed_result.checksum;
 }
 /* =========== auxiliary functions ===========*/

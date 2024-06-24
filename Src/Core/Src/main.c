@@ -47,7 +47,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t reveive_data_pool[20] = {0};
 
 /* USER CODE END PV */
 
@@ -61,25 +60,6 @@ static void MPU_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-// {
-//     if (huart->Instance == USART1) {
-//         HAL_UART_Transmit_DMA(huart, reveive_data_pool, 2);
-//         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-//         HAL_UART_Receive_DMA(huart, reveive_data_pool, 2);
-//     }
-// }
-
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{
-    if (huart->Instance == USART1) {
-        HAL_UART_Transmit_DMA(huart, reveive_data_pool, Size);
-        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-        HAL_UARTEx_ReceiveToIdle_DMA(huart, reveive_data_pool, 20);
-        // stop dma half transfer interrupt
-        __HAL_DMA_DISABLE_IT(huart->hdmarx, DMA_IT_HT);
-    }
-}
 /* USER CODE END 0 */
 
 /**
@@ -120,21 +100,27 @@ int main(void)
     MX_USART1_UART_Init();
     MX_DAC1_Init();
     /* USER CODE BEGIN 2 */
-    char message[] = "Hello World!";
-    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, reveive_data_pool, 20);
-    // HAL_UART_Receive_DMA(&huart1, reveive_data_pool, 2);
-    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, SET);
-    __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
-
+    Start_Protocol_Frame_Receive();
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
-        HAL_Delay(1000);
+        send_frame.cmd      = SEND_VEL_PID_CMD;
+        send_frame.header   = PROTOCOL_FRAME_HEADER;
+        send_frame.motor_id = MOTOR_ID1;
+        send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
+        Send_Protocol_Frame_Data(&send_frame);
+        HAL_Delay(500);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
+        Parse_Protocol_Frame();
+        if (receive_frame.cmd == SEND_VEL_PID_CMD) {
+            HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+            // printf("receive SEND_VEL_PID_CMD\n");
+        }
+        HAL_Delay(500);
     }
     /* USER CODE END 3 */
 }

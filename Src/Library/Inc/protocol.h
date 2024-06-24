@@ -123,11 +123,9 @@ int32_t protocol_init(void);
 
 /**
  * @brief process the received data
- * @return int32_t: process results
- *  -1 means unexpecetd result
- *  other is the command id
+ * @return uint16_t: process results: cmd_type
  */
-int32_t protocol_data_handler(void);
+uint16_t protocol_data_handler(void);
 
 /**
  * @brief calculate the checksum of the frame
