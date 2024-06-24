@@ -19,13 +19,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dac.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t reveive_data_pool[20] = {0};
 
 /* USER CODE END PV */
 
@@ -59,6 +61,25 @@ static void MPU_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+//     if (huart->Instance == USART1) {
+//         HAL_UART_Transmit_DMA(huart, reveive_data_pool, 2);
+//         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+//         HAL_UART_Receive_DMA(huart, reveive_data_pool, 2);
+//     }
+// }
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+    if (huart->Instance == USART1) {
+        HAL_UART_Transmit_DMA(huart, reveive_data_pool, Size);
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+        HAL_UARTEx_ReceiveToIdle_DMA(huart, reveive_data_pool, 20);
+        // stop dma half transfer interrupt
+        __HAL_DMA_DISABLE_IT(huart->hdmarx, DMA_IT_HT);
+    }
+}
 /* USER CODE END 0 */
 
 /**
@@ -93,22 +114,25 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_USART1_UART_Init();
+    MX_DMA_Init();
     MX_USART3_UART_Init();
     MX_TIM3_Init();
+    MX_USART1_UART_Init();
     MX_DAC1_Init();
     /* USER CODE BEGIN 2 */
+    char message[] = "Hello World!";
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, reveive_data_pool, 20);
+    // HAL_UART_Receive_DMA(&huart1, reveive_data_pool, 2);
+    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, SET);
+    __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
 
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
+        HAL_Delay(1000);
         /* USER CODE END WHILE */
-        HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-        HAL_Delay(1000);
-        HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-        HAL_Delay(1000);
 
         /* USER CODE BEGIN 3 */
     }
