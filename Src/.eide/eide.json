@@ -23,7 +23,7 @@
       "excludeList": [],
       "toolchain": "GCC",
       "compileConfig": {
-        "cpuType": "Cortex-M3",
+        "cpuType": "Cortex-M7",
         "floatingPointHardware": "none",
         "scatterFilePath": "",
         "useCustomScatterFile": true,
@@ -36,7 +36,7 @@
       "uploader": "OpenOCD",
       "uploadConfig": {
         "bin": "",
-        "target": "stm32f1x",
+        "target": "stm32h7x",
         "interface": "cmsis-dap",
         "baseAddr": "0x08000000"
       },
