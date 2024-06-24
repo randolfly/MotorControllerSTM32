@@ -47,24 +47,30 @@ MU_TEST(uint8_array_float_array_convert_test)
     }
 }
 
-// MU_TEST(uint8_array_name_string_array_convert_test)
-// {
-//     char name_string_array[10][10] = {"kp", "ki", "kd", "test", "system_id"};
-//     uint8_t uint8_array[100]       = {0};
-//     name_string_array_to_uint8_array(name_string_array, uint8_array, sizeof(name_string_array) / sizeof(name_string_array[0]), ',');
-//     char test_name_string_array[10][10] = {0};
-//     uint8_array_to_name_string_array(uint8_array, test_name_string_array, sizeof(uint8_array), ',');
-// }
+MU_TEST(uint8_array_name_string_convert_test)
+{
+    char name_string_array[] = "kp,ki,kd,test,system_id";
+    uint8_t uint8_array[100] = {0};
+    name_string_to_uint8_array(name_string_array, uint8_array, sizeof(name_string_array));
+    char test_name_string_array[100] = {0};
+    uint8_array_to_name_string(uint8_array, test_name_string_array, sizeof(uint8_array));
 
-MU_TEST(uint8_array_to_name_string_array_test)
+    for (uint8_t i = 0; i < sizeof(name_string_array); i++) {
+        mu_check(test_name_string_array[i] == name_string_array[i]);
+    }
+}
+
+MU_TEST(uint8_array_to_name_string_test)
 {
     uint8_t src_byte_array[] = {
         0x6b,
         0x70};
-    char **name_string_array = NULL;
-    uint8_array_to_name_string_array(src_byte_array,
-                                     name_string_array, sizeof(src_byte_array), ',');
-    mu_check(strcmp(name_string_array[0], "kp") == 0);
+    char name_string_array[100]     = {0};
+    char target_name_string_array[] = "kp";
+    uint8_array_to_name_string(src_byte_array, name_string_array, sizeof(src_byte_array));
+    for (uint8_t i = 0; i < sizeof(src_byte_array); i++) {
+        mu_check(target_name_string_array[i] == name_string_array[i]);
+    }
 }
 
 MU_TEST_SUITE(test_suite)
@@ -74,8 +80,8 @@ MU_TEST_SUITE(test_suite)
     MU_RUN_TEST(float_to_uint8_array_test);
     MU_RUN_TEST(uint8_array_to_float_test);
     MU_RUN_TEST(uint8_array_float_array_convert_test);
-    MU_RUN_TEST(uint8_array_to_name_string_array_test);
-    // MU_RUN_TEST(uint8_array_name_string_array_convert_test);
+    MU_RUN_TEST(uint8_array_to_name_string_test);
+    MU_RUN_TEST(uint8_array_name_string_convert_test);
 }
 
 int main()

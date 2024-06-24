@@ -26,6 +26,7 @@
     ".xmake": true,
     "build": true,
     ".*": true,
-    "eclipse.*": true
+    "eclipse.*": true,
+    "Debug/": true
   }
 }
