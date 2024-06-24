@@ -2,6 +2,7 @@
 #define __TYPE_DEF_PROTOCOL_H__
 
 // defined for non-stm32 project
+
 #ifdef NON_STM32
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;

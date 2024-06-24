@@ -39,12 +39,32 @@ MU_TEST(uint8_array_float_array_convert_test)
     // uint8_t size_float_array                  = sizeof(float_array) / sizeof(float_array[0]);
     float test_array[9]        = {0};
     uint8_t uint8_array[9 * 4] = {0};
-    float_array_to_uint8_array(float_array, uint8_array, 9);
-    uint8_array_to_float_array(uint8_array, test_array, 9 * 4);
+    float_array_to_uint8_array(float_array, uint8_array, sizeof(float_array) / sizeof(float_array[0]));
+    uint8_array_to_float_array(uint8_array, test_array, sizeof(uint8_array) / sizeof(uint8_array[0]));
 
-    for (uint16_t i = 0; i < 9; i++) {
+    for (uint16_t i = 0; i < sizeof(float_array) / sizeof(float); i++) {
         mu_check(abs(float_array[i] - test_array[i]) < eps);
     }
+}
+
+// MU_TEST(uint8_array_name_string_array_convert_test)
+// {
+//     char name_string_array[10][10] = {"kp", "ki", "kd", "test", "system_id"};
+//     uint8_t uint8_array[100]       = {0};
+//     name_string_array_to_uint8_array(name_string_array, uint8_array, sizeof(name_string_array) / sizeof(name_string_array[0]), ',');
+//     char test_name_string_array[10][10] = {0};
+//     uint8_array_to_name_string_array(uint8_array, test_name_string_array, sizeof(uint8_array), ',');
+// }
+
+MU_TEST(uint8_array_to_name_string_array_test)
+{
+    uint8_t src_byte_array[] = {
+        0x6b,
+        0x70};
+    char **name_string_array = NULL;
+    uint8_array_to_name_string_array(src_byte_array,
+                                     name_string_array, sizeof(src_byte_array), ',');
+    mu_check(strcmp(name_string_array[0], "kp") == 0);
 }
 
 MU_TEST_SUITE(test_suite)
@@ -54,6 +74,8 @@ MU_TEST_SUITE(test_suite)
     MU_RUN_TEST(float_to_uint8_array_test);
     MU_RUN_TEST(uint8_array_to_float_test);
     MU_RUN_TEST(uint8_array_float_array_convert_test);
+    MU_RUN_TEST(uint8_array_to_name_string_array_test);
+    // MU_RUN_TEST(uint8_array_name_string_array_convert_test);
 }
 
 int main()

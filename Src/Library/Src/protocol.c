@@ -52,25 +52,28 @@ int32_t protocol_data_handler(void)
 {
     uint8_t frame_data[PROTOCOL_RECURSIVE_BUFFER_SIZE];
     uint16_t frame_len = 0;
-    uint16_t cmd_type  = NULL_CMD;
+    uint16_t cmd_type = NULL_CMD;
 
     cmd_type = protocol_frame_parse(frame_data, &frame_len);
-    switch (cmd_type) {
-        case NULL_CMD: {
+    switch (cmd_type)
+    {
+    case NULL_CMD:
+    {
 
-            printf("NULL_CMD\n");
-            return NULL_CMD;
-        }
+        printf("NULL_CMD\n");
+        return NULL_CMD;
+    }
 
-        case SEND_VEL_PID_CMD: {
+    case SEND_VEL_PID_CMD:
+    {
 
-            printf("SEND_VEL_PID_CMD\n");
-            return SEND_VEL_PID_CMD;
-        }
+        printf("SEND_VEL_PID_CMD\n");
+        return SEND_VEL_PID_CMD;
+    }
 
-        default:
-            printf("default\n");
-            return -1;
+    default:
+        printf("default\n");
+        return -1;
     }
 }
 
@@ -78,7 +81,8 @@ uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
 {
     uint8_t sum = init;
 
-    while (--len) {
+    while (--len)
+    {
         sum += *ptr;
         ptr++;
     }
@@ -105,17 +109,17 @@ void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame)
            frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
     // auto calculate checksum
     EXTRACT_8BIT_1x8BIT(0x00, data_dest + PROTOCOL_FRAME_HEADER_SIZE);
-    frame->checksum           = calculate_checksum(0, data_dest, frame->len);
+    frame->checksum = calculate_checksum(0, data_dest, frame->len);
     data_dest[frame->len - 1] = frame->checksum;
 }
 
 void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame)
 {
 
-    frame->header   = get_frame_header(data_dest, 0);
+    frame->header = get_frame_header(data_dest, 0);
     frame->motor_id = get_frame_motor_id(data_dest, 0);
-    frame->len      = get_frame_len(data_dest, 0);
-    frame->cmd      = get_frame_cmd(data_dest, 0);
+    frame->len = get_frame_len(data_dest, 0);
+    frame->cmd = get_frame_cmd(data_dest, 0);
     // copy data
     memcpy(frame->data,
            data_dest + PROTOCOL_FRAME_HEADER_SIZE,
@@ -125,10 +129,10 @@ void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame)
 
 void deserialize_frame_data(protocol_frame *frame)
 {
-    frame->header   = protocol_frame_parsed_result.header;
+    frame->header = protocol_frame_parsed_result.header;
     frame->motor_id = protocol_frame_parsed_result.motor_id;
-    frame->len      = protocol_frame_parsed_result.len;
-    frame->cmd      = protocol_frame_parsed_result.cmd;
+    frame->len = protocol_frame_parsed_result.len;
+    frame->cmd = protocol_frame_parsed_result.cmd;
     memcpy(frame->data,
            protocol_frame_parsed_result.data,
            frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
@@ -253,11 +257,13 @@ static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_l
 static int32_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len)
 {
     uint16_t i = 0;
-    for (i = 0; i < (target_len - 3); i++) {
+    for (i = 0; i < (target_len - 3); i++)
+    {
         if (((buf[(start + i + 0) % buf_len] << 0) |
              (buf[(start + i + 1) % buf_len] << 8) |
              (buf[(start + i + 2) % buf_len] << 16) |
-             (buf[(start + i + 3) % buf_len] << 24)) == PROTOCOL_FRAME_HEADER) {
+             (buf[(start + i + 3) % buf_len] << 24)) == PROTOCOL_FRAME_HEADER)
+        {
             return ((start + i) % buf_len);
         }
     }
@@ -272,36 +278,42 @@ static int32_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start,
  */
 static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
 {
-    uint16_t cmd                     = NULL_CMD;
+    uint16_t cmd = NULL_CMD;
     protocol_frame_parsed_result.cmd = cmd;
-    uint16_t unparsed_len            = 0;
-    int32_t header_ofs               = -1;
-    uint8_t checksum                 = 0;
+    uint16_t unparsed_len = 0;
+    int32_t header_ofs = -1;
+    uint8_t checksum = 0;
 
     unparsed_len = get_unparsed_frame_len(parser.frame_len, PROTOCOL_RECURSIVE_BUFFER_SIZE, parser.read_offset, parser.write_offset);
-    if (unparsed_len < PROTOCOL_FRAME_HEADER_SIZE) {
+    if (unparsed_len < PROTOCOL_FRAME_HEADER_SIZE)
+    {
         return cmd;
     }
 
     // no frame header founded, continue found
-    if (0 == parser.found_frame_head) {
+    if (0 == parser.found_frame_head)
+    {
         header_ofs = find_frame_header(parser.recursive_buffer_pointer,
                                        PROTOCOL_RECURSIVE_BUFFER_SIZE,
                                        parser.read_offset,
                                        unparsed_len);
-        if (0 <= header_ofs) {
+        if (0 <= header_ofs)
+        {
             // frame header founded
             parser.found_frame_head = 1;
-            parser.read_offset      = header_ofs;
+            parser.read_offset = header_ofs;
 
             // check if unparsed frame size >= ideal frame size
             if (get_unparsed_frame_len(parser.frame_len,
                                        PROTOCOL_RECURSIVE_BUFFER_SIZE,
                                        parser.read_offset,
-                                       parser.write_offset) < PROTOCOL_FRAME_HEADER_SIZE) {
+                                       parser.write_offset) < PROTOCOL_FRAME_HEADER_SIZE)
+            {
                 return cmd;
             }
-        } else {
+        }
+        else
+        {
             // no valid frame header in unparsed data, remove all data in this parse
             parser.read_offset = ((parser.read_offset + unparsed_len - 3) % PROTOCOL_RECURSIVE_BUFFER_SIZE);
             return cmd;
@@ -309,45 +321,56 @@ static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
     }
 
     // check frame length valid
-    if (0 == parser.frame_len) {
+    if (0 == parser.frame_len)
+    {
         parser.frame_len = get_frame_len(parser.recursive_buffer_pointer, parser.read_offset);
-        if (unparsed_len < parser.frame_len) {
+        if (unparsed_len < parser.frame_len)
+        {
             return cmd;
         }
     }
 
     // frame header valid, do checksum
-    if ((parser.frame_len + parser.read_offset - PROTOCOL_FRAME_CHECKSUM_SIZE) > PROTOCOL_RECURSIVE_BUFFER_SIZE) {
+    if ((parser.frame_len + parser.read_offset - PROTOCOL_FRAME_CHECKSUM_SIZE) > PROTOCOL_RECURSIVE_BUFFER_SIZE)
+    {
         checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer + parser.read_offset,
                                       PROTOCOL_RECURSIVE_BUFFER_SIZE - parser.read_offset);
         checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer, parser.frame_len - PROTOCOL_FRAME_CHECKSUM_SIZE + parser.read_offset - PROTOCOL_RECURSIVE_BUFFER_SIZE);
-    } else {
+    }
+    else
+    {
         checksum = calculate_checksum(checksum, parser.recursive_buffer_pointer + parser.read_offset, parser.frame_len - PROTOCOL_FRAME_CHECKSUM_SIZE);
     }
 
     uint8_t tmp_checksum = 0;
-    tmp_checksum         = get_frame_checksum(parser.recursive_buffer_pointer,
-                                              parser.read_offset,
-                                              parser.frame_len);
-    if (checksum == tmp_checksum) {
+    tmp_checksum = get_frame_checksum(parser.recursive_buffer_pointer,
+                                      parser.read_offset,
+                                      parser.frame_len);
+    if (checksum == tmp_checksum)
+    {
         // all data valid
-        if ((parser.read_offset + parser.frame_len) > PROTOCOL_RECURSIVE_BUFFER_SIZE) {
+        if ((parser.read_offset + parser.frame_len) > PROTOCOL_RECURSIVE_BUFFER_SIZE)
+        {
             uint16_t data_len_part = PROTOCOL_RECURSIVE_BUFFER_SIZE - parser.read_offset;
             memcpy(data, parser.recursive_buffer_pointer + parser.read_offset, data_len_part);
             memcpy(data + data_len_part, parser.recursive_buffer_pointer, parser.frame_len - data_len_part);
-        } else {
+        }
+        else
+        {
             memcpy(data, parser.recursive_buffer_pointer + parser.read_offset, parser.frame_len);
         }
         *data_len = parser.frame_len;
-        cmd       = get_frame_cmd(data, 0);
+        cmd = get_frame_cmd(data, 0);
         deserialize_frame_data_from_dest(data,
                                          &protocol_frame_parsed_result);
         parser.read_offset = (parser.read_offset + parser.frame_len) % PROTOCOL_RECURSIVE_BUFFER_SIZE;
-    } else {
+    }
+    else
+    {
         // check error, update read_offset
         parser.read_offset = (parser.read_offset + 1) % PROTOCOL_RECURSIVE_BUFFER_SIZE;
     }
-    parser.frame_len        = 0;
+    parser.frame_len = 0;
     parser.found_frame_head = 0;
 
     return cmd;
@@ -364,15 +387,21 @@ static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len)
 static uint16_t get_unparsed_frame_len(uint16_t frame_len, uint16_t buff_len, uint16_t start, uint16_t end)
 {
     uint16_t unparsed_len = 0;
-    if (start <= end) {
+    if (start <= end)
+    {
         unparsed_len = end - start;
-    } else {
+    }
+    else
+    {
         unparsed_len = buff_len - start + end;
     }
 
-    if (frame_len > unparsed_len) {
+    if (frame_len > unparsed_len)
+    {
         return 0;
-    } else {
+    }
+    else
+    {
         return unparsed_len;
     }
 }
@@ -388,11 +417,13 @@ static uint16_t get_unparsed_frame_len(uint16_t frame_len, uint16_t buff_len, ui
 static void buf_put_data(uint8_t *buf, uint16_t ring_buf_len, uint16_t w_ofs,
                          uint8_t *data, uint16_t data_len)
 {
-    if ((w_ofs + data_len) > ring_buf_len) {
+    if ((w_ofs + data_len) > ring_buf_len)
+    {
         uint16_t data_len_part = ring_buf_len - w_ofs;
         memcpy(buf + w_ofs, data, data_len_part);
         memcpy(buf, data + data_len_part, data_len - data_len_part);
-    } else
+    }
+    else
         memcpy(buf + w_ofs, data, data_len);
 }
 
@@ -402,12 +433,12 @@ static void buf_put_data(uint8_t *buf, uint16_t ring_buf_len, uint16_t w_ofs,
  */
 static void swap_cmd_header(uint8_t *cmd)
 {
-    uint8_t tmp               = 0;
-    tmp                       = cmd[FRAME_INDEX_HEAD + 0];
+    uint8_t tmp = 0;
+    tmp = cmd[FRAME_INDEX_HEAD + 0];
     cmd[FRAME_INDEX_HEAD + 0] = cmd[FRAME_INDEX_HEAD + 3];
     cmd[FRAME_INDEX_HEAD + 3] = tmp;
 
-    tmp                       = cmd[FRAME_INDEX_HEAD + 2];
+    tmp = cmd[FRAME_INDEX_HEAD + 2];
     cmd[FRAME_INDEX_HEAD + 2] = cmd[FRAME_INDEX_HEAD + 1];
     cmd[FRAME_INDEX_HEAD + 1] = tmp;
 }
@@ -418,8 +449,8 @@ static void swap_cmd_header(uint8_t *cmd)
  */
 static void swap_cmd_length(uint8_t *cmd)
 {
-    uint8_t tmp              = 0;
-    tmp                      = cmd[FRAME_INDEX_LEN + 0];
+    uint8_t tmp = 0;
+    tmp = cmd[FRAME_INDEX_LEN + 0];
     cmd[FRAME_INDEX_LEN + 0] = cmd[FRAME_INDEX_LEN + 1];
     cmd[FRAME_INDEX_LEN + 1] = tmp;
 }
@@ -430,8 +461,8 @@ static void swap_cmd_length(uint8_t *cmd)
  */
 static void swap_cmd_type(uint8_t *cmd)
 {
-    uint8_t tmp              = 0;
-    tmp                      = cmd[FRAME_INDEX_CMD + 0];
+    uint8_t tmp = 0;
+    tmp = cmd[FRAME_INDEX_CMD + 0];
     cmd[FRAME_INDEX_CMD + 0] = cmd[FRAME_INDEX_CMD + 1];
     cmd[FRAME_INDEX_CMD + 1] = tmp;
 }
