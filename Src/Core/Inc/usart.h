@@ -72,3 +72,4 @@ void Parse_Protocol_Frame(void);
 #endif
 
 #endif /* __USART_H__ */
+

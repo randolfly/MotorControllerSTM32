@@ -99,28 +99,47 @@ int main(void)
     MX_TIM3_Init();
     MX_USART1_UART_Init();
     MX_DAC1_Init();
+    MX_TIM4_Init();
     /* USER CODE BEGIN 2 */
     Start_Protocol_Frame_Receive();
+    Start_State_Timer();
+
+    send_frame.cmd      = SEND_VEL_PID_CMD;
+    send_frame.header   = PROTOCOL_FRAME_HEADER;
+    send_frame.motor_id = MOTOR_ID1;
+    send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
-        send_frame.cmd      = SEND_VEL_PID_CMD;
-        send_frame.header   = PROTOCOL_FRAME_HEADER;
-        send_frame.motor_id = MOTOR_ID1;
-        send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-        Send_Protocol_Frame_Data(&send_frame);
-        HAL_Delay(500);
+
+        if (state_tim_counter % STATE_TIM_10K == 0) {
+        }
+
+        if (state_tim_counter % STATE_TIM_5K == 0) {
+        }
+
+        if (state_tim_counter % STATE_TIM_4K == 0) {
+        }
+        if (state_tim_counter % STATE_TIM_2K == 0) {
+        }
+        if (state_tim_counter % STATE_TIM_1K == 0) {
+        }
+
+        if (state_tim_counter % STATE_TIM_100 == 0) {
+        }
+        if (state_tim_counter % STATE_TIM_10 == 0) {
+        }
+
+        if (state_tim_counter % STATE_TIM_1 == 0) {
+            Send_Protocol_Frame_Data(&send_frame);
+        }
+
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        Parse_Protocol_Frame();
-        if (receive_frame.cmd == SEND_VEL_PID_CMD) {
-            HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-            // printf("receive SEND_VEL_PID_CMD\n");
-        }
-        HAL_Delay(500);
     }
     /* USER CODE END 3 */
 }
