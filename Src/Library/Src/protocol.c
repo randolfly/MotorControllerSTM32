@@ -88,7 +88,7 @@ void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame)
            frame->data,
            frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
     // auto calculate checksum
-    frame->checksum           = calculate_checksum(0, data_dest, frame->len - 1);
+    frame->checksum           = calculate_checksum(0, data_dest, frame->len - PROTOCOL_FRAME_CHECKSUM_SIZE);
     data_dest[frame->len - 1] = frame->checksum;
 }
 
