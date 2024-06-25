@@ -1,7 +1,7 @@
 #include "protocol.h"
 #include <stdio.h>
 
-#ifdef TEST
+#ifdef TEST_RANDOLF
 protocol_frame_parser_t parser;
 //~ dont directly use the recursive_buffer, use the parser.buf instead
 uint8_t recursive_buffer[PROTOCOL_RECURSIVE_BUFFER_SIZE];
@@ -62,7 +62,7 @@ uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
 {
     uint8_t sum = init;
 
-    while (--len) {
+    while (len--) {
         sum += *ptr;
         ptr++;
     }
@@ -88,8 +88,7 @@ void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame)
            frame->data,
            frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
     // auto calculate checksum
-    EXTRACT_8BIT_1x8BIT(0x00, data_dest + PROTOCOL_FRAME_HEADER_SIZE);
-    frame->checksum           = calculate_checksum(0, data_dest, frame->len);
+    frame->checksum           = calculate_checksum(0, data_dest, frame->len - 1);
     data_dest[frame->len - 1] = frame->checksum;
 }
 

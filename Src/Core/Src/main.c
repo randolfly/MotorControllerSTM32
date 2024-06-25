@@ -108,7 +108,7 @@ int main(void)
     send_frame.header   = PROTOCOL_FRAME_HEADER;
     send_frame.motor_id = MOTOR_ID1;
     send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-
+    send_frame.data     = (uint8_t *)param_data_array;
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -131,10 +131,22 @@ int main(void)
         if (state_tim_counter % STATE_TIM_100 == 0) {
         }
         if (state_tim_counter % STATE_TIM_10 == 0) {
+            // protocol handler
+            Parse_Protocol_Frame();
+
+            // send available log data name list
+            if (receive_frame.cmd == DATALOG_CHECK_AVAILABLE_DATA_CMD) {
+                send_frame.cmd = DATALOG_SEND_AVAILABLE_DATA_CMD;
+                name_string_to_uint8_array(param_name_string_array,
+                                           param_data_array,
+                                           strlen(param_name_string_array));
+                send_frame.len = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + strlen(param_name_string_array);
+                Send_Protocol_Frame_Data(&send_frame);
+                HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+            }
         }
 
         if (state_tim_counter % STATE_TIM_1 == 0) {
-            Send_Protocol_Frame_Data(&send_frame);
         }
 
         /* USER CODE END WHILE */

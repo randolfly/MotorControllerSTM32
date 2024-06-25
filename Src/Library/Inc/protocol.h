@@ -61,17 +61,27 @@ typedef struct
 
 /* command definition */
 /* client to server commands*/
-#define SEND_VEL_PID_CMD  0x0001 // send pid command of velocity loop in client
-#define SEND_POS_PID_CMD  0x0002 // send pid command of position loop in client
-#define SEND_STATE_ID_CMD 0x0003 // send current system state id(statemachine) in client
+#define SEND_VEL_PID_CMD                0x0001 // send pid command of velocity loop in client
+#define SEND_POS_PID_CMD                0x0002 // send pid command of position loop in client
+#define SEND_STATE_ID_CMD               0x0003 // send current system state id(statemachine) in client
+
+#define DATALOG_SEND_AVAILABLE_DATA_CMD 0x2001 // send available log data
+#define DATALOG_ECHO_LOG_DATA_CMD       0x2002 // send all log data
+#define DATALOG_ECHO_LOG_START_CMD      0x2003
+#define DATALOG_RUNNING_CMD             0x2004 // send in high-speed uart port
 
 /* server to client commands*/
-#define SET_VEL_PID_CMD    0x1001 // set pid command of velocity loop in server
-#define SET_POS_PID_CMD    0x1002 // set pid command of position loop in server
-#define START_SYSTEM_CMD   0x1003 // start the system
-#define STOP_SYSTEM_CMD    0x1004 // stop the system
-#define EMERGENCY_STOP_CMD 0x1005 // emergency stop the system
-#define RESET_SYSTEM_CMD   0x1006 // reset the system
+#define SET_VEL_PID_CMD                  0x1001 // set pid command of velocity loop in server
+#define SET_POS_PID_CMD                  0x1002 // set pid command of position loop in server
+#define START_SYSTEM_CMD                 0x1003 // start the system
+#define STOP_SYSTEM_CMD                  0x1004 // stop the system
+#define EMERGENCY_STOP_CMD               0x1005 // emergency stop the system
+#define RESET_SYSTEM_CMD                 0x1006 // reset the system
+
+#define DATALOG_CHECK_AVAILABLE_DATA_CMD 0x3001 // check available log data
+#define DATALOG_SET_LOG_DATA_CMD         0x3002 // set log data name
+#define DATALOG_START_LOG_CMD            0x3003 // start log
+#define DATALOG_STOP_LOG_CMD             0x3004 // stop log
 
 /* null command*/
 #define NULL_CMD 0xFFFF // null command

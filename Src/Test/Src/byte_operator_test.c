@@ -49,9 +49,9 @@ MU_TEST(uint8_array_float_array_convert_test)
 
 MU_TEST(uint8_array_name_string_convert_test)
 {
-    char name_string_array[] = "kp,ki,kd,test,system_id";
-    uint8_t uint8_array[100] = {0};
-    name_string_to_uint8_array(name_string_array, uint8_array, sizeof(name_string_array));
+    char name_string_array[100] = "kp,ki,kd,test,system_id";
+    uint8_t uint8_array[100]    = {0};
+    name_string_to_uint8_array(name_string_array, uint8_array, strlen(name_string_array));
     char test_name_string_array[100] = {0};
     uint8_array_to_name_string(uint8_array, test_name_string_array, sizeof(uint8_array));
 

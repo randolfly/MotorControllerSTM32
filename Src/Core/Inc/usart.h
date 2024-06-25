@@ -30,7 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include "protocol.h"
-
+#include "byte_operator.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;
@@ -40,6 +40,9 @@ extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN Private defines */
 extern protocol_frame receive_frame;
 extern protocol_frame send_frame;
+
+extern char param_name_string_array[PROTOCOL_FRAME_MAX_SIZE];
+extern uint8_t param_data_array[PROTOCOL_FRAME_MAX_SIZE];
 
 #define UART_PROTOCOL huart1
 #define UART_DATA     huart3
@@ -72,4 +75,3 @@ void Parse_Protocol_Frame(void);
 #endif
 
 #endif /* __USART_H__ */
-

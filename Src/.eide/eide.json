@@ -67,7 +67,8 @@
         "defineList": [
           "DEBUG",
           "USE_HAL_DRIVER",
-          "STM32H743xx"
+          "STM32H743xx",
+          "TEST_RANDOLF"
         ]
       }
     },

@@ -57,10 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define STATE_TIM_PRESCALER   120 - 1
-#define STATE_TIM_COUNTER_MAX 100 - 1
-#define LED_1_Pin             GPIO_PIN_15
-#define LED_1_GPIO_Port       GPIOA
+#define STATE_TIM_PRESCALER 120-1
+#define STATE_TIM_COUNTER_MAX 100-1
+#define LED_1_Pin GPIO_PIN_15
+#define LED_1_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 // time4: state machine timer-> 240M/120/100 = 20KHz
