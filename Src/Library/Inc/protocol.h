@@ -90,6 +90,7 @@ typedef struct
 
 /**
  * @brief serialize frame struct to uint8 data array, the checksum will be calculated automatically
+ * notice that this means the frame length should be properly treated, no automatic calculation
  * @param  data_dest: target data array, only store 1 frame data, no need to protect the data array
  * @param  frame: frame struct
  */
