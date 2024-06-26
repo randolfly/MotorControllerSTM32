@@ -21,6 +21,14 @@ MU_TEST(torque_permillage_to_dac_test)
     mu_check(torque_permillage_to_dac(torque_cmd1) == 0);
     mu_check(torque_permillage_to_dac(torque_cmd2) == 4096);
     mu_check(torque_permillage_to_dac(torque_cmd3) == 2048);
+
+    torque_cmd1 = -10000.0;
+    torque_cmd2 = 10000.0;
+    torque_cmd3 = 1001.0;
+
+    mu_check(torque_permillage_to_dac(torque_cmd1) == 0);
+    mu_check(torque_permillage_to_dac(torque_cmd2) == 4096);
+    mu_check(torque_permillage_to_dac(torque_cmd3) == 4096);
 }
 
 MU_TEST_SUITE(test_suite)

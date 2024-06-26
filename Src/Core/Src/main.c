@@ -162,8 +162,7 @@ int main(void)
 
         if (state_tim_counter % STATE_TIM_1 == 0) {
             // test dac
-            HAL_DAC_SetValue(&DAC_MOTOR_COMMAND, DAC_MOTOR_COMMAND_PORT1, DAC_ALIGN_12B_R, 2048);
-            HAL_DAC_Start(&DAC_MOTOR_COMMAND, DAC_MOTOR_COMMAND_PORT1);
+            Set_Motor_Torque(500.0);
         }
 
         /* USER CODE END WHILE */

@@ -36,6 +36,7 @@ extern "C" {
 extern DAC_HandleTypeDef hdac1;
 
 /* USER CODE BEGIN Private defines */
+extern uint32_t dac_value;
 
 /* USER CODE END Private defines */
 
@@ -43,6 +44,12 @@ void MX_DAC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+/**
+ * @brief set motor torque value, range from -1000 to 1000, unit is permillage
+ *  -1000->-max_torque, 0->0, 1000->max_torque
+ * @param  torque_permillage: torque command in permillage
+ */
+void Set_Motor_Torque(float torque_permillage);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
