@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    dac.h
-  * @brief   This file contains all the function prototypes for
-  *          the dac.c file
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    dac.h
+ * @brief   This file contains all the function prototypes for
+ *          the dac.c file
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __DAC_H__
@@ -29,7 +29,8 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#define DAC_MOTOR_COMMAND       hdac1
+#define DAC_MOTOR_COMMAND_PORT1 DAC_CHANNEL_1
 /* USER CODE END Includes */
 
 extern DAC_HandleTypeDef hdac1;
@@ -49,4 +50,3 @@ void MX_DAC1_Init(void);
 #endif
 
 #endif /* __DAC_H__ */
-
