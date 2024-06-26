@@ -1,6 +1,6 @@
 /**
  * @file protocol.h
- * @brief contains the protocol of communication between the client and the server
+ * @brief contains the protocol of communication between the stm32 board and the computer
  * @author randolf (1665718426@qq.com)
  * @version 1.0.1
  * @date 2024-06-18

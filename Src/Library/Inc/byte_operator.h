@@ -1,6 +1,7 @@
 /**
  * @file byte_operator.h
- * @brief
+ * @brief contains byte operators, used for operating bytes
+ *  provides byte<->float<->string conversion functionality
  * @author randolf (1665718426@qq.com)
  * @version 1.0.1
  * @date 2024-06-20
@@ -16,6 +17,10 @@
 
 #ifdef STM32H743xx
 #include "main.h"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 // max variable name size, such as hello is valid, hellohellohellohellohello is invalid
@@ -67,5 +72,9 @@ void uint8_array_to_name_string(uint8_t *src_byte_array, char *dst, uint16_t byt
  * @param  byte_len: length of string array(byte size)
  */
 void name_string_to_uint8_array(char *src_name_string_array, uint8_t *dst, uint16_t string_len);
+
+#ifdef _cplusplus
+}
+#endif
 
 #endif // !__BYTE_OPERATOR_H__
