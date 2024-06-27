@@ -1,5 +1,4 @@
-#include "protocol.h"
-#include <stdio.h>
+
 
 #ifdef TEST_RANDOLF
 protocol_frame_parser_t parser;
@@ -31,10 +30,11 @@ static void swap_cmd_header(uint8_t *cmd);
 static void swap_cmd_length(uint8_t *cmd);
 static void swap_cmd_type(uint8_t *cmd);
 
-int32_t protocol_init(void)
+void protocol_init(protocol_frame_parser_t *parser, ring_buffer_t *ring_buffer)
 {
-    memset(&parser, 0, sizeof(protocol_frame_parser_t));
-    parser.recursive_buffer_pointer = recursive_buffer;
+    static uint8_t buffer[PROTOCOL_RECURSIVE_BUFFER_SIZE] = {0};
+    ring_buffer_init(&ring_buffer, buffer, sizeof(buffer));
+    parser->ring_buffer = ring_buffer;
     return 0;
 }
 
@@ -58,174 +58,7 @@ uint16_t protocol_data_handler(void)
     return cmd_type;
 }
 
-uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
-{
-    uint8_t sum = init;
-
-    while (len--) {
-        sum += *ptr;
-        ptr++;
-    }
-
-    return sum;
-}
-
-void rearrange_cmd(uint8_t *cmd)
-{
-    swap_cmd_header(cmd);
-    swap_cmd_length(cmd);
-    swap_cmd_type(cmd);
-}
-
-void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame)
-{
-    EXTRACT_32BIT_4x8BIT(frame->header, data_dest + FRAME_INDEX_HEAD);
-    EXTRACT_8BIT_1x8BIT(frame->motor_id, data_dest + FRAME_INDEX_MOTOR_ID);
-    EXTRACT_16BIT_2x8BIT(frame->len, data_dest + FRAME_INDEX_LEN);
-    EXTRACT_16BIT_2x8BIT(frame->cmd, data_dest + FRAME_INDEX_CMD);
-    // copy data
-    memcpy(data_dest + PROTOCOL_FRAME_HEADER_SIZE,
-           frame->data,
-           frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
-    // auto calculate checksum
-    frame->checksum           = calculate_checksum(0, data_dest, frame->len - PROTOCOL_FRAME_CHECKSUM_SIZE);
-    data_dest[frame->len - 1] = frame->checksum;
-}
-
-void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame_t *frame)
-{
-
-    frame->header   = get_frame_header(data_dest, 0);
-    frame->motor_id = get_frame_motor_id(data_dest, 0);
-    frame->len      = get_frame_len(data_dest, 0);
-    frame->cmd      = get_frame_cmd(data_dest, 0);
-    // copy data
-    memcpy(frame->data,
-           data_dest + PROTOCOL_FRAME_HEADER_SIZE,
-           frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
-    frame->checksum = get_frame_checksum(data_dest, 0, frame->len);
-}
-
-void deserialize_frame_data(protocol_frame_t *frame)
-{
-    frame->header            = protocol_frame_parsed_result.header;
-    frame->motor_id          = protocol_frame_parsed_result.motor_id;
-    frame->len               = protocol_frame_parsed_result.len;
-    frame->cmd               = protocol_frame_parsed_result.cmd;
-    uint16_t param_data_size = frame->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE;
-    if (frame->data != NULL && (param_data_size > 0)) {
-        memcpy(frame->data,
-               protocol_frame_parsed_result.data, param_data_size);
-    }
-    frame->checksum = protocol_frame_parsed_result.checksum;
-}
 /* =========== auxiliary functions ===========*/
-
-/**
- * @brief extract 32bit data to 4x8 bit data array(low end first|pos 0)
- * @param  raw_data: 32bit raw data
- * @param  data_dest: data array destination
- */
-static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest)
-{
-    data_dest[0] = (uint8_t)(raw_data & 0x000000FF);
-    data_dest[1] = (uint8_t)((raw_data & 0x0000FF00) >> 8);
-    data_dest[2] = (uint8_t)((raw_data & 0x00FF0000) >> 16);
-    data_dest[3] = (uint8_t)((raw_data & 0xFF000000) >> 24);
-}
-
-/**
- * @brief extract 16bit data to 2x8 bit data array(low end first)
- * @param  raw_data: 16bit raw data
- * @param  data_dest: data array destination
- */
-static void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest)
-{
-    data_dest[0] = (uint8_t)(raw_data & 0x00FF);
-    data_dest[1] = (uint8_t)((raw_data & 0xFF00) >> 8);
-}
-/**
- * @brief extract 8bit data to 1x8 bit data array(low end first)
- * @param  raw_data: 8bit raw data
- * @param  data_dest: data array destination
- */
-static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest)
-{
-    data_dest[0] = (uint8_t)(raw_data & 0xFF);
-}
-
-/**
- * @brief Get the frame data object from recursive_buffer
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @param  index: index of the data in the frame
- * @return uint8_t: data value
- */
-static uint8_t get_frame_data(uint8_t *buf, uint16_t r_ofs, uint16_t index)
-{
-    return buf[(r_ofs + index) % PROTOCOL_RECURSIVE_BUFFER_SIZE] & 0xFF;
-}
-
-/**
- * @brief Get the frame header object from recursive_buffer
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @return uint32_t: frame header value
- */
-static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs)
-{
-    return (get_frame_data(buf, r_ofs, FRAME_INDEX_HEAD + 0) << 0 |
-            get_frame_data(buf, r_ofs, FRAME_INDEX_HEAD + 1) << 8 |
-            get_frame_data(buf, r_ofs, FRAME_INDEX_HEAD + 2) << 16 |
-            get_frame_data(buf, r_ofs, FRAME_INDEX_HEAD + 3) << 24);
-}
-
-/**
- * @brief Get the frame type(command)
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @return uint16_t: command value
- */
-static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs)
-{
-    return (get_frame_data(buf, r_ofs, FRAME_INDEX_CMD) << 0 |
-            get_frame_data(buf, r_ofs, FRAME_INDEX_CMD + 1) << 8);
-}
-
-/**
- * @brief Get the frame len object(length)
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @return uint16_t: length value
- */
-static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs)
-{
-    return (get_frame_data(buf, r_ofs, FRAME_INDEX_LEN) << 0 |
-            get_frame_data(buf, r_ofs, FRAME_INDEX_LEN + 1) << 8);
-}
-
-/**
- * @brief Get the frame motor id object
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @return uint8_t: motor id value
- */
-static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs)
-{
-    return get_frame_data(buf, r_ofs, FRAME_INDEX_MOTOR_ID);
-}
-
-/**
- * @brief Get the frame checksum object(CRC-16)
- * @param  buf: pointer to the recursive buffer
- * @param  r_ofs: read offset of the frame
- * @param  frame_len: frame length
- * @return uint8_t: checksum value
- */
-static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len)
-{
-    return get_frame_data(buf, r_ofs, frame_len - 1);
-}
 
 /**
  * @brief find frame header in the buffer

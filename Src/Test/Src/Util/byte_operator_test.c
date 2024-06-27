@@ -4,12 +4,12 @@
 
 void test_setup(void)
 {
-    printf("\ntest initialization\n");
+    printf("\nBYTE OPERATOR TEST STARTED\n");
 }
 
 void test_teardown(void)
 {
-    /* Nothing */
+    printf("\nBYTE OPERATOR TEST STOPED\n");
 }
 
 MU_TEST(float_to_uint8_array_test)

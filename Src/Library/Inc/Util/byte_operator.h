@@ -23,19 +23,16 @@
 extern "C" {
 #endif
 
-// max variable name size, such as hello is valid, hellohellohellohellohello is invalid
-#define MaxVariableNameSize 20
-
 /**
  * @brief transfer float to uint8_t array
  * @param  src_float: src float data
- * @param  dst: target uint8_t array
+ * @param  dst: target uint8_t array, insert 4 bytes
  */
 void float_to_uint8_array(float src_float, uint8_t *dst);
 
 /**
  * @brief transfer uint8_t array to float
- * @param  src_byte_array: src byte array
+ * @param  src_byte_array: src byte array, insert 4 bytes
  */
 float uint8_array_to_float(uint8_t *src_byte_array);
 
@@ -54,8 +51,6 @@ void float_array_to_uint8_array(float *src_float_array, uint8_t *dst, uint16_t f
  * @param  len: length of byte array
  */
 void uint8_array_to_float_array(uint8_t *src_byte_array, float *dst, uint16_t byte_len);
-
-//! just send 1d char array!!!!
 
 /**
  * @brief transfer uint8_t array to name string list: [0x00, 0x01, 0x02] -> "kp, ki, kd". note the sep is inside in the byte array, default is ','

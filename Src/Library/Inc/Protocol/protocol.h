@@ -13,6 +13,7 @@
 
 // defined for non-stm32 project
 #include "type_def_protocol.h"
+#include "ringbuffer.h"
 #include <string.h>
 
 #ifdef STM32H743xx
@@ -36,18 +37,14 @@ typedef struct
     uint8_t checksum; /* frame checksum*/
 } protocol_frame_t;
 
-typedef struct
-{
-    uint8_t *recursive_buffer_pointer;
-    uint16_t read_offset;
-    uint16_t write_offset;
-    uint16_t frame_len;
-    uint16_t found_frame_head;
-} protocol_frame_parser_t;
-
 // protocol recursive buffer size;
-#define PROTOCOL_FRAME_MAX_SIZE        100
-#define PROTOCOL_RECURSIVE_BUFFER_SIZE 256
+#define PROTOCOL_FRAME_MAX_SIZE 100
+
+/* frame index definition */
+#define FRAME_INDEX_HEAD     0x0u // frame head index
+#define FRAME_INDEX_MOTOR_ID 0x4u // motor id index
+#define FRAME_INDEX_LEN      0x5u // frame length index
+#define FRAME_INDEX_CMD      0x7u // command index
 
 // protocol frame checksum length
 #define PROTOCOL_FRAME_CHECKSUM_SIZE 1
@@ -60,7 +57,7 @@ typedef struct
 #define MOTOR_ID2 0x02
 
 /* command definition */
-/* client to server commands*/
+/* stm32 board to computer commands*/
 #define SEND_VEL_PID_CMD                0x0001 // send pid command of velocity loop in client
 #define SEND_POS_PID_CMD                0x0002 // send pid command of position loop in client
 #define SEND_STATE_ID_CMD               0x0003 // send current system state id(statemachine) in client
@@ -70,7 +67,7 @@ typedef struct
 #define DATALOG_ECHO_LOG_START_CMD      0x2003
 #define DATALOG_RUNNING_CMD             0x2004 // send in high-speed uart port
 
-/* server to client commands*/
+/* computer to stm32 board commands*/
 #define SET_VEL_PID_CMD                  0x1001 // set pid command of velocity loop in server
 #define SET_POS_PID_CMD                  0x1002 // set pid command of position loop in server
 #define START_SYSTEM_CMD                 0x1003 // start the system
@@ -86,18 +83,6 @@ typedef struct
 /* null command*/
 #define NULL_CMD 0xFFFF // null command
 
-/* frame index definition */
-#define FRAME_INDEX_HEAD     0x0u // frame head index
-#define FRAME_INDEX_MOTOR_ID 0x4u // motor id index
-#define FRAME_INDEX_LEN      0x5u // frame length index
-#define FRAME_INDEX_CMD      0x7u // command index
-
-// exchange 32bit data high and low bit
-#define EXCHANGE_HIGH_LOW_BIT(data) ((((data) << 24) & 0xFF000000) | \
-                                     (((data) << 8) & 0x00FF0000) |  \
-                                     (((data) >> 8) & 0x0000FF00) |  \
-                                     (((data) >> 24) & 0x000000FF))
-
 /**
  * @brief serialize frame struct to uint8 data array, the checksum will be calculated automatically
  * notice that this means the frame length should be properly treated, no automatic calculation
@@ -107,36 +92,11 @@ typedef struct
 void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame);
 
 /**
- * @brief deserialize frame struct from parser.recursive_buffer_pointer, the checksum will not be calculated
+ * @brief deserialize frame struct from specified data array
+ * @param  data_src: source byte data array
  * @param  frame: target frame struct
  */
-void deserialize_frame_data(protocol_frame_t *frame);
-
-/**
- * @brief deserialize frame struct from specified data array, the checksum will not be calculated
- * @param  data_dest: data array destination
- * @param  frame: target frame struct
- */
-void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame_t *frame);
-
-/**
- * @brief write the protocol data into recursive buffer
- * @param  data: target data array
- * @param  len: data length
- */
-void protocol_data_receive(uint8_t *data, uint16_t len);
-
-/**
- * @brief initialize the protocol
- * @return int32_t initialization result
- */
-int32_t protocol_init(void);
-
-/**
- * @brief process the received data
- * @return uint16_t: process results: cmd_type
- */
-uint16_t protocol_data_handler(void);
+void deserialize_frame_data(uint8_t *data_src, protocol_frame_t *frame);
 
 /**
  * @brief calculate the checksum of the frame
@@ -147,11 +107,69 @@ uint16_t protocol_data_handler(void);
  */
 uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len);
 
+/* =========== auxiliary functions ===========*/
+
 /**
- * @brief switch cmd array to the low end arrange type
- * @param  cmd: cmd data array
+ * @brief extract 32bit data to 4x8 bit data array(low end first|pos 0)
+ * @param  raw_data: 32bit raw data
+ * @param  data_dest: data array destination
  */
-void rearrange_cmd(uint8_t *cmd);
+static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest);
+
+/**
+ * @brief extract 16bit data to 2x8 bit data array(low end first)
+ * @param  raw_data: 16bit raw data
+ * @param  data_dest: data array destination
+ */
+static void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest);
+
+/**
+ * @brief extract 8bit data to 1x8 bit data array(low end first)
+ * @param  raw_data: 8bit raw data
+ * @param  data_dest: data array destination
+ */
+static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest);
+
+/**
+ * @brief Get the frame header object from byte array
+ * @param  buf: byte array pointer
+ * @param  r_ofs: read offset of the frame
+ * @return uint32_t: frame header value
+ */
+static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs);
+
+/**
+ * @brief Get the frame cmd object from byte array
+ * @param  buf: byte array pointer
+ * @param  r_ofs: read offset of the frame
+ * @return uint32_t: frame cmd value
+ */
+static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs);
+
+/**
+ * @brief Get the frame length object from byte array
+ * @param  buf: byte array pointer
+ * @param  r_ofs: read offset of the frame
+ * @return uint32_t: frame length value
+ */
+static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
+
+/**
+ * @brief Get the frame motor id object from byte array
+ * @param  buf: byte array pointer
+ * @param  r_ofs: read offset of the frame
+ * @return uint32_t: frame motor id value
+ */
+static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs);
+
+/**
+ * @brief Get the frame checksum object(CRC-16) from byte array
+ * @param  buf: pointer to the byte array
+ * @param  r_ofs: read offset of the frame
+ * @param  frame_len: frame length
+ * @return uint8_t: checksum value
+ */
+static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len);
 
 #ifdef _cplusplus
 }
