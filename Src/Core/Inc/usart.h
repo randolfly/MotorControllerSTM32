@@ -29,8 +29,8 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#include "protocol.h"
-#include "byte_operator.h"
+#include "Protocol/protocol_parser.h"
+#include "Util/byte_operator.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;
@@ -38,35 +38,37 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
-extern protocol_frame receive_frame;
-extern protocol_frame send_frame;
+extern protocol_frame_parser_t command_parser;
+extern protocol_frame_t command_send_frame;
+extern protocol_frame_t command_receive_frame;
 
-extern char param_name_string_array[PROTOCOL_FRAME_MAX_SIZE];
-extern uint8_t param_data_array[PROTOCOL_FRAME_MAX_SIZE];
+extern char command_param_name_string_array[PROTOCOL_FRAME_MAX_SIZE];
+extern uint8_t command_param_data_array[PROTOCOL_FRAME_MAX_SIZE];
 
-#define UART_PROTOCOL huart1
-#define UART_DATA     huart3
+#define UART_COMMAND huart1
+#define UART_DATALOG huart3
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(void);
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-/**
- * @brief send (protocol)frame data by uart dma
- * @param  frame: single protocol frame data
- */
-void Send_Protocol_Frame_Data(protocol_frame *frame);
 
 /**
- * @brief start uart receive dma frames
+ * @brief send command (protocol)frame data by uart dma
+ * @param  frame: single protocol frame data
  */
-void Start_Protocol_Frame_Receive(void);
+void Send_Command_Frame_Data(protocol_frame_t *frame);
+
+/**
+ * @brief start command uart receive dma frames
+ */
+void Start_Command_Frame_Receive(void);
 
 /**
  * @brief parse protocol uart frame
  */
-void Parse_Protocol_Frame(void);
+void Parse_Command_Frame(void);
 
 /* USER CODE END Prototypes */
 
@@ -75,4 +77,3 @@ void Parse_Protocol_Frame(void);
 #endif
 
 #endif /* __USART_H__ */
-

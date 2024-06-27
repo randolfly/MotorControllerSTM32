@@ -11,7 +11,7 @@
 #ifndef __MOTOR_UTIL_H__
 #define __MOTOR_UTIL_H__
 
-#include "type_def_protocol.h"
+#include "Util/type_def_protocol.h"
 
 #ifdef STM32H743xx
 #include "main.h"

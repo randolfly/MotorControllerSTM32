@@ -52,13 +52,6 @@ void protocol_data_receive(protocol_frame_parser_t *parser, uint8_t *data, uint3
  */
 uint16_t protocol_data_handler(protocol_frame_parser_t *parser);
 
-/**
- * @brief deep copy the frame from src to dest
- * @param  dest: destination frame
- * @param  src: source frame
- */
-void deep_copy_frame(protocol_frame_t *dest, protocol_frame_t *src);
-
 /* =========== auxiliary functions ===========*/
 
 /**
@@ -84,35 +77,35 @@ uint16_t protocol_frame_parse(protocol_frame_parser_t *parser, uint8_t *data_des
  * @param  buffer: ring buffer instance
  * @return uint16_t
  */
-static uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer);
+uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer);
 
 /**
  * @brief the get_frame_len function for parser
  * @param  parser
  * @return uint16_t
  */
-static uint16_t get_frame_len_parser(protocol_frame_parser_t *parser);
+uint16_t get_frame_len_parser(protocol_frame_parser_t *parser);
 
 /**
  * @brief the get_frame_checksum function for parser
  * @param  parser
  * @return uint16_t
  */
-static uint16_t get_frame_checksum_parser(protocol_frame_parser_t *parser);
+uint16_t get_frame_checksum_parser(protocol_frame_parser_t *parser);
 
 /**
  * @brief store all the frame data into the data_dest
  * @param  parser: protocol_frame_parser instance
  * @param  data_dest: target data array
  */
-static void get_frame_full_data_parser(protocol_frame_parser_t *parser, uint8_t *data_dest);
+void get_frame_full_data_parser(protocol_frame_parser_t *parser, uint8_t *data_dest);
 
 /**
  * @brief the calculate_checksum function for parser
  * @param  parser
  * @return uint8_t
  */
-static uint8_t calculate_checksum_parser(protocol_frame_parser_t *parser);
+uint8_t calculate_checksum_parser(protocol_frame_parser_t *parser);
 #ifdef _cplusplus
 }
 #endif

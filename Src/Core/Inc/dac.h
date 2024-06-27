@@ -29,6 +29,8 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+#include "Motion/motor_util.h"
+
 #define DAC_MOTOR_COMMAND       hdac1
 #define DAC_MOTOR_COMMAND_PORT1 DAC_CHANNEL_1
 /* USER CODE END Includes */
@@ -57,4 +59,3 @@ void Set_Motor_Torque(float torque_permillage);
 #endif
 
 #endif /* __DAC_H__ */
-

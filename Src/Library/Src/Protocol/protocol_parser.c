@@ -36,19 +36,6 @@ uint16_t protocol_data_handler(protocol_frame_parser_t *parser)
     return cmd_type;
 }
 
-void deep_copy_frame(protocol_frame_t *dest, protocol_frame_t *src)
-{
-    dest->header             = src->header;
-    dest->motor_id           = src->motor_id;
-    dest->len                = src->len;
-    dest->cmd                = src->cmd;
-    uint16_t param_data_size = src->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE;
-    if (param_data_size > 0) {
-        memcpy(dest->data, src->data, param_data_size);
-    }
-    dest->checksum = src->checksum;
-}
-
 /* =========== auxiliary functions ===========*/
 
 int64_t find_frame_header(ring_buffer_t *buffer, uint16_t start, uint16_t target_len)
@@ -134,7 +121,7 @@ uint16_t protocol_frame_parse(protocol_frame_parser_t *parser, uint8_t *data_des
     return cmd;
 }
 
-static uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer)
+uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer)
 {
     uint16_t unparsed_len = ring_buffer_num_items(buffer);
 
@@ -145,7 +132,7 @@ static uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer
     }
 }
 
-static uint16_t get_frame_len_parser(protocol_frame_parser_t *parser)
+uint16_t get_frame_len_parser(protocol_frame_parser_t *parser)
 {
     uint8_t len_1, len_2;
     ring_buffer_peek(parser->ring_buffer, &len_1, FRAME_INDEX_LEN + 0);
@@ -153,19 +140,19 @@ static uint16_t get_frame_len_parser(protocol_frame_parser_t *parser)
     return (len_1 << 0) | (len_2 << 8);
 }
 
-static uint16_t get_frame_checksum_parser(protocol_frame_parser_t *parser)
+uint16_t get_frame_checksum_parser(protocol_frame_parser_t *parser)
 {
     uint8_t checksum;
     ring_buffer_peek(parser->ring_buffer, &checksum, parser->next_frame_len - PROTOCOL_FRAME_CHECKSUM_SIZE);
     return checksum;
 }
 
-static void get_frame_full_data_parser(protocol_frame_parser_t *parser, uint8_t *data_dest)
+void get_frame_full_data_parser(protocol_frame_parser_t *parser, uint8_t *data_dest)
 {
     ring_buffer_dequeue_arr(parser->ring_buffer, data_dest, parser->next_frame_len);
 }
 
-static uint8_t calculate_checksum_parser(protocol_frame_parser_t *parser)
+uint8_t calculate_checksum_parser(protocol_frame_parser_t *parser)
 {
     uint32_t i       = 0;
     uint8_t tmp_data = 0;

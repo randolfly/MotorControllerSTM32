@@ -115,6 +115,13 @@ void deserialize_frame_data(uint8_t *data_src, protocol_frame_t *frame);
  */
 uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len);
 
+/**
+ * @brief deep copy the frame from src to dest
+ * @param  dest: destination frame
+ * @param  src: source frame
+ */
+void deep_copy_frame(protocol_frame_t *dest, protocol_frame_t *src);
+
 /* =========== auxiliary functions ===========*/
 
 /**

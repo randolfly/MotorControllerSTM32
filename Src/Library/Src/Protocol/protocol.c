@@ -47,6 +47,19 @@ uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
     return sum;
 }
 
+void deep_copy_frame(protocol_frame_t *dest, protocol_frame_t *src)
+{
+    dest->header             = src->header;
+    dest->motor_id           = src->motor_id;
+    dest->len                = src->len;
+    dest->cmd                = src->cmd;
+    uint16_t param_data_size = src->len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE;
+    if (param_data_size > 0) {
+        memcpy(dest->data, src->data, param_data_size);
+    }
+    dest->checksum = src->checksum;
+}
+
 /* =========== auxiliary functions ===========*/
 
 void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest)
