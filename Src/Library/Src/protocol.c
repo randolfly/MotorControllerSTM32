@@ -5,12 +5,12 @@
 protocol_frame_parser_t parser;
 //~ dont directly use the recursive_buffer, use the parser.buf instead
 uint8_t recursive_buffer[PROTOCOL_RECURSIVE_BUFFER_SIZE];
-protocol_frame protocol_frame_parsed_result = {0};
+protocol_frame_t protocol_frame_parsed_result = {0};
 #else
 static protocol_frame_parser_t parser;
 //~ dont directly use the recursive_buffer, use the parser.buf instead
 static uint8_t recursive_buffer[PROTOCOL_RECURSIVE_BUFFER_SIZE];
-static protocol_frame protocol_frame_parsed_result = {0};
+static protocol_frame_t protocol_frame_parsed_result = {0};
 #endif
 
 static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest);
@@ -77,7 +77,7 @@ void rearrange_cmd(uint8_t *cmd)
     swap_cmd_type(cmd);
 }
 
-void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame)
+void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame)
 {
     EXTRACT_32BIT_4x8BIT(frame->header, data_dest + FRAME_INDEX_HEAD);
     EXTRACT_8BIT_1x8BIT(frame->motor_id, data_dest + FRAME_INDEX_MOTOR_ID);
@@ -92,7 +92,7 @@ void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame)
     data_dest[frame->len - 1] = frame->checksum;
 }
 
-void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame)
+void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame_t *frame)
 {
 
     frame->header   = get_frame_header(data_dest, 0);
@@ -106,7 +106,7 @@ void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame)
     frame->checksum = get_frame_checksum(data_dest, 0, frame->len);
 }
 
-void deserialize_frame_data(protocol_frame *frame)
+void deserialize_frame_data(protocol_frame_t *frame)
 {
     frame->header            = protocol_frame_parsed_result.header;
     frame->motor_id          = protocol_frame_parsed_result.motor_id;

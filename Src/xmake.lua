@@ -1,5 +1,12 @@
 add_rules("mode.debug", "mode.release")
 
+target("test-ringbuffer")
+    add_defines("TEST_RANDOLF","NON_STM32")
+    set_kind("binary")
+    add_includedirs("Library/Inc", "Test/Inc")
+    add_files("Library/Src/ringbuffer.c")
+    add_files("Test/Src/ringbuffer_test.c")
+
 target("test-protocol")
     add_defines("TEST_RANDOLF","NON_STM32")
     set_kind("binary")

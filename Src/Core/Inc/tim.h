@@ -37,7 +37,7 @@ extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 
 /* USER CODE BEGIN Private defines */
-#define ENCODER_TIMER htim3
+#define ENCODER_TIMER htim5
 #define STATE_TIMER   htim4
 /* USER CODE END Private defines */
 
@@ -58,4 +58,3 @@ void Start_State_Timer(void);
 #endif
 
 #endif /* __TIM_H__ */
-

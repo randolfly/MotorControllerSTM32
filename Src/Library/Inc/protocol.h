@@ -34,7 +34,7 @@ typedef struct
     uint16_t cmd;     /* command */
     uint8_t *data;    /* frame data */
     uint8_t checksum; /* frame checksum*/
-} protocol_frame;
+} protocol_frame_t;
 
 typedef struct
 {
@@ -104,20 +104,20 @@ typedef struct
  * @param  data_dest: target data array, only store 1 frame data, no need to protect the data array
  * @param  frame: frame struct
  */
-void serialize_frame_data(uint8_t *data_dest, protocol_frame *frame);
+void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame);
 
 /**
  * @brief deserialize frame struct from parser.recursive_buffer_pointer, the checksum will not be calculated
  * @param  frame: target frame struct
  */
-void deserialize_frame_data(protocol_frame *frame);
+void deserialize_frame_data(protocol_frame_t *frame);
 
 /**
  * @brief deserialize frame struct from specified data array, the checksum will not be calculated
  * @param  data_dest: data array destination
  * @param  frame: target frame struct
  */
-void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame *frame);
+void deserialize_frame_data_from_dest(uint8_t *data_dest, protocol_frame_t *frame);
 
 /**
  * @brief write the protocol data into recursive buffer

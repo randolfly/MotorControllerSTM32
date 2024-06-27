@@ -6,7 +6,7 @@
  * @brief write frame data to the protocol parser ring buffer
  * @param  frame: single protocol frame data
  */
-static void write_frame_buf(protocol_frame *frame);
+static void write_frame_buf(protocol_frame_t *frame);
 
 // test protocal frame data pool
 static uint8_t protocal_data_pool[PROTOCOL_RECURSIVE_BUFFER_SIZE] = {0};
@@ -26,7 +26,7 @@ void test_teardown(void)
     /* Nothing */
 }
 
-void init_test_protocol_frame(protocol_frame *frame)
+void init_test_protocol_frame(protocol_frame_t *frame)
 {
     frame->header   = PROTOCOL_FRAME_HEADER;
     frame->motor_id = MOTOR_ID1;
@@ -38,8 +38,8 @@ void init_test_protocol_frame(protocol_frame *frame)
 MU_TEST(serialize_deserialize_frame_data_test)
 {
     printf("start serialize_deserialize_frame_data_test\n");
-    protocol_frame protocal_frame = {0};
-    protocol_frame test_frame     = {0};
+    protocol_frame_t protocal_frame = {0};
+    protocol_frame_t test_frame     = {0};
 
     init_test_protocol_frame(&protocal_frame);
     serialize_frame_data(protocal_data_pool, &protocal_frame);
@@ -57,7 +57,7 @@ MU_TEST(protocol_data_receive_test)
 {
     uint16_t check_read_offset, check_write_offset;
     printf("start protocol_data_receive_test\n");
-    protocol_frame protocal_frame = {0};
+    protocol_frame_t protocal_frame = {0};
     init_test_protocol_frame(&protocal_frame);
 
     check_read_offset  = parser.write_offset;
@@ -72,8 +72,8 @@ MU_TEST(protocol_data_receive_test)
 MU_TEST(SEND_VEL_PID_CMD_test)
 {
     printf("start protocol_data_receive_test\n");
-    protocol_frame protocal_frame = {0};
-    protocol_frame test_frame     = {0};
+    protocol_frame_t protocal_frame = {0};
+    protocol_frame_t test_frame     = {0};
     init_test_protocol_frame(&protocal_frame);
 
     write_frame_buf(&protocal_frame);
@@ -108,7 +108,7 @@ int main()
     return MU_EXIT_CODE;
 }
 
-static void write_frame_buf(protocol_frame *frame)
+static void write_frame_buf(protocol_frame_t *frame)
 {
     serialize_frame_data(protocal_data_pool, frame);
     protocol_data_receive(protocal_data_pool, frame->len);
