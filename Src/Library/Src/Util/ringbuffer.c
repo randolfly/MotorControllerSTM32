@@ -1,16 +1,23 @@
-#include "ringbuffer.h"
+#include "Util/ringbuffer.h"
 
 /**
  * @file
  * Implementation of ring buffer functions.
  */
 
-void ring_buffer_init(ring_buffer_t *buffer, uint8_t *buf, uint32_t buf_size)
+void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size)
 {
+    //! check the sysmem.c file to see the _sbrk() function implementation
+    uint8_t *buf        = (uint8_t *)malloc(buf_size);
     buffer->buffer      = buf;
     buffer->buffer_mask = buf_size - 1;
     buffer->tail_index  = 0;
     buffer->head_index  = 0;
+}
+
+void ring_buffer_deinit(ring_buffer_t *buffer)
+{
+    free(buffer->buffer);
 }
 
 void ring_buffer_queue(ring_buffer_t *buffer, uint8_t data)

@@ -1,4 +1,4 @@
-#include "ringbuffer.h"
+#include "Util/ringbuffer.h"
 #include "minunit.h"
 
 ring_buffer_t ring_buffer;
@@ -6,13 +6,14 @@ ring_buffer_t ring_buffer;
 void test_setup(void)
 {
     printf("\nRING BUFFER TEST STARTED\n");
-    static uint8_t buffer[256];
-    ring_buffer_init(&ring_buffer, buffer, sizeof(buffer));
+
+    ring_buffer_init(&ring_buffer, 256);
 }
 
 void test_teardown(void)
 {
     printf("\nRING BUFFER TEST STOPED\n");
+    ring_buffer_deinit(&ring_buffer);
 }
 
 MU_TEST(insert_element_to_buffer_test)

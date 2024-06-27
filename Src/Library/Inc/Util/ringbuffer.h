@@ -2,8 +2,9 @@
 #define __RINGBUFFER_H__
 
 // defined for non-stm32 project
-#include "type_def_protocol.h"
+#include "Util/type_def_protocol.h"
 #include <string.h>
+#include <stdlib.h>
 
 #ifdef STM32H743xx
 #include "main.h"
@@ -61,10 +62,15 @@ struct ring_buffer_t {
  * This function can also be used to empty/reset the buffer.
  * The resulting buffer can contain <em>buf_size-1</em> bytes.
  * @param buffer The ring buffer to initialize.
- * @param buf The buffer allocated for the ringbuffer.
  * @param buf_size The size of the allocated ringbuffer.
  */
-void ring_buffer_init(ring_buffer_t *buffer, uint8_t *buf, uint32_t buf_size);
+void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size);
+
+/**
+ * @brief free the buffer
+ * @param  buffer: ring_buffer instance
+ */
+void ring_buffer_deinit(ring_buffer_t *buffer);
 
 /**
  * Adds a byte to a ring buffer.

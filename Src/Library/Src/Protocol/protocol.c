@@ -1,4 +1,4 @@
-#include "protocol.h"
+#include "Protocol/protocol.h"
 #include <stdio.h>
 
 void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame)

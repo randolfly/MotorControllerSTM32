@@ -9,6 +9,7 @@
     "C_Cpp.default.configurationProvider": "cl.eide",
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
+      ".fantomasignore": "ignore",
       ".eideignore": "ignore",
       "*.a51": "a51",
       "*.h": "c",
@@ -18,7 +19,23 @@
       "*.c++": "cpp",
       "*.cpp": "cpp",
       "*.cxx": "cpp",
-      "*.cc": "cpp"
+      "*.cc": "cpp",
+      "cctype": "c",
+      "climits": "c",
+      "cmath": "c",
+      "compare": "c",
+      "concepts": "c",
+      "cstdarg": "c",
+      "cstdio": "c",
+      "cstdlib": "c",
+      "exception": "c",
+      "type_traits": "c",
+      "limits": "c",
+      "new": "c",
+      "*.tcc": "c",
+      "cinttypes": "c",
+      "cstdint": "c",
+      "typeinfo": "c"
     },
     "[yaml]": {
       "editor.insertSpaces": true,

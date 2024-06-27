@@ -12,8 +12,8 @@
 #define __PROTOCOL_H__
 
 // defined for non-stm32 project
-#include "type_def_protocol.h"
-#include "ringbuffer.h"
+#include "Util/type_def_protocol.h"
+#include "Util/ringbuffer.h"
 #include <string.h>
 
 #ifdef STM32H743xx
