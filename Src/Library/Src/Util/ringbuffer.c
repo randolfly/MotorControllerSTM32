@@ -8,7 +8,8 @@
 void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size)
 {
     //! check the sysmem.c file to see the _sbrk() function implementation
-    uint8_t *buf        = (uint8_t *)malloc(buf_size);
+    uint8_t *buf = (uint8_t *)malloc(buf_size);
+    memset(buf, 0, buf_size);
     buffer->buffer      = buf;
     buffer->buffer_mask = buf_size - 1;
     buffer->tail_index  = 0;

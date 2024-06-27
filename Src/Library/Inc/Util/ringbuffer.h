@@ -51,9 +51,9 @@ struct ring_buffer_t {
     uint8_t *buffer;
     /** Buffer mask. */
     ring_buffer_size_t buffer_mask;
-    /** Index of tail. */
+    /** Index of tail(read). */
     ring_buffer_size_t tail_index;
-    /** Index of head. */
+    /** Index of head(write). */
     ring_buffer_size_t head_index;
 };
 

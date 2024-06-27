@@ -84,6 +84,14 @@ typedef struct
 #define NULL_CMD 0xFFFF // null command
 
 /**
+ * @brief Set the frame param data, and update the frame length
+ * @param  frame: frame struct
+ * @param  data: byte array
+ * @param  data_len: byte array length
+ */
+void set_frame_data(protocol_frame_t *frame, uint8_t *data, uint16_t data_len);
+
+/**
  * @brief serialize frame struct to uint8 data array, the checksum will be calculated automatically
  * notice that this means the frame length should be properly treated, no automatic calculation
  * @param  data_dest: target data array, only store 1 frame data, no need to protect the data array
@@ -114,21 +122,21 @@ uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len);
  * @param  raw_data: 32bit raw data
  * @param  data_dest: data array destination
  */
-static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest);
+void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest);
 
 /**
  * @brief extract 16bit data to 2x8 bit data array(low end first)
  * @param  raw_data: 16bit raw data
  * @param  data_dest: data array destination
  */
-static void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest);
+void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest);
 
 /**
  * @brief extract 8bit data to 1x8 bit data array(low end first)
  * @param  raw_data: 8bit raw data
  * @param  data_dest: data array destination
  */
-static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest);
+void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest);
 
 /**
  * @brief Get the frame header object from byte array
@@ -136,7 +144,7 @@ static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest);
  * @param  r_ofs: read offset of the frame
  * @return uint32_t: frame header value
  */
-static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs);
+uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs);
 
 /**
  * @brief Get the frame cmd object from byte array
@@ -144,7 +152,7 @@ static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs);
  * @param  r_ofs: read offset of the frame
  * @return uint32_t: frame cmd value
  */
-static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs);
+uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs);
 
 /**
  * @brief Get the frame length object from byte array
@@ -152,7 +160,7 @@ static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs);
  * @param  r_ofs: read offset of the frame
  * @return uint32_t: frame length value
  */
-static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
+uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
 
 /**
  * @brief Get the frame motor id object from byte array
@@ -160,7 +168,7 @@ static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs);
  * @param  r_ofs: read offset of the frame
  * @return uint32_t: frame motor id value
  */
-static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs);
+uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs);
 
 /**
  * @brief Get the frame checksum object(CRC-16) from byte array
@@ -169,7 +177,7 @@ static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs);
  * @param  frame_len: frame length
  * @return uint8_t: checksum value
  */
-static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len);
+uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len);
 
 #ifdef _cplusplus
 }

@@ -19,12 +19,12 @@ extern "C" {
 typedef struct
 {
     ring_buffer_t *ring_buffer; /** storage of ring_buffer */
-    protocol_frame_t *frame;    /** storage of current parsed protocol_frame */
-    uint16_t frame_len;
-    uint16_t found_frame_head;
+    protocol_frame_t *frame;    /** storage of protocol_frame */
+    uint8_t found_frame_head;
+    uint16_t next_frame_len; /** next frame length, used as an indicator of */
 } protocol_frame_parser_t;
 
-#define PROTOCOL_RECURSIVE_BUFFER_SIZE 512
+#define PROTOCOL_RECURSIVE_BUFFER_SIZE 1024
 
 /**
  * @brief initialize the protocol parser
@@ -39,24 +39,18 @@ void protocol_parser_init(protocol_frame_parser_t *parser);
 void protocol_parser_deinit(protocol_frame_parser_t *parser);
 
 /**
- * @brief retrive the parsed frame
+ * @brief write the protocol data into parser recursive buffer
  * @param  parser: protocol_frame_parser instance
- * @param  frame: protocol_frame instance
- */
-void get_parsed_frame(protocol_frame_parser_t *parser, protocol_frame_t *frame);
-
-/**
- * @brief write the protocol data into recursive buffer
  * @param  data: target data array
- * @param  len: data length
+ * @param  size: data length
  */
-void protocol_data_receive(uint8_t *data, uint16_t len);
+void protocol_data_receive(protocol_frame_parser_t *parser, uint8_t *data, uint32_t size);
 
 /**
  * @brief process the received data
- * @return uint16_t: process results: cmd_type
+ * @param  parser: protocol_frame_parser instance
  */
-uint16_t protocol_data_handler(void);
+uint16_t protocol_data_handler(protocol_frame_parser_t *parser);
 
 /**
  * @brief deep copy the frame from src to dest
@@ -64,15 +58,61 @@ uint16_t protocol_data_handler(void);
  * @param  src: source frame
  */
 void deep_copy_frame(protocol_frame_t *dest, protocol_frame_t *src);
+
 /* =========== auxiliary functions ===========*/
 
-static int32_t find_frame_header(uint8_t *buf, uint16_t buf_len, uint16_t start, uint16_t target_len);
-static uint16_t get_unparsed_frame_len(uint16_t frame_len, uint16_t buff_len, uint16_t start, uint16_t end);
-static uint16_t protocol_frame_parse(uint8_t *data, uint16_t *data_len);
-static void buf_put_data(uint8_t *buf, uint16_t ring_buf_len, uint16_t w_ofs, uint8_t *data, uint16_t data_len);
-static void swap_cmd_header(uint8_t *cmd);
-static void swap_cmd_length(uint8_t *cmd);
-static void swap_cmd_type(uint8_t *cmd);
+/**
+ * @brief find frame header in the buffer
+ * @param  buffer: ringbuffer instance
+ * @param  start: start index of the buffer
+ * @param  target_len: target length of the frame(need to find)
+ * @return int64_t: -1: not found, other: found index
+ */
+int64_t find_frame_header(ring_buffer_t *buffer, uint16_t start, uint16_t target_len);
+/**
+ * @brief parse the protocol ring buffer to get the frame raw data
+ * @param  parser: protocol_frame_parser instance
+ * @param  data_dest: target data array, used to store the frame raw data
+ * @param  data_len: target data length, used to store the frame raw data length
+ * @return uint16_t: frame cmd type
+ */
+uint16_t protocol_frame_parse(protocol_frame_parser_t *parser, uint8_t *data_dest, uint16_t *data_len);
+
+/**
+ * @brief Get the unparsed frame len in the ring buffer
+ * @param  frame_len: ideal frame length
+ * @param  buffer: ring buffer instance
+ * @return uint16_t
+ */
+static uint16_t get_unparsed_frame_len(uint16_t frame_len, ring_buffer_t *buffer);
+
+/**
+ * @brief the get_frame_len function for parser
+ * @param  parser
+ * @return uint16_t
+ */
+static uint16_t get_frame_len_parser(protocol_frame_parser_t *parser);
+
+/**
+ * @brief the get_frame_checksum function for parser
+ * @param  parser
+ * @return uint16_t
+ */
+static uint16_t get_frame_checksum_parser(protocol_frame_parser_t *parser);
+
+/**
+ * @brief store all the frame data into the data_dest
+ * @param  parser: protocol_frame_parser instance
+ * @param  data_dest: target data array
+ */
+static void get_frame_full_data_parser(protocol_frame_parser_t *parser, uint8_t *data_dest);
+
+/**
+ * @brief the calculate_checksum function for parser
+ * @param  parser
+ * @return uint8_t
+ */
+static uint8_t calculate_checksum_parser(protocol_frame_parser_t *parser);
 #ifdef _cplusplus
 }
 #endif

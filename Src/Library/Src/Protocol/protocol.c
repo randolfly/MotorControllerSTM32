@@ -1,6 +1,12 @@
 #include "Protocol/protocol.h"
 #include <stdio.h>
 
+void set_frame_data(protocol_frame_t *frame, uint8_t *data, uint16_t data_len)
+{
+    frame->data = data;
+    frame->len  = PROTOCOL_FRAME_HEADER_SIZE + data_len + PROTOCOL_FRAME_CHECKSUM_SIZE;
+}
+
 void serialize_frame_data(uint8_t *data_dest, protocol_frame_t *frame)
 {
     EXTRACT_32BIT_4x8BIT(frame->header, data_dest + FRAME_INDEX_HEAD);
@@ -43,7 +49,7 @@ uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
 
 /* =========== auxiliary functions ===========*/
 
-static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest)
+void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest)
 {
     data_dest[0] = (uint8_t)(raw_data & 0x000000FF);
     data_dest[1] = (uint8_t)((raw_data & 0x0000FF00) >> 8);
@@ -51,18 +57,18 @@ static void EXTRACT_32BIT_4x8BIT(uint32_t raw_data, uint8_t *data_dest)
     data_dest[3] = (uint8_t)((raw_data & 0xFF000000) >> 24);
 }
 
-static void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest)
+void EXTRACT_16BIT_2x8BIT(uint16_t raw_data, uint8_t *data_dest)
 {
     data_dest[0] = (uint8_t)(raw_data & 0x00FF);
     data_dest[1] = (uint8_t)((raw_data & 0xFF00) >> 8);
 }
 
-static void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest)
+void EXTRACT_8BIT_1x8BIT(uint8_t raw_data, uint8_t *data_dest)
 {
     data_dest[0] = (uint8_t)(raw_data & 0xFF);
 }
 
-static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs)
+uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs)
 {
     return (buf[r_ofs + FRAME_INDEX_HEAD + 0] << 0 |
             buf[r_ofs + FRAME_INDEX_HEAD + 1] << 8 |
@@ -70,24 +76,24 @@ static uint32_t get_frame_header(uint8_t *buf, uint16_t r_ofs)
             buf[r_ofs + FRAME_INDEX_HEAD + 3] << 24);
 }
 
-static uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs)
+uint16_t get_frame_cmd(uint8_t *buf, uint16_t r_ofs)
 {
     return (buf[r_ofs + FRAME_INDEX_CMD + 0] << 0 |
             buf[r_ofs + FRAME_INDEX_CMD + 1] << 8);
 }
 
-static uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs)
+uint16_t get_frame_len(uint8_t *buf, uint16_t r_ofs)
 {
     return (buf[r_ofs + FRAME_INDEX_LEN + 0] << 0 |
             buf[r_ofs + FRAME_INDEX_LEN + 1] << 8);
 }
 
-static uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs)
+uint8_t get_frame_motor_id(uint8_t *buf, uint16_t r_ofs)
 {
     return buf[r_ofs + FRAME_INDEX_MOTOR_ID + 0];
 }
 
-static uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len)
+uint8_t get_frame_checksum(uint8_t *buf, uint16_t r_ofs, uint16_t frame_len)
 {
     return buf[r_ofs + frame_len - 1];
 }

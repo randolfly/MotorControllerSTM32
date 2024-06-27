@@ -19,7 +19,6 @@ uint16_t protocol_data_handler(void)
     return cmd_type;
 }
 
-/* =========== auxiliary functions ===========*/
 
 /**
  * @brief find frame header in the buffer
