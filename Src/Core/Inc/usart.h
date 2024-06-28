@@ -29,6 +29,10 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include "stdint.h"
+#include <string.h>
+#include <stdarg.h>
 #include "Protocol/protocol_parser.h"
 #include "Util/byte_operator.h"
 /* USER CODE END Includes */
@@ -70,6 +74,19 @@ void Start_Command_Frame_Receive(void);
  */
 void Parse_Command_Frame(void);
 
+/**
+ * @brief relocate printf function to USART1
+ * @param  ch character to be printed
+ * @param  f file pointer
+ * @return int
+ */
+
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -77,3 +94,4 @@ void Parse_Command_Frame(void);
 #endif
 
 #endif /* __USART_H__ */
+

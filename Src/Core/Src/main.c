@@ -103,6 +103,7 @@ int main(void)
     /* USER CODE BEGIN 2 */
     Start_Command_Frame_Receive();
     Start_State_Timer();
+    HAL_TIM_Encoder_Start(&ENCODER_TIMER, TIM_CHANNEL_ALL);
 
     command_send_frame.cmd      = SEND_VEL_PID_CMD;
     command_send_frame.header   = PROTOCOL_FRAME_HEADER;
@@ -144,6 +145,8 @@ int main(void)
                 Send_Command_Frame_Data(&command_send_frame);
                 HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
             }
+
+            printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
         }
 
         if (state_tim_counter % STATE_TIM_1 == 0) {
