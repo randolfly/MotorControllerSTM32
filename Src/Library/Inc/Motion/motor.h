@@ -12,8 +12,6 @@
 #define __MOTOR_H__
 
 #include "Motion/motor_util.h"
-#include "Motion/encoder.h"
-#include "Motion/safety.h"
 
 #ifdef STM32H743xx
 #include "main.h"
@@ -22,23 +20,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct {
-    /* data region */
-    float target_torque; /* target torque executed(Nm), clock-wise -> + */
-    float actual_torque; /* actual torque */
-
-    /* hardware(wire-pin, sensor) region */
-    encoder_t encoder;
-
-    /* config region */
-    motion_config_t motion_config;
-} motor_t;
-
-typedef struct
-{
-    motion_limit_t motion_limit;
-} motor_config_t;
 
 /**
  * @brief init the motor

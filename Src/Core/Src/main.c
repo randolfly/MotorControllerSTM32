@@ -54,6 +54,9 @@
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
+void Init_Task_Scheduler_Tasks(void);
+
+void Send_Frame_Test(void);
 
 /* USER CODE END PFP */
 
@@ -101,8 +104,9 @@ int main(void)
     MX_TIM4_Init();
     MX_TIM5_Init();
     /* USER CODE BEGIN 2 */
-    Start_Command_Frame_Receive();
-    Start_State_Timer();
+    Start_Command_Frame_Receive(); // command uart receive dma frames
+    Start_Task_Scheduler_Timer();  // start the tasks scheduler timer
+
     HAL_TIM_Encoder_Start(&ENCODER_TIMER, TIM_CHANNEL_ALL);
 
     command_send_frame.cmd      = SEND_VEL_PID_CMD;
@@ -110,50 +114,14 @@ int main(void)
     command_send_frame.motor_id = MOTOR_ID1;
     command_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
     command_send_frame.data     = (uint8_t *)command_param_data_array;
+
+    Init_Task_Scheduler_Tasks(); // init the tasks scheduler tasks
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
-
-        if (state_tim_counter % STATE_TIM_10K == 0) {
-        }
-
-        if (state_tim_counter % STATE_TIM_5K == 0) {
-        }
-
-        if (state_tim_counter % STATE_TIM_4K == 0) {
-        }
-        if (state_tim_counter % STATE_TIM_2K == 0) {
-        }
-        if (state_tim_counter % STATE_TIM_1K == 0) {
-        }
-
-        if (state_tim_counter % STATE_TIM_100 == 0) {
-        }
-        if (state_tim_counter % STATE_TIM_10 == 0) {
-            // protocol handler
-            Parse_Command_Frame();
-
-            // send available log data name list
-            if (command_receive_frame.cmd == DATALOG_CHECK_AVAILABLE_DATA_CMD) {
-                command_send_frame.cmd = DATALOG_SEND_AVAILABLE_DATA_CMD;
-                name_string_to_uint8_array(command_param_name_string_array,
-                                           command_param_data_array,
-                                           strlen(command_param_name_string_array));
-                set_frame_data(&command_send_frame, command_param_data_array, strlen(command_param_name_string_array));
-                Send_Command_Frame_Data(&command_send_frame);
-                HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-            }
-
-            printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
-        }
-
-        if (state_tim_counter % STATE_TIM_1 == 0) {
-            // test dac
-            // Set_Motor_Torque(500.0);
-        }
-
+        task_scheduler_run();
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
@@ -223,6 +191,29 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+void Init_Task_Scheduler_Tasks(void)
+{
+    task_scheduler_add_task(Send_Frame_Test, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
+}
+
+void Send_Frame_Test(void)
+{
+    // protocol handler
+    Parse_Command_Frame();
+
+    // send available log data name list
+    if (command_receive_frame.cmd == DATALOG_CHECK_AVAILABLE_DATA_CMD) {
+        command_send_frame.cmd = DATALOG_SEND_AVAILABLE_DATA_CMD;
+        name_string_to_uint8_array(command_param_name_string_array,
+                                   command_param_data_array,
+                                   strlen(command_param_name_string_array));
+        set_frame_data(&command_send_frame, command_param_data_array, strlen(command_param_name_string_array));
+        Send_Command_Frame_Data(&command_send_frame);
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+    }
+
+    printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
+}
 /* USER CODE END 4 */
 
 /* MPU Configuration */

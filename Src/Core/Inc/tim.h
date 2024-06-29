@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "Util/task_scheduler.h"
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim4;
@@ -37,20 +37,19 @@ extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 
 /* USER CODE BEGIN Private defines */
-#define ENCODER_TIMER htim5
-#define STATE_TIMER   htim4
+#define ENCODER_TIMER        htim5
+#define TASK_SCHEDULER_TIMER htim4
 /* USER CODE END Private defines */
 
 void MX_TIM4_Init(void);
 void MX_TIM5_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-extern uint16_t state_tim_counter;
 
 /**
  * @brief start the system state timer
  */
-void Start_State_Timer(void);
+void Start_Task_Scheduler_Timer(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -58,4 +57,3 @@ void Start_State_Timer(void);
 #endif
 
 #endif /* __TIM_H__ */
-
