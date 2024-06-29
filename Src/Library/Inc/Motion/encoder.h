@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-#define ENCODER_RESOLUTION (63000 * 1024 - 1) /* encoder resolution*/
+#define ENCODER_RESOLUTION 63000 * 1024 /* encoder resolution*/
 typedef struct {
     double_t start_position;
 } encoder_config_t;

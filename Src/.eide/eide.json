@@ -61,7 +61,8 @@
           "Drivers/STM32H7xx_HAL_Driver/Inc/Legacy",
           "Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "Drivers/CMSIS/Include",
-          "Library/Inc"
+          "Library/Inc",
+          "Matlab"
         ],
         "libList": [],
         "defineList": [
