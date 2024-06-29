@@ -3,6 +3,8 @@
 
 // defined for non-stm32 project
 
+#define PI 3.1415926;
+
 #ifdef NON_STM32
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;

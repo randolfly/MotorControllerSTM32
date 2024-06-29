@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-#define ENCODER_RESOLUTION (63000 * 1024 - 1) * 4 /* encoder resolution*/
+#define ENCODER_RESOLUTION (63000 * 1024 - 1) /* encoder resolution*/
 typedef struct {
     double_t start_position;
 } encoder_config_t;
@@ -39,6 +39,8 @@ void encoder_init(encoder_t *encoder, encoder_config_t *encoder_config);
  * @param  encoder_counter: current encoder counter(get from __HAL_TIM_GET_COUNTER(&htim5))
  */
 void encoder_update(encoder_t *encoder, uint32_t encoder_counter);
+// todo: check encoder velocity calculation method paper
+// should add fpu to accelerate execution?
 
 #ifdef _cplusplus
 }

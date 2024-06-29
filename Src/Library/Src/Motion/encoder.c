@@ -11,4 +11,7 @@ void encoder_init(encoder_t *encoder, encoder_config_t *encoder_config)
 void encoder_update(encoder_t *encoder, uint32_t encoder_counter)
 {
     encoder->current_revolute_counter = encoder_counter;
+
+    encoder->position = encoder->encoder_config->start_position +
+                        (double(encoder->current_revolute_counter) / ENCODER_RESOLUTION + encoder->rotation_num) * 2 * PI;
 }
