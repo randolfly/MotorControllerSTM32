@@ -56,8 +56,14 @@ static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 void Init_Task_Scheduler_Tasks(void);
 
-void Send_Frame_Test(void);
+// tasks
+void Command_Frames_Handler(void);
+void test_work(void);
+void Datalog_Frames_Handler(void);
 
+// test functions
+void Init_Command_Send_Frame(void);
+void Init_Datalog_Send_Frame(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -108,13 +114,8 @@ int main(void)
     Start_Task_Scheduler_Timer();  // start the tasks scheduler timer
 
     HAL_TIM_Encoder_Start(&ENCODER_TIMER, TIM_CHANNEL_ALL);
-
-    command_send_frame.cmd      = SEND_VEL_PID_CMD;
-    command_send_frame.header   = PROTOCOL_FRAME_HEADER;
-    command_send_frame.motor_id = MOTOR_ID1;
-    command_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-    command_send_frame.data     = (uint8_t *)command_param_data_array;
-
+    Init_Command_Send_Frame();
+    Init_Datalog_Send_Frame();
     Init_Task_Scheduler_Tasks(); // init the tasks scheduler tasks
     /* USER CODE END 2 */
 
@@ -193,10 +194,12 @@ void SystemClock_Config(void)
 
 void Init_Task_Scheduler_Tasks(void)
 {
-    task_scheduler_add_task(Send_Frame_Test, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
+    task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
+    task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1), 0);
+    task_scheduler_add_task(test_work, GET_TASK_SCHEDULER_IDEAL_TICKS(5), 1);
 }
 
-void Send_Frame_Test(void)
+void Command_Frames_Handler(void)
 {
     // protocol handler
     Parse_Command_Frame();
@@ -212,7 +215,66 @@ void Send_Frame_Test(void)
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
     }
 
+    if (command_receive_frame.cmd == DATALOG_SET_LOG_DATA_CMD) {
+        command_send_frame.cmd = DATALOG_ECHO_LOG_DATA_CMD;
+        name_string_to_uint8_array(command_param_name_string_array,
+                                   command_param_data_array,
+                                   strlen(command_param_name_string_array));
+        set_frame_data(&command_send_frame, command_param_data_array, strlen(command_param_name_string_array));
+        Send_Command_Frame_Data(&command_send_frame);
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+    }
+
+    // for test, the log data is the predefined values
+    if (command_receive_frame.cmd == DATALOG_START_LOG_CMD) {
+        // send back start log command
+        command_send_frame.cmd = DATALOG_ECHO_LOG_START_CMD;
+        command_send_frame.len = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
+        Send_Command_Frame_Data(&command_send_frame);
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+        // start send log data
+        task_scheduler_enable_task(1); // enable datalog task(id = 1)
+    }
+
+    if (command_receive_frame.cmd == DATALOG_STOP_LOG_CMD) {
+        task_scheduler_disable_task(1); // disable datalog task(id = 1)
+    }
+}
+
+void Datalog_Frames_Handler(void)
+{
+    datalog_send_frame.cmd = DATALOG_RUNNING_CMD;
+    float_array_to_uint8_array(datalog_param_float_array, datalog_param_data_array, 4);
+    set_frame_data(&datalog_send_frame, datalog_param_data_array, 4 * 4);
+    Send_Datalog_Frame_Data(&datalog_send_frame);
+}
+
+void test_work(void)
+{
     printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
+    datalog_param_float_array[0] += 0.1;
+    datalog_param_float_array[1] += 0.2;
+    datalog_param_float_array[2] += 0.3;
+    datalog_param_float_array[3] += 0.4;
+    // HAL_UART_Transmit_DMA(&UART_DATALOG, (uint8_t *)"hello world\n", strlen("hello world\n"));
+}
+
+void Init_Command_Send_Frame(void)
+{
+    command_send_frame.cmd      = SEND_VEL_PID_CMD;
+    command_send_frame.header   = PROTOCOL_FRAME_HEADER;
+    command_send_frame.motor_id = MOTOR_ID1;
+    command_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
+    command_send_frame.data     = (uint8_t *)command_param_data_array;
+}
+
+void Init_Datalog_Send_Frame(void)
+{
+    datalog_send_frame.cmd      = NULL;
+    datalog_send_frame.header   = PROTOCOL_FRAME_HEADER;
+    datalog_send_frame.motor_id = MOTOR_ID1;
+    datalog_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
+    datalog_send_frame.data     = (uint8_t *)datalog_param_data_array;
 }
 /* USER CODE END 4 */
 

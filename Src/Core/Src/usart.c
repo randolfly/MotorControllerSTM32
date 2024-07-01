@@ -22,18 +22,27 @@
 
 /* USER CODE BEGIN 0 */
 
+/* ================== COMMAND ====================*/
+
 // send and receive frame data(public handler)
 protocol_frame_parser_t command_parser;
 
 protocol_frame_t command_send_frame    = {0};
 protocol_frame_t command_receive_frame = {0};
 
-char command_param_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = "kp,ki,kd,test,system_id";
+char command_param_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = "kp,ki,kd,system_id";
 uint8_t command_param_data_array[PROTOCOL_FRAME_MAX_SIZE]     = {0};
 
 // private send/receive data buffer(single frame byte data)
 static uint8_t command_receive_frame_data[PROTOCOL_FRAME_MAX_SIZE] = {0};
 static uint8_t command_send_frame_data[PROTOCOL_FRAME_MAX_SIZE]    = {0};
+
+/* ================== DATALOG ====================*/
+protocol_frame_t datalog_send_frame                       = {0};
+float datalog_param_float_array[PROTOCOL_FRAME_MAX_SIZE]  = {0};
+uint8_t datalog_param_data_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
+
+static uint8_t datalog_send_frame_data[PROTOCOL_FRAME_MAX_SIZE] = {0};
 
 /* USER CODE END 0 */
 
@@ -318,6 +327,12 @@ void Parse_Command_Frame(void)
 {
     protocol_data_handler(&command_parser);
     deep_copy_frame(&command_receive_frame, command_parser.frame);
+}
+
+void Send_Datalog_Frame_Data(protocol_frame_t *frame)
+{
+    serialize_frame_data(datalog_send_frame_data, frame);
+    HAL_UART_Transmit_DMA(&UART_DATALOG, datalog_send_frame_data, frame->len);
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
