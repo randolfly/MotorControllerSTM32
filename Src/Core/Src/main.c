@@ -194,8 +194,11 @@ void SystemClock_Config(void)
 
 void Init_Task_Scheduler_Tasks(void)
 {
+    // send/receive command frames with 10Hz frequency
     task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
-    task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1), 0);
+    // log data with 2kHz frequency
+    task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
+
     task_scheduler_add_task(test_work, GET_TASK_SCHEDULER_IDEAL_TICKS(5), 1);
 }
 
@@ -270,7 +273,7 @@ void Init_Command_Send_Frame(void)
 
 void Init_Datalog_Send_Frame(void)
 {
-    datalog_send_frame.cmd      = NULL;
+    datalog_send_frame.cmd      = NULL_CMD;
     datalog_send_frame.header   = PROTOCOL_FRAME_HEADER;
     datalog_send_frame.motor_id = MOTOR_ID1;
     datalog_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
