@@ -27,6 +27,10 @@ MU_TEST(dictionary_test)
     mu_check(*get_value(&dict, "ki") == 20.0);
     mu_check(*get_value(&dict, "kd") == 30.0);
     mu_check(*get_value(&dict, "system_id") == 40.0);
+
+    char all_keys[50];
+    get_all_keys(&dict, all_keys);
+    mu_check(strcmp(all_keys, "kp,ki,kd,system_id") == 0);
 }
 
 MU_TEST_SUITE(test_suite)

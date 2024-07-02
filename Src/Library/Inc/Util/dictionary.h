@@ -12,7 +12,8 @@
 extern "C" {
 #endif
 
-#define DICT_MAX_SIZE 50
+#define DICT_MAX_SIZE  50
+#define KEY_MAX_LENGTH 20
 
 typedef struct
 {
@@ -47,6 +48,13 @@ void add_key_value_pair(dictionary_t *dict, const char *key, float *value);
  * @return float* : value
  */
 float *get_value(dictionary_t *dict, const char *key);
+
+/**
+ * @brief Get the all keys in dictionary
+ * @param  dict: dictionary instance
+ * @param char*: keys string separated by "," e.g. "key1,key2,key3"
+ */
+void get_all_keys(dictionary_t *dict, char *all_keys);
 
 #ifdef __cplusplus
 }

@@ -23,3 +23,15 @@ float *get_value(dictionary_t *dict, const char *key)
     }
     return NULL;
 }
+
+void get_all_keys(dictionary_t *dict, char *all_keys)
+{
+    all_keys[0] = '\0';
+
+    for (int i = 0; i < dict->size; i++) {
+        strcat(all_keys, dict->pairs[i].key);
+        if (i < dict->size - 1) {
+            strcat(all_keys, ",");
+        }
+    }
+}

@@ -30,7 +30,7 @@ protocol_frame_parser_t command_parser;
 protocol_frame_t command_send_frame    = {0};
 protocol_frame_t command_receive_frame = {0};
 
-char command_param_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = "kp,ki,kd,system_id";
+char command_param_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
 uint8_t command_param_data_array[PROTOCOL_FRAME_MAX_SIZE]     = {0};
 
 // private send/receive data buffer(single frame byte data)

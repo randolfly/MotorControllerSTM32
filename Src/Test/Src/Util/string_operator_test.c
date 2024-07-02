@@ -12,6 +12,10 @@ MU_TEST(seperate_string_test)
     mu_check(strcmp(name_list[2], "kd") == 0);
     mu_check(strcmp(name_list[3], "system_id") == 0);
     mu_check(num == 4);
+
+    char name2[20] = {0};
+    join_string(name_list, name2, num);
+    mu_check(strcmp("kp,ki,kd,system_id", name2) == 0);
 }
 
 MU_TEST_SUITE(test_suite)

@@ -34,11 +34,13 @@ void uint8_array_to_float_array(uint8_t *src_byte_array, float *dst, uint16_t by
 
 void uint8_array_to_name_string(uint8_t *src_byte_array, char *dst, uint16_t byte_len)
 {
+
     memcpy(dst, src_byte_array, byte_len);
     src_byte_array[byte_len] = '\0';
 }
 
 void name_string_to_uint8_array(char *src_name_string_array, uint8_t *dst, uint16_t string_len)
 {
+
     memcpy(dst, src_name_string_array, string_len);
 }
