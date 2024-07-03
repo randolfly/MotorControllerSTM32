@@ -2,6 +2,11 @@
 
 void init_encoder(encoder_t *encoder)
 {
+    encoder->rotation_num                   = 0;
+    encoder->current_revolute_counter       = 0;
+    encoder->position                       = 0;
+    encoder->velocity                       = 0;
+    encoder->acceleration                   = 0;
     encoder->encoder_config                 = (encoder_config_t *)malloc(sizeof(encoder_config_t));
     encoder->encoder_config->start_position = 0;
     encoder->velocity_diff_model            = (encoder_velocity_diff_t *)malloc(sizeof(encoder_velocity_diff_t));

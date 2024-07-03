@@ -1,10 +1,5 @@
 #include "main_app.h"
 
-float kp       = 0.1;
-float ki       = 0.2;
-float kd       = 0.3;
-float setpoint = 0.4;
-
 // the variables can be logged
 dictionary_t datalog_available_symbol_dict;
 char *datalog_target_symbol_name[DICT_MAX_SIZE];
@@ -14,7 +9,7 @@ int datalog_target_symbol_size = 0;
 motor_t motor1;
 
 /* =============== MAIN WORK ====================*/
-static void test_work(void);
+static void MAIN_WORK(void);
 
 /* =============== TASK SCHEDULER ====================*/
 /**
@@ -75,13 +70,10 @@ void Run_App_Functions(void)
 
 /* =============== MAIN WORK ====================*/
 
-static void test_work(void)
+static void MAIN_WORK(void)
 {
-    printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
-    kp += 0.1;
-    ki += 0.2;
-    kd += 0.3;
-    setpoint += 0.4;
+    // update motor1 encoder info
+    encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
 }
 
 /* =============== TASK SCHEDULER ====================*/
@@ -94,7 +86,7 @@ static void Init_Task_Scheduler_Tasks(void)
     // task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
     task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
-    task_scheduler_add_task(test_work, GET_TASK_SCHEDULER_IDEAL_TICKS(5), 1);
+    task_scheduler_add_task(MAIN_WORK, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
 }
 
 /* =============== PROTOCOL ====================*/
@@ -102,10 +94,9 @@ static void Init_Task_Scheduler_Tasks(void)
 static void Init_Datalog_Param_Dict(void)
 {
     init_dictionary(&datalog_available_symbol_dict);
-    add_key_value_pair(&datalog_available_symbol_dict, "kp", &kp);
-    add_key_value_pair(&datalog_available_symbol_dict, "ki", &ki);
-    add_key_value_pair(&datalog_available_symbol_dict, "kd", &kd);
-    add_key_value_pair(&datalog_available_symbol_dict, "setpoint", &setpoint);
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_cnt", &((motor1.encoder->current_revolute_counter)));
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &((motor1.encoder->position)));
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &((motor1.encoder->velocity)));
 }
 
 static void Command_Frames_Handler(void)
