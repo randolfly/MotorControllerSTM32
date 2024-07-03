@@ -22,11 +22,13 @@ void deinit_encoder(encoder_t *encoder)
 
 void encoder_update(encoder_t *encoder, uint32_t encoder_counter)
 {
-    encoder->current_revolute_counter = encoder_counter;
-    encoder->position                 = encoder->encoder_config->start_position +
-                        ((double)(encoder->current_revolute_counter) / ENCODER_RESOLUTION + encoder->rotation_num) * 2 * PI;
+    // todo: ignore the overflow of encoder counter
+    if (abs(encoder_counter - encoder->current_revolute_counter) < ENCODER_RESOLUTION / 2) {
+        encoder->current_revolute_counter = encoder_counter;
+        encoder->position                 = encoder->encoder_config->start_position +
+                            ((double)(encoder->current_revolute_counter) / ENCODER_RESOLUTION + encoder->rotation_num) * 2 * PI;
+    }
     // set velocity_diff model input
-
     step_encoder_velocity_diff(encoder->velocity_diff_model,
                                (encoder->position),
                                &(encoder->velocity));
