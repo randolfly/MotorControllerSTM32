@@ -14,7 +14,7 @@ static struct {
     task_t *tasks;
 } task_scheduler;
 
-void task_scheduler_init(uint32_t task_size)
+void init_task_scheduler(uint32_t task_size)
 {
     task_scheduler.ticks      = 0;
     task_scheduler.task_nums  = 0;
@@ -22,7 +22,7 @@ void task_scheduler_init(uint32_t task_size)
     task_scheduler.tasks      = (task_t *)malloc(task_scheduler.tasks_size);
 }
 
-void task_scheduler_deinit(void)
+void deinit_task_scheduler(void)
 {
     free(task_scheduler.tasks);
 }

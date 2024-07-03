@@ -2,6 +2,7 @@
 #define __ENCODER_H__
 
 #include "Util/type_def_protocol.h"
+#include "Controller/encoder_velocity_diff.h"
 
 #ifdef STM32H743xx
 #include "main.h"
@@ -18,20 +19,29 @@ typedef struct {
 
 typedef struct
 {
+    /* data region */
     int32_t rotation_num;              /* encoder rotation number, updated by Z signal */
     uint32_t current_revolute_counter; /* current encoder counter, indicates the locatin of single round */
     double_t position;                 /* encoder position(rad) */
     double_t velocity;                 /* encoder velocity(rad/s) */
     double_t acceleration;             /* encoder acceleration(rad/s^2) */
     encoder_config_t *encoder_config;  /* encoder configuration */
+
+    /* method region */
+    encoder_velocity_diff_t *velocity_diff_model; /* velocity diff model */
 } encoder_t;
 
 /**
  * @brief init encoder with specified configuration
  * @param  encoder: encoder object
- * @param  encoder_config: encoder configuration
  */
-void encoder_init(encoder_t *encoder, encoder_config_t *encoder_config);
+void init_encoder(encoder_t *encoder);
+
+/**
+ * @brief deinit encoder
+ * @param  encoder
+ */
+void deinit_encoder(encoder_t *encoder);
 
 /**
  * @brief update encoder counter, position, velocity and acceleration

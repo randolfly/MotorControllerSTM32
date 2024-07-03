@@ -24,12 +24,12 @@ static uint8_t datalog_send_frame_data[PROTOCOL_FRAME_MAX_SIZE] = {0};
 
 void Init_Command_Protocol_Parser(void)
 {
-    protocol_parser_init(&command_parser);
+    init_protocol_parser(&command_parser);
 }
 
 void DeInit_Command_Protocol_Parser(void)
 {
-    protocol_parser_deinit(&command_parser);
+    deinit_protocol_parser(&command_parser);
 }
 
 void Send_Command_Frame_Data(protocol_frame_t *frame)

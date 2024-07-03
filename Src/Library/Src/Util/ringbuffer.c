@@ -5,7 +5,7 @@
  * Implementation of ring buffer functions.
  */
 
-void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size)
+void init_ring_buffer(ring_buffer_t *buffer, uint32_t buf_size)
 {
     //! check the sysmem.c file to see the _sbrk() function implementation
     uint8_t *buf = (uint8_t *)malloc(buf_size);
@@ -16,7 +16,7 @@ void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size)
     buffer->head_index  = 0;
 }
 
-void ring_buffer_deinit(ring_buffer_t *buffer)
+void deinit_ring_buffer(ring_buffer_t *buffer)
 {
     free(buffer->buffer);
 }

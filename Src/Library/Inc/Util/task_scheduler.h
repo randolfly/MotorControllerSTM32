@@ -18,12 +18,12 @@ typedef void (*task_func_t)(void);
  * @brief initialize task scheduler with specified task nums
  * @param  task_size: max amount of tasks
  */
-void task_scheduler_init(uint32_t task_size);
+void init_task_scheduler(uint32_t task_size);
 
 /**
  * @brief deinitialize task scheduler
  */
-void task_scheduler_deinit(void);
+void deinit_task_scheduler(void);
 
 /**
  * @brief run in main loop to execute tasks

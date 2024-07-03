@@ -1,9 +1,9 @@
 #include "Protocol/protocol_parser.h"
 
-void protocol_parser_init(protocol_frame_parser_t *parser)
+void init_protocol_parser(protocol_frame_parser_t *parser)
 {
     parser->ring_buffer = (ring_buffer_t *)malloc(sizeof(ring_buffer_t));
-    ring_buffer_init(parser->ring_buffer, PROTOCOL_RECURSIVE_BUFFER_SIZE);
+    init_ring_buffer(parser->ring_buffer, PROTOCOL_RECURSIVE_BUFFER_SIZE);
     parser->frame = (protocol_frame_t *)malloc(sizeof(protocol_frame_t));
     memset(parser->frame, 0, sizeof(protocol_frame_t));
     parser->frame->data = (uint8_t *)malloc(PROTOCOL_FRAME_MAX_SIZE);
@@ -12,9 +12,9 @@ void protocol_parser_init(protocol_frame_parser_t *parser)
     parser->next_frame_len   = 0;
 }
 
-void protocol_parser_deinit(protocol_frame_parser_t *parser)
+void deinit_protocol_parser(protocol_frame_parser_t *parser)
 {
-    ring_buffer_deinit(parser->ring_buffer);
+    deinit_ring_buffer(parser->ring_buffer);
     free(parser->ring_buffer);
     free(parser->frame->data);
     free(parser->frame);

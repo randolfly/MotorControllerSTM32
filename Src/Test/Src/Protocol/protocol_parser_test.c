@@ -10,13 +10,13 @@ void check_parse_frame_result(protocol_frame_t *protocol_frame);
 void test_setup(void)
 {
     printf("\n PROTOCOL PARSER TEST STARTED\n");
-    protocol_parser_init(&parser);
+    init_protocol_parser(&parser);
 }
 
 void test_teardown(void)
 {
     printf("\n PROTOCOL PARSER TEST STOPED\n");
-    protocol_parser_deinit(&parser);
+    deinit_protocol_parser(&parser);
 }
 
 void init_test_protocol_frame(protocol_frame_t *frame)

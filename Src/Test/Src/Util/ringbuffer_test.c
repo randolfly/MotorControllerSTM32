@@ -7,13 +7,13 @@ void test_setup(void)
 {
     printf("\nRING BUFFER TEST STARTED\n");
 
-    ring_buffer_init(&ring_buffer, 256);
+    init_ring_buffer(&ring_buffer, 256);
 }
 
 void test_teardown(void)
 {
     printf("\nRING BUFFER TEST STOPED\n");
-    ring_buffer_deinit(&ring_buffer);
+    deinit_ring_buffer(&ring_buffer);
 }
 
 MU_TEST(insert_element_to_buffer_test)

@@ -64,13 +64,13 @@ struct ring_buffer_t {
  * @param buffer The ring buffer to initialize.
  * @param buf_size The size of the allocated ringbuffer.
  */
-void ring_buffer_init(ring_buffer_t *buffer, uint32_t buf_size);
+void init_ring_buffer(ring_buffer_t *buffer, uint32_t buf_size);
 
 /**
  * @brief free the buffer
  * @param  buffer: ring_buffer instance
  */
-void ring_buffer_deinit(ring_buffer_t *buffer);
+void deinit_ring_buffer(ring_buffer_t *buffer);
 
 /**
  * Adds a byte to a ring buffer.

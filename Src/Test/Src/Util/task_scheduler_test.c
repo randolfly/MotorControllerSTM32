@@ -10,13 +10,13 @@ void hello2_func(void);
 void test_setup(void)
 {
     printf("\nRING BUFFER TEST STARTED\n");
-    task_scheduler_init(10);
+    init_task_scheduler(10);
 }
 
 void test_teardown(void)
 {
     printf("\nRING BUFFER TEST STOPED\n");
-    task_scheduler_deinit();
+    deinit_task_scheduler();
 }
 
 void hello1_func(void)

@@ -21,10 +21,10 @@ void Start_Encoder_Timer(void)
 
 void Init_Task_Scheduler(void)
 {
-    task_scheduler_init(TASK_SCHEDULER_MAX_TASK);
+    init_task_scheduler(TASK_SCHEDULER_MAX_TASK);
 }
 
 void DeInit_Task_Scheduler(void)
 {
-    task_scheduler_deinit();
+    deinit_task_scheduler();
 }

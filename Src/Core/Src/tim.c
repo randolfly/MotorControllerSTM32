@@ -71,7 +71,7 @@ void MX_TIM5_Init(void)
 
     /* USER CODE END TIM5_Init 0 */
 
-    TIM_Encoder_InitTypeDef sConfig       = {0};
+    TIM_init_encoderTypeDef sConfig       = {0};
     TIM_MasterConfigTypeDef sMasterConfig = {0};
 
     /* USER CODE BEGIN TIM5_Init 1 */
@@ -92,7 +92,7 @@ void MX_TIM5_Init(void)
     sConfig.IC2Selection         = TIM_ICSELECTION_DIRECTTI;
     sConfig.IC2Prescaler         = TIM_ICPSC_DIV1;
     sConfig.IC2Filter            = 5;
-    if (HAL_TIM_Encoder_Init(&htim5, &sConfig) != HAL_OK) {
+    if (HAL_TIM_init_encoder(&htim5, &sConfig) != HAL_OK) {
         Error_Handler();
     }
     sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;

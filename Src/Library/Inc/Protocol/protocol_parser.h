@@ -30,13 +30,13 @@ typedef struct
  * @brief initialize the protocol parser
  * @param parser: protocol_frame_parser instance
  */
-void protocol_parser_init(protocol_frame_parser_t *parser);
+void init_protocol_parser(protocol_frame_parser_t *parser);
 
 /**
  * @brief deinitialize the protocol parser
  * @param  parser
  */
-void protocol_parser_deinit(protocol_frame_parser_t *parser);
+void deinit_protocol_parser(protocol_frame_parser_t *parser);
 
 /**
  * @brief write the protocol data into parser recursive buffer
