@@ -26,10 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <string.h>
-#include <stdio.h>
-#include "Util/string_operator.h"
-#include "Util/dictionary.h"
+#include "main_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,16 +48,6 @@
 
 /* USER CODE BEGIN PV */
 
-// test datalog parameters
-float kp       = 0.1;
-float ki       = 0.2;
-float kd       = 0.3;
-float setpoint = 0.4;
-
-// the variables can be logged
-dictionary_t datalog_avialable_symbol_dict;
-char *datalog_target_symbol_name[DICT_MAX_SIZE];
-int datalog_target_symbol_size = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,19 +55,6 @@ void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 
-// datalog dictionary
-void Init_Datalog_Param_Dict(void);
-
-// tasks
-void Init_Task_Scheduler_Tasks(void);
-
-void Command_Frames_Handler(void);
-void test_work(void);
-void Datalog_Frames_Handler(void);
-
-// test functions
-void Init_Command_Send_Frame(void);
-void Init_Datalog_Send_Frame(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -127,23 +101,14 @@ int main(void)
     MX_TIM4_Init();
     MX_TIM5_Init();
     /* USER CODE BEGIN 2 */
-    Start_Command_Frame_Receive(); // command uart receive dma frames
-    Start_Task_Scheduler_Timer();  // start the tasks scheduler timer
-
-    HAL_TIM_Encoder_Start(&ENCODER_TIMER, TIM_CHANNEL_ALL);
-
-    Init_Datalog_Param_Dict();   // init the datalog parameters dictionary
-    Init_Command_Send_Frame();   // init the command send frame
-    Init_Datalog_Send_Frame();   // init the datalog send frame
-    Init_Task_Scheduler_Tasks(); // init the tasks scheduler tasks
+    Init_App_Functions();
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
-        task_scheduler_run();
         /* USER CODE END WHILE */
-
+        Run_App_Functions();
         /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
@@ -211,117 +176,6 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void Init_Datalog_Param_Dict(void)
-{
-    init_dictionary(&datalog_avialable_symbol_dict);
-    add_key_value_pair(&datalog_avialable_symbol_dict, "kp", &kp);
-    add_key_value_pair(&datalog_avialable_symbol_dict, "ki", &ki);
-    add_key_value_pair(&datalog_avialable_symbol_dict, "kd", &kd);
-    add_key_value_pair(&datalog_avialable_symbol_dict, "setpoint", &setpoint);
-}
-
-void Init_Task_Scheduler_Tasks(void)
-{
-    // send/receive command frames with 10Hz frequency
-    task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
-    // log data with 2kHz frequency
-    task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
-
-    task_scheduler_add_task(test_work, GET_TASK_SCHEDULER_IDEAL_TICKS(5), 1);
-}
-
-void Command_Frames_Handler(void)
-{
-    // protocol handler
-    Parse_Command_Frame();
-
-    // send available log data name list
-    if (command_receive_frame.cmd == DATALOG_CHECK_AVAILABLE_DATA_CMD) {
-        command_send_frame.cmd = DATALOG_SEND_AVAILABLE_DATA_CMD;
-        get_all_keys(&datalog_avialable_symbol_dict, command_param_name_string_array); // get all keys in the dictionary
-        name_string_to_uint8_array(command_param_name_string_array,
-                                   command_param_data_array,
-                                   strlen(command_param_name_string_array));
-        set_frame_data(&command_send_frame, command_param_data_array, strlen(command_param_name_string_array));
-        Send_Command_Frame_Data(&command_send_frame);
-        memset(command_param_name_string_array, 0, sizeof(command_param_name_string_array));
-
-        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-    }
-
-    if (command_receive_frame.cmd == DATALOG_SET_LOG_DATA_CMD) {
-        // set log data
-        static char datalog_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
-        uint8_array_to_name_string(command_receive_frame.data,
-                                   datalog_name_string_array,
-                                   command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
-        seperate_string(datalog_name_string_array, datalog_target_symbol_name, &datalog_target_symbol_size);
-        join_string(datalog_target_symbol_name, command_param_name_string_array, datalog_target_symbol_size);
-
-        command_send_frame.cmd = DATALOG_ECHO_LOG_DATA_CMD;
-        name_string_to_uint8_array(command_param_name_string_array,
-                                   command_param_data_array,
-                                   strlen(command_param_name_string_array));
-        set_frame_data(&command_send_frame, command_param_data_array, strlen(command_param_name_string_array));
-        Send_Command_Frame_Data(&command_send_frame);
-        memset(command_param_name_string_array, 0, sizeof(command_param_name_string_array));
-
-        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-    }
-
-    if (command_receive_frame.cmd == DATALOG_START_LOG_CMD) {
-        // send back start log command
-        command_send_frame.cmd = DATALOG_ECHO_LOG_START_CMD;
-        command_send_frame.len = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-        Send_Command_Frame_Data(&command_send_frame);
-        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-        // start send log data
-        task_scheduler_enable_task(1); // enable datalog task(id = 1)
-    }
-
-    if (command_receive_frame.cmd == DATALOG_STOP_LOG_CMD) {
-        task_scheduler_disable_task(1); // disable datalog task(id = 1)
-    }
-}
-
-void Datalog_Frames_Handler(void)
-{
-    datalog_send_frame.cmd = DATALOG_RUNNING_CMD;
-    for (uint8_t i = 0; i < datalog_target_symbol_size; i++) {
-        datalog_param_float_array[i] = *(get_value(&datalog_avialable_symbol_dict, datalog_target_symbol_name[i]));
-    }
-    float_array_to_uint8_array(datalog_param_float_array, datalog_param_data_array, datalog_target_symbol_size);
-    set_frame_data(&datalog_send_frame, datalog_param_data_array, 4 * datalog_target_symbol_size);
-    Send_Datalog_Frame_Data(&datalog_send_frame);
-}
-
-void test_work(void)
-{
-    printf("longint counter: %ld\n", __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
-    kp += 0.1;
-    ki += 0.2;
-    kd += 0.3;
-    setpoint += 0.4;
-    // HAL_UART_Transmit_DMA(&UART_DATALOG, (uint8_t *)"hello world\n", strlen("hello world\n"));
-}
-
-void Init_Command_Send_Frame(void)
-{
-    command_send_frame.cmd      = SEND_VEL_PID_CMD;
-    command_send_frame.header   = PROTOCOL_FRAME_HEADER;
-    command_send_frame.motor_id = MOTOR_ID1;
-    command_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-    command_send_frame.data     = (uint8_t *)command_param_data_array;
-}
-
-void Init_Datalog_Send_Frame(void)
-{
-    datalog_send_frame.cmd      = NULL_CMD;
-    datalog_send_frame.header   = PROTOCOL_FRAME_HEADER;
-    datalog_send_frame.motor_id = MOTOR_ID1;
-    datalog_send_frame.len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-    datalog_send_frame.data     = (uint8_t *)datalog_param_data_array;
-}
 /* USER CODE END 4 */
 
 /* MPU Configuration */

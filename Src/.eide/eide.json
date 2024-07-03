@@ -5,7 +5,9 @@
   "srcDirs": [
     "Library/Src",
     "Core",
-    "Drivers"
+    "Drivers",
+    "Module/Src",
+    "App/Src"
   ],
   "virtualFolder": {
     "name": "<virtual_root>",
@@ -62,7 +64,9 @@
           "Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "Drivers/CMSIS/Include",
           "Library/Inc",
-          "Matlab"
+          "Matlab",
+          "Module/Inc",
+          "App/Inc"
         ],
         "libList": [],
         "defineList": [

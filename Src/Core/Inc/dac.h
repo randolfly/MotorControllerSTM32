@@ -29,16 +29,12 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#include "Motion/motor_util.h"
 
-#define DAC_MOTOR_COMMAND       hdac1
-#define DAC_MOTOR_COMMAND_PORT1 DAC_CHANNEL_1
 /* USER CODE END Includes */
 
 extern DAC_HandleTypeDef hdac1;
 
 /* USER CODE BEGIN Private defines */
-extern uint32_t dac_value;
 
 /* USER CODE END Private defines */
 
@@ -46,12 +42,6 @@ void MX_DAC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
-/**
- * @brief set motor torque value, range from -1000 to 1000, unit is permillage
- *  -1000->-max_torque, 0->0, 1000->max_torque
- * @param  torque_permillage: torque command in permillage
- */
-void Set_Motor_Torque(float torque_permillage);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -59,4 +49,3 @@ void Set_Motor_Torque(float torque_permillage);
 #endif
 
 #endif /* __DAC_H__ */
-

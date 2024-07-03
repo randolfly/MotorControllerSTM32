@@ -110,7 +110,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle)
 
     if (tim_baseHandle->Instance == TIM4) {
         /* USER CODE BEGIN TIM4_MspInit 0 */
-        task_scheduler_init(TASK_SCHEDULER_MAX_TASK);
+
         /* USER CODE END TIM4_MspInit 0 */
         /* TIM4 clock enable */
         __HAL_RCC_TIM4_CLK_ENABLE();
@@ -158,7 +158,7 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_baseHandle)
 
     if (tim_baseHandle->Instance == TIM4) {
         /* USER CODE BEGIN TIM4_MspDeInit 0 */
-        task_scheduler_deinit();
+
         /* USER CODE END TIM4_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_TIM4_CLK_DISABLE();
@@ -194,15 +194,5 @@ void HAL_TIM_Encoder_MspDeInit(TIM_HandleTypeDef *tim_encoderHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-    if (htim == &TASK_SCHEDULER_TIMER) {
-        task_scheduler_tick();
-    }
-}
 
-void Start_Task_Scheduler_Timer()
-{
-    HAL_TIM_Base_Start_IT(&TASK_SCHEDULER_TIMER);
-}
 /* USER CODE END 1 */
