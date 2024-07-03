@@ -21,8 +21,6 @@ extern "C" {
 typedef struct {
     RT_MODEL *model;
     DW *state;
-    real_T input_position;
-    real_T output_velocity;
 } encoder_velocity_diff_t;
 
 /**
@@ -39,9 +37,10 @@ void deinit_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff);
 /**
  * @brief execution 1 step of diff model
  * @param  velocity_diff: encoder_velocity_diff_t instance
+ * @param  input_position: input position
+ * @param  output_velocity: output velocity(pointer)
  */
-void step_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff);
-
+void step_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff, real_T input_position, real_T *output_velocity);
 #ifdef _cplusplus
 }
 #endif

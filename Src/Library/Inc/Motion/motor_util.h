@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct
 {
-    motion_limit_t motion_limit;
+    motion_limit_t *motion_limit;
 } motor_config_t;
 
 typedef struct {
@@ -46,10 +46,10 @@ typedef struct {
     float actual_torque; /* actual torque */
 
     /* hardware(wire-pin, sensor) region */
-    encoder_t encoder;
+    encoder_t *encoder;
 
     /* config region */
-    motor_config_t motor_config;
+    motor_config_t *motor_config;
 } motor_t;
 
 /**

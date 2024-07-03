@@ -12,8 +12,10 @@ extern "C" {
 #include "tim_bsp.h"
 #include "usart_bsp.h"
 
+#include "Util/type_def_protocol.h"
 #include "Util/string_operator.h"
 #include "Util/dictionary.h"
+#include "Motion/motor.h"
 
 /**
  * @brief init the bsp layer provided app functions

@@ -25,7 +25,13 @@ extern "C" {
  * @brief init the motor
  * @param: target motor
  */
-void motor_init(motor_t *motor);
+void init_motor(motor_t *motor);
+
+/**
+ * @brief deinit the motor
+ * @param  motor
+ */
+void deinit_motor(motor_t *motor);
 
 /**
  * @brief turn on the electric power of motor(24V signal)

@@ -10,6 +10,9 @@ dictionary_t datalog_available_symbol_dict;
 char *datalog_target_symbol_name[DICT_MAX_SIZE];
 int datalog_target_symbol_size = 0;
 
+// motor instance
+motor_t motor1;
+
 /* =============== MAIN WORK ====================*/
 static void test_work(void);
 
@@ -57,9 +60,12 @@ void Init_App_Functions()
     Init_Datalog_Send_Frame();     // init the datalog send frame
     Init_Datalog_Param_Dict();     // init the datalog parameters dictionary
     Start_Command_Frame_Receive(); // command uart receive dma frames
-    Start_Task_Scheduler_Timer();  // start the tasks scheduler timer
-    Start_Encoder_Timer();         // start the encoder timer
-    Init_Task_Scheduler_Tasks();   // init the tasks scheduler tasks
+    init_motor(&motor1);           // init the motor1
+
+    // init timers and tasks
+    Start_Task_Scheduler_Timer(); // start the tasks scheduler timer
+    Start_Encoder_Timer();        // start the encoder timer
+    Init_Task_Scheduler_Tasks();  // init the tasks scheduler tasks
 }
 
 void Run_App_Functions(void)

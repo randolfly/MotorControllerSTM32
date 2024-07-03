@@ -14,7 +14,9 @@ void deinit_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff)
     free(velocity_diff->model);
 }
 
-void step_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff)
+void step_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff,
+                                real_T input_position,
+                                real_T *output_velocity)
 {
     static boolean_T OverrunFlag = false;
 
@@ -33,8 +35,8 @@ void step_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff)
 
     /* Step the model */
     EncoderVelocityDiff_step(velocity_diff->model,
-                             velocity_diff->input_position,
-                             &(velocity_diff->output_velocity));
+                             input_position,
+                             output_velocity);
 
     /* Get model outputs here */
 
