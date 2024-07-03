@@ -5,23 +5,42 @@ void init_dictionary(dictionary_t *dict)
     dict->size = 0;
 }
 
-void add_key_value_pair(dictionary_t *dict, const char *key, float *value)
+void add_key_value_pair(dictionary_t *dict, const char *key, void *value, value_type_t value_type)
 {
     if (dict->size < DICT_MAX_SIZE) {
         strcpy(dict->pairs[dict->size].key, key);
-        dict->pairs[dict->size].value = value;
+        dict->pairs[dict->size].value      = value;
+        dict->pairs[dict->size].value_type = value_type;
         dict->size++;
     }
 }
 
-float *get_value(dictionary_t *dict, const char *key)
+float get_value(dictionary_t *dict, const char *key)
 {
+    float tmp = 0;
     for (int i = 0; i < dict->size; i++) {
         if (strcmp(dict->pairs[i].key, key) == 0) {
-            return (dict->pairs[i].value);
+            switch (dict->pairs[i].value_type) {
+                case UINT16_TYPE_RANDOLF:
+                    tmp = (float)(*((uint16_t *)dict->pairs[i].value));
+                    break;
+                case UINT32_TYPE_RANDOLF:
+                    tmp = (float)(*((uint32_t *)dict->pairs[i].value));
+                    break;
+                case INT_TYPE_RANDOLF:
+                    tmp = (float)(*((int *)dict->pairs[i].value));
+                    break;
+                case DOUBLE_TYPE_RANDOLF:
+                    tmp = (float)(*((double *)dict->pairs[i].value));
+                    break;
+                default:
+                    tmp = *((float *)dict->pairs[i].value);
+                    break;
+            }
+            return tmp;
         }
     }
-    return NULL;
+    return 0;
 }
 
 void get_all_keys(dictionary_t *dict, char *all_keys)

@@ -53,9 +53,11 @@ void Init_App_Functions()
     // init app layer
     Init_Command_Send_Frame();     // init the command send frame
     Init_Datalog_Send_Frame();     // init the datalog send frame
-    Init_Datalog_Param_Dict();     // init the datalog parameters dictionary
     Start_Command_Frame_Receive(); // command uart receive dma frames
     init_motor(&motor1);           // init the motor1
+
+    // log data params(place after all params are initialized)
+    Init_Datalog_Param_Dict(); // init the datalog parameters dictionary
 
     // init timers and tasks
     Start_Task_Scheduler_Timer(); // start the tasks scheduler timer
@@ -94,9 +96,9 @@ static void Init_Task_Scheduler_Tasks(void)
 static void Init_Datalog_Param_Dict(void)
 {
     init_dictionary(&datalog_available_symbol_dict);
-    add_key_value_pair(&datalog_available_symbol_dict, "encoder_cnt", &((motor1.encoder->current_revolute_counter)));
-    add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &((motor1.encoder->position)));
-    add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &((motor1.encoder->velocity)));
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_cnt", &(motor1.encoder->current_revolute_counter), UINT32_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &(motor1.encoder->position), DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &(motor1.encoder->velocity), DOUBLE_TYPE_RANDOLF);
 }
 
 static void Command_Frames_Handler(void)
@@ -157,7 +159,7 @@ static void Datalog_Frames_Handler(void)
 {
     datalog_send_frame.cmd = DATALOG_RUNNING_CMD;
     for (uint8_t i = 0; i < datalog_target_symbol_size; i++) {
-        datalog_param_float_array[i] = *(get_value(&datalog_available_symbol_dict, datalog_target_symbol_name[i]));
+        datalog_param_float_array[i] = (get_value(&datalog_available_symbol_dict, datalog_target_symbol_name[i]));
     }
     float_array_to_uint8_array(datalog_param_float_array, datalog_param_data_array, datalog_target_symbol_size);
     set_frame_data(&datalog_send_frame, datalog_param_data_array, 4 * datalog_target_symbol_size);

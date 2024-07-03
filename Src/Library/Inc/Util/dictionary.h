@@ -1,3 +1,14 @@
+/**
+ * @file dictionary.h
+ * @brief dictionary.h is designed to provide an interface of a dictionary data structure
+ * for storing and managing key-value pair data, where value type is variant
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-03
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __DICTIONARY_H__
 #define __DICTIONARY_H__
 
@@ -7,18 +18,27 @@
 #ifdef STM32H743xx
 #include "main.h"
 #endif
+#include "Util/type_def_protocol.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define DICT_MAX_SIZE  50
-#define KEY_MAX_LENGTH 20
+#define KEY_MAX_LENGTH 30
 
-typedef struct
-{
-    char key[20];
-    float *value;
+typedef enum {
+    UINT16_TYPE_RANDOLF,
+    UINT32_TYPE_RANDOLF,
+    INT_TYPE_RANDOLF,
+    FLOAT_TYPE_RANDOLF,
+    DOUBLE_TYPE_RANDOLF
+} value_type_t;
+
+typedef struct {
+    char key[KEY_MAX_LENGTH];
+    void *value;
+    value_type_t value_type;
 } key_value_pair_t;
 
 typedef struct
@@ -36,18 +56,19 @@ void init_dictionary(dictionary_t *dict);
 /**
  * @brief add key value pair to the dictionary
  * @param  dict: dictionary instance
- * @param  key: key
- * @param  value: value
+ * @param  key: key string
+ * @param  value: value pointer
+ * @param  value_type: value type
  */
-void add_key_value_pair(dictionary_t *dict, const char *key, float *value);
+void add_key_value_pair(dictionary_t *dict, const char *key, void *value, value_type_t value_type);
 
 /**
  * @brief Get the value object
  * @param  dict: dictionary instance
  * @param  key: key
- * @return float* : value
+ * @return float : target float value
  */
-float *get_value(dictionary_t *dict, const char *key);
+float get_value(dictionary_t *dict, const char *key);
 
 /**
  * @brief Get the all keys in dictionary
