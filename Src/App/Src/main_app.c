@@ -96,7 +96,7 @@ static void Init_Task_Scheduler_Tasks(void)
 static void Init_Datalog_Param_Dict(void)
 {
     init_dictionary(&datalog_available_symbol_dict);
-    add_key_value_pair(&datalog_available_symbol_dict, "encoder_cnt", &(motor1.encoder->current_revolute_counter), UINT32_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "rotation_num", &(motor1.encoder->rotation_num), INT32_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &(motor1.encoder->position), DOUBLE_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &(motor1.encoder->velocity), DOUBLE_TYPE_RANDOLF);
 }

@@ -1,4 +1,5 @@
 #include "tim_bsp.h"
+#include "Util/task_scheduler.h"
 
 /// @brief timer interrupt callback function(20kHz), used for task scheduler
 /// @param htim

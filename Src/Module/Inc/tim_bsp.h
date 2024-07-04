@@ -7,8 +7,6 @@ extern "C" {
 
 #include "tim.h"
 
-#include "Util/task_scheduler.h"
-
 #define ENCODER_TIMER        htim5
 #define TASK_SCHEDULER_TIMER htim4
 

@@ -12,6 +12,7 @@ extern "C" {
 #include "tim_bsp.h"
 #include "usart_bsp.h"
 
+#include "Util/task_scheduler.h"
 #include "Util/type_def_protocol.h"
 #include "Util/string_operator.h"
 #include "Util/dictionary.h"

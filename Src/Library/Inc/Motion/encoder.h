@@ -12,7 +12,6 @@
 extern "C" {
 #endif
 
-#define ENCODER_RESOLUTION (63000 * 1024) /* encoder resolution*/
 typedef struct {
     double_t start_position;
 } encoder_config_t;
@@ -20,12 +19,12 @@ typedef struct {
 typedef struct
 {
     /* data region */
-    int32_t rotation_num;              /* encoder rotation number, updated by Z signal */
-    uint32_t current_revolute_counter; /* current encoder counter, indicates the locatin of single round */
-    double_t position;                 /* encoder position(rad) */
-    double_t velocity;                 /* encoder velocity(rad/s) */
-    double_t acceleration;             /* encoder acceleration(rad/s^2) */
-    encoder_config_t *encoder_config;  /* encoder configuration */
+    uint32_t last_counter;            /* last encoder counter */
+    int32_t rotation_num;             /* encoder rotation num */
+    double_t position;                /* encoder position(rad) */
+    double_t velocity;                /* encoder velocity(rad/s) */
+    double_t acceleration;            /* encoder acceleration(rad/s^2) */
+    encoder_config_t *encoder_config; /* encoder configuration */
 
     /* method region */
     encoder_velocity_diff_t *velocity_diff_model; /* velocity diff model */

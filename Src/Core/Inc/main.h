@@ -57,25 +57,26 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define STATE_TIM_PRESCALER       120 - 1
-#define STATE_TIM_COUNTER_MAX     100 - 1
-#define ENCODER_A_Pin             GPIO_PIN_10
-#define ENCODER_A_GPIO_Port       GPIOH
-#define ENCODER_B_Pin             GPIO_PIN_11
-#define ENCODER_B_GPIO_Port       GPIOH
-#define DATALOG_UART_TX_Pin       GPIO_PIN_8
+#define STATE_TIM_PRESCALER 120-1
+#define STATE_TIM_COUNTER_MAX 100-1
+#define ENCODER_RESOLUTION (63000 * 1024)
+#define ENCODER_A_Pin GPIO_PIN_10
+#define ENCODER_A_GPIO_Port GPIOH
+#define ENCODER_B_Pin GPIO_PIN_11
+#define ENCODER_B_GPIO_Port GPIOH
+#define DATALOG_UART_TX_Pin GPIO_PIN_8
 #define DATALOG_UART_TX_GPIO_Port GPIOD
-#define DATALOG_UART_RX_Pin       GPIO_PIN_9
+#define DATALOG_UART_RX_Pin GPIO_PIN_9
 #define DATALOG_UART_RX_GPIO_Port GPIOD
-#define LED_1_Pin                 GPIO_PIN_15
-#define LED_1_GPIO_Port           GPIOA
-#define COMMAND_UART_TX_Pin       GPIO_PIN_6
+#define LED_1_Pin GPIO_PIN_15
+#define LED_1_GPIO_Port GPIOA
+#define COMMAND_UART_TX_Pin GPIO_PIN_6
 #define COMMAND_UART_TX_GPIO_Port GPIOB
-#define COMMAND_UART_RX_Pin       GPIO_PIN_7
+#define COMMAND_UART_RX_Pin GPIO_PIN_7
 #define COMMAND_UART_RX_GPIO_Port GPIOB
-#define ENCODER_Z_Pin             GPIO_PIN_7
-#define ENCODER_Z_GPIO_Port       GPIOI
-#define ENCODER_Z_EXTI_IRQn       EXTI9_5_IRQn
+#define ENCODER_Z_Pin GPIO_PIN_7
+#define ENCODER_Z_GPIO_Port GPIOI
+#define ENCODER_Z_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 // time4: state machine timer-> 240M/120/100 = 20KHz

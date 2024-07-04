@@ -27,6 +27,12 @@ float get_value(dictionary_t *dict, const char *key)
                 case UINT32_TYPE_RANDOLF:
                     tmp = (float)(*((uint32_t *)dict->pairs[i].value));
                     break;
+                case INT32_TYPE_RANDOLF:
+                    tmp = (float)(*((int32_t *)dict->pairs[i].value));
+                    break;
+                case INT64_TYPE_RANDOLF:
+                    tmp = (float)(*((int64_t *)dict->pairs[i].value));
+                    break;
                 case INT_TYPE_RANDOLF:
                     tmp = (float)(*((int *)dict->pairs[i].value));
                     break;
