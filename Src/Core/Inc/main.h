@@ -68,6 +68,14 @@ void Error_Handler(void);
 #define DATALOG_UART_TX_GPIO_Port GPIOD
 #define DATALOG_UART_RX_Pin GPIO_PIN_9
 #define DATALOG_UART_RX_GPIO_Port GPIOD
+#define DAC_SPI_SYNC_Pin GPIO_PIN_0
+#define DAC_SPI_SYNC_GPIO_Port GPIOI
+#define DAC_SPI_SCLK_Pin GPIO_PIN_1
+#define DAC_SPI_SCLK_GPIO_Port GPIOI
+#define DAC_SPI_SDO_Pin GPIO_PIN_2
+#define DAC_SPI_SDO_GPIO_Port GPIOI
+#define DAC_SPI_SDIN_Pin GPIO_PIN_3
+#define DAC_SPI_SDIN_GPIO_Port GPIOI
 #define LED_1_Pin GPIO_PIN_15
 #define LED_1_GPIO_Port GPIOA
 #define COMMAND_UART_TX_Pin GPIO_PIN_6
