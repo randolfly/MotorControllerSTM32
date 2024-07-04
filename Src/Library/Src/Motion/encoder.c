@@ -1,5 +1,4 @@
 #include "Motion/encoder.h"
-#include "tim_bsp.h"
 
 void init_encoder(encoder_t *encoder)
 {

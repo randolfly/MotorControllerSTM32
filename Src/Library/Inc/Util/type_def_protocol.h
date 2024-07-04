@@ -14,6 +14,8 @@ typedef long long int64_t;
 typedef long int32_t;
 typedef short int16_t;
 typedef signed char int8_t;
+
+#define ENCODER_RESOLUTION (63000 * 1024)
 #endif
 
 #endif // DEBUG

@@ -1,6 +1,6 @@
 #include "Motion/motor_util.h"
 
-uint32_t torque_permillage_to_dac(float torque_permillage)
+uint16_t torque_permillage_to_dac(float torque_permillage)
 {
     if (torque_permillage > 1000.0) {
         torque_permillage = 1000.0;
@@ -8,5 +8,5 @@ uint32_t torque_permillage_to_dac(float torque_permillage)
         torque_permillage = -1000.0;
     }
 
-    return (uint32_t)(torque_permillage * 4096.0 / 2000.0 + 2048.0);
+    return (uint16_t)(torque_permillage * (float)(0xFF) / 2000.0 + (float)(0xFF) / 2.0);
 }

@@ -63,10 +63,10 @@ uint8_t check_motion_limit(motor_t *motor, motion_limit_t *motion_limit);
 
 /**
  * @brief convert torque ratio() to actual dac output
- * @param torque_permillage: torque permillage: 1000->4096, -1000->0
- * @return uint32_t: dac target value, [0, 4096] (2^12)
+ * @param torque_permillage: torque permillage: 1000->0xFF, -1000->0x00
+ * @return uint32_t: dac target value, [0x00, 0xFF] (2^16)
  */
-uint32_t torque_permillage_to_dac(float torque_permillage);
+uint16_t torque_permillage_to_dac(float torque_permillage);
 
 #ifdef _cplusplus
 }

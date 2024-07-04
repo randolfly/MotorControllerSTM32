@@ -1,6 +1,7 @@
 #ifndef __ENCODER_H__
 #define __ENCODER_H__
 
+#include <math.h>
 #include "Util/type_def_protocol.h"
 #include "Controller/encoder_velocity_diff.h"
 
@@ -48,8 +49,6 @@ void deinit_encoder(encoder_t *encoder);
  * @param  encoder_counter: current encoder counter(get from __HAL_TIM_GET_COUNTER(&htim5))
  */
 void encoder_update(encoder_t *encoder, uint32_t encoder_counter);
-// todo: check encoder velocity calculation method paper
-// should add fpu to accelerate execution?
 
 #ifdef _cplusplus
 }

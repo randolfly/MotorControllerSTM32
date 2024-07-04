@@ -1,4 +1,4 @@
-#include "motor.h"
+#include "Motion/motor_util.h"
 #include "minunit.h"
 #include <stdio.h>
 
@@ -19,16 +19,16 @@ MU_TEST(torque_permillage_to_dac_test)
     float torque_cmd3 = 0.0;
 
     mu_check(torque_permillage_to_dac(torque_cmd1) == 0);
-    mu_check(torque_permillage_to_dac(torque_cmd2) == 4096);
-    mu_check(torque_permillage_to_dac(torque_cmd3) == 2048);
+    mu_check(torque_permillage_to_dac(torque_cmd2) == 0xFF);
+    mu_check(torque_permillage_to_dac(torque_cmd3) == (0xFF / 2));
 
     torque_cmd1 = -10000.0;
     torque_cmd2 = 10000.0;
     torque_cmd3 = 1001.0;
 
     mu_check(torque_permillage_to_dac(torque_cmd1) == 0);
-    mu_check(torque_permillage_to_dac(torque_cmd2) == 4096);
-    mu_check(torque_permillage_to_dac(torque_cmd3) == 4096);
+    mu_check(torque_permillage_to_dac(torque_cmd2) == 0xFF);
+    mu_check(torque_permillage_to_dac(torque_cmd3) == 0xFF);
 }
 
 MU_TEST_SUITE(test_suite)
