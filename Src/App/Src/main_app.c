@@ -111,22 +111,45 @@ static void Command_Frames_Handler(void)
     Parse_Command_Frame();
     if (command_receive_frame.cmd == GET_SYMBOL_DATA_CMD) {
         // locate the target symbol name
-        static char target_symbol_name[PROTOCOL_FRAME_MAX_SIZE] = {0};
+        static char get_target_symbol_name[PROTOCOL_FRAME_MAX_SIZE] = {0};
         uint8_array_to_name_string(command_receive_frame.data,
-                                   target_symbol_name,
+                                   get_target_symbol_name,
                                    command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
-        static float target_symbol_value = 0;
-        target_symbol_value              = get_value(&datalog_available_symbol_dict, target_symbol_name);
+        static float get_target_symbol_value = 0;
+        get_target_symbol_value              = get_dictionary_value(&datalog_available_symbol_dict, get_target_symbol_name);
 
         // send back the symbol data
         command_send_frame.cmd = GET_ECHO_SYMBOL_DATA_CMD;
-        float_to_uint8_array(target_symbol_value, command_param_data_array);
+        float_to_uint8_array(get_target_symbol_value, command_param_data_array);
         set_frame_data(&command_send_frame, command_param_data_array, 4);
         Send_Command_Frame_Data(&command_send_frame);
-        memset(target_symbol_name, 0, sizeof(target_symbol_name));
+        memset(get_target_symbol_name, 0, sizeof(get_target_symbol_name));
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
 
-    } else if (command_receive_frame.cmd == DATALOG_GET_AVAILABLE_DATA_CMD) {
+    } else if (command_receive_frame.cmd == SET_SYMBOL_DATA_CMD) {
+        // locate the target symbol name
+        static char set_target_symbol_name[PROTOCOL_FRAME_MAX_SIZE] = {0};
+        uint8_array_to_name_string(command_receive_frame.data,
+                                   set_target_symbol_name,
+                                   command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE - 4);
+        static float set_target_symbol_value = 0;
+        set_target_symbol_value              = uint8_array_to_float(command_receive_frame.data + (command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE - 4));
+        set_dictionary_value(&datalog_available_symbol_dict, set_target_symbol_name, set_target_symbol_value);
+
+        // send back the symbol data
+        command_send_frame.cmd = SET_ECHO_SYMBOL_DATA_CMD;
+        name_string_to_uint8_array(set_target_symbol_name,
+                                   command_param_data_array,
+                                   strlen(set_target_symbol_name));
+        float_to_uint8_array(set_target_symbol_value, command_param_data_array + strlen(set_target_symbol_name));
+        set_frame_data(&command_send_frame, command_param_data_array, 4 + strlen(set_target_symbol_name));
+        Send_Command_Frame_Data(&command_send_frame);
+
+        memset(set_target_symbol_name, 0, sizeof(set_target_symbol_name));
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+    }
+
+    else if (command_receive_frame.cmd == DATALOG_GET_AVAILABLE_DATA_CMD) {
         command_send_frame.cmd = DATALOG_ECHO_GET_AVAILABLE_DATA_CMD;
         get_all_keys(&datalog_available_symbol_dict, command_param_name_string_array); // get all keys in the dictionary
         name_string_to_uint8_array(command_param_name_string_array,
@@ -183,7 +206,7 @@ static void Datalog_Frames_Handler(void)
 {
     datalog_send_frame.cmd = DATALOG_RUNNING_CMD;
     for (uint8_t i = 0; i < datalog_target_symbol_size; i++) {
-        datalog_param_float_array[i] = (get_value(&datalog_target_symbol_dict, datalog_target_symbol_name[i]));
+        datalog_param_float_array[i] = (get_dictionary_value(&datalog_target_symbol_dict, datalog_target_symbol_name[i]));
     }
     float_array_to_uint8_array(datalog_param_float_array, datalog_param_data_array, datalog_target_symbol_size);
     set_frame_data(&datalog_send_frame, datalog_param_data_array, 4 * datalog_target_symbol_size);

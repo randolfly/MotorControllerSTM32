@@ -66,7 +66,8 @@ typedef struct
 
 /* ========= SET ============ */
 
-#define SET_SYMBOL_DATA_CMD 0x2001 // set symbol data
+#define SET_SYMBOL_DATA_CMD      0x2001 // set symbol data
+#define SET_ECHO_SYMBOL_DATA_CMD 0x2101 // echo set symbol data
 
 /* ========= DATALOG ============ */
 
