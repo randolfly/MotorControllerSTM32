@@ -35,15 +35,13 @@ void deinit_motor(motor_t *motor);
 
 /**
  * @brief turn on the electric power of motor(24V signal)
- * @param: motor: target motor
  */
-void enable_motor_electric_power(motor_t *motor);
+void enable_motor_electric_power();
 
 /**
  * @brief shut down the electric power of motor(24V signal)
- * @param motor: target motor
  */
-void disable_motor_electric_power(motor_t *motor);
+void disable_motor_electric_power();
 
 /**
  * @brief set the motor power on (the meaning in servo control)
