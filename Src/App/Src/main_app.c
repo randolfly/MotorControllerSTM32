@@ -49,6 +49,7 @@ void Init_App_Functions()
     // init bsp layer
     Init_Task_Scheduler();
     Init_Command_Protocol_Parser();
+    init_dac();
 
     // init app layer
     Init_Command_Send_Frame();     // init the command send frame

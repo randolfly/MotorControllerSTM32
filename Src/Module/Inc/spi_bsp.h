@@ -36,7 +36,7 @@ void init_dac(void);
 /**
  * @brief set the dac output data
  * @param  channel: dac output channel
- * @param  data: value range: [0x00, 0xFF]
+ * @param  data: value range: [0x0000, 0xFFFF]
  */
 void set_dac_value(uint16_t channel, uint16_t data);
 
