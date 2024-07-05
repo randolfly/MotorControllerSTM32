@@ -50,6 +50,7 @@ void Init_App_Functions()
     Init_Task_Scheduler();
     Init_Command_Protocol_Parser();
     init_dac();
+    set_switch_ch1_on(); // power on motor1(electrical switch)
 
     // init app layer
     Init_Command_Send_Frame();     // init the command send frame

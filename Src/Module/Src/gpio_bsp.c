@@ -9,3 +9,23 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         __HAL_GPIO_EXTI_CLEAR_IT(ENCODER_Z_Pin);
     }
 }
+
+void set_switch_ch1_on(void)
+{
+    HAL_GPIO_WritePin(GPIO_SWITCH_CH1_GPIO_Port, GPIO_SWITCH_CH1_Pin, GPIO_PIN_SET);
+}
+
+void set_switch_ch1_off(void)
+{
+    HAL_GPIO_WritePin(GPIO_SWITCH_CH1_GPIO_Port, GPIO_SWITCH_CH1_Pin, GPIO_PIN_RESET);
+}
+
+void set_switch_ch2_on(void)
+{
+    HAL_GPIO_WritePin(GPIO_SWITCH_CH2_GPIO_Port, GPIO_SWITCH_CH2_Pin, GPIO_PIN_SET);
+}
+
+void set_switch_ch2_off(void)
+{
+    HAL_GPIO_WritePin(GPIO_SWITCH_CH2_GPIO_Port, GPIO_SWITCH_CH2_Pin, GPIO_PIN_RESET);
+}
