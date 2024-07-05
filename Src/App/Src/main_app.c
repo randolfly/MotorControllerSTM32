@@ -2,6 +2,8 @@
 
 // the variables can be logged
 dictionary_t datalog_available_symbol_dict;
+dictionary_t datalog_target_symbol_dict;
+
 char *datalog_target_symbol_name[DICT_MAX_SIZE];
 int datalog_target_symbol_size = 0;
 
@@ -107,10 +109,25 @@ static void Command_Frames_Handler(void)
 {
     // protocol handler
     Parse_Command_Frame();
+    if (command_receive_frame.cmd == GET_SYMBOL_DATA_CMD) {
+        // locate the target symbol name
+        static char target_symbol_name[PROTOCOL_FRAME_MAX_SIZE] = {0};
+        uint8_array_to_name_string(command_receive_frame.data,
+                                   target_symbol_name,
+                                   command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
+        static float target_symbol_value = 0;
+        target_symbol_value              = get_value(&datalog_available_symbol_dict, target_symbol_name);
 
-    // send available log data name list
-    if (command_receive_frame.cmd == DATALOG_CHECK_AVAILABLE_DATA_CMD) {
-        command_send_frame.cmd = DATALOG_SEND_AVAILABLE_DATA_CMD;
+        // send back the symbol data
+        command_send_frame.cmd = GET_ECHO_SYMBOL_DATA_CMD;
+        float_to_uint8_array(target_symbol_value, command_param_data_array);
+        set_frame_data(&command_send_frame, command_param_data_array, 4);
+        Send_Command_Frame_Data(&command_send_frame);
+        memset(target_symbol_name, 0, sizeof(target_symbol_name));
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+
+    } else if (command_receive_frame.cmd == DATALOG_GET_AVAILABLE_DATA_CMD) {
+        command_send_frame.cmd = DATALOG_ECHO_GET_AVAILABLE_DATA_CMD;
         get_all_keys(&datalog_available_symbol_dict, command_param_name_string_array); // get all keys in the dictionary
         name_string_to_uint8_array(command_param_name_string_array,
                                    command_param_data_array,
@@ -120,18 +137,30 @@ static void Command_Frames_Handler(void)
         memset(command_param_name_string_array, 0, sizeof(command_param_name_string_array));
 
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-    }
-
-    if (command_receive_frame.cmd == DATALOG_SET_LOG_DATA_CMD) {
+    } else if (command_receive_frame.cmd == DATALOG_SET_LOG_DATA_CMD) {
         // set log data
         static char datalog_name_string_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
+        memset(datalog_target_symbol_name, 0, sizeof(datalog_target_symbol_name));
+        memset(datalog_name_string_array, 0, sizeof(datalog_name_string_array));
         uint8_array_to_name_string(command_receive_frame.data,
                                    datalog_name_string_array,
                                    command_receive_frame.len - PROTOCOL_FRAME_HEADER_SIZE - PROTOCOL_FRAME_CHECKSUM_SIZE);
         seperate_string(datalog_name_string_array, datalog_target_symbol_name, &datalog_target_symbol_size);
+
+        init_dictionary(&datalog_target_symbol_dict);
+        for (uint8_t i = 0; i < datalog_target_symbol_size; i++) {
+            for (int dict_id = 0; dict_id < datalog_available_symbol_dict.size; dict_id++) {
+                if (strcmp(datalog_available_symbol_dict.pairs[dict_id].key,
+                           datalog_target_symbol_name[i]) == 0) {
+                    add_key_value_pair(&datalog_target_symbol_dict, datalog_target_symbol_name[i],
+                                       datalog_available_symbol_dict.pairs[dict_id].value,
+                                       datalog_available_symbol_dict.pairs[dict_id].value_type);
+                }
+            }
+        }
         join_string(datalog_target_symbol_name, command_param_name_string_array, datalog_target_symbol_size);
 
-        command_send_frame.cmd = DATALOG_ECHO_LOG_DATA_CMD;
+        command_send_frame.cmd = DATALOG_ECHO_SET_LOG_DATA_CMD;
         name_string_to_uint8_array(command_param_name_string_array,
                                    command_param_data_array,
                                    strlen(command_param_name_string_array));
@@ -140,19 +169,12 @@ static void Command_Frames_Handler(void)
         memset(command_param_name_string_array, 0, sizeof(command_param_name_string_array));
 
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-    }
-
-    if (command_receive_frame.cmd == DATALOG_START_LOG_CMD) {
-        // send back start log command
-        command_send_frame.cmd = DATALOG_ECHO_LOG_START_CMD;
-        command_send_frame.len = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
-        Send_Command_Frame_Data(&command_send_frame);
-        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+    } else if (command_receive_frame.cmd == DATALOG_START_LOG_CMD) {
         // start send log data
         task_scheduler_enable_task(1); // enable datalog task(id = 1)
-    }
-
-    if (command_receive_frame.cmd == DATALOG_STOP_LOG_CMD) {
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+    } else if (command_receive_frame.cmd == DATALOG_STOP_LOG_CMD) {
+        HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
         task_scheduler_disable_task(1); // disable datalog task(id = 1)
     }
 }
@@ -161,7 +183,7 @@ static void Datalog_Frames_Handler(void)
 {
     datalog_send_frame.cmd = DATALOG_RUNNING_CMD;
     for (uint8_t i = 0; i < datalog_target_symbol_size; i++) {
-        datalog_param_float_array[i] = (get_value(&datalog_available_symbol_dict, datalog_target_symbol_name[i]));
+        datalog_param_float_array[i] = (get_value(&datalog_target_symbol_dict, datalog_target_symbol_name[i]));
     }
     float_array_to_uint8_array(datalog_param_float_array, datalog_param_data_array, datalog_target_symbol_size);
     set_frame_data(&datalog_send_frame, datalog_param_data_array, 4 * datalog_target_symbol_size);

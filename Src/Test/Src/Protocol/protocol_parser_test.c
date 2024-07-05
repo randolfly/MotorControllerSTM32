@@ -23,7 +23,7 @@ void init_test_protocol_frame(protocol_frame_t *frame)
 {
     frame->header   = PROTOCOL_FRAME_HEADER;
     frame->motor_id = MOTOR_ID1;
-    frame->cmd      = SEND_VEL_PID_CMD;
+    frame->cmd      = DATALOG_ECHO_SET_LOG_DATA_CMD;
     frame->data     = NULL;
     frame->len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
 }
@@ -92,7 +92,7 @@ MU_TEST(protocol_frame_floatarray_receive_test)
     protocol_frame_t protocol_frame                             = {0};
     init_test_protocol_frame(&protocol_frame);
 
-    protocol_frame.cmd                          = DATALOG_CHECK_AVAILABLE_DATA_CMD;
+    protocol_frame.cmd                          = DATALOG_GET_AVAILABLE_DATA_CMD;
     protocol_frame.motor_id                     = MOTOR_ID2;
     float data[]                                = {1.0, 2.0, 3.0};
     uint8_t byte_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
@@ -116,7 +116,7 @@ MU_TEST(protocol_frame_namestring_receive_test)
     protocol_frame_t protocol_frame                             = {0};
     init_test_protocol_frame(&protocol_frame);
 
-    protocol_frame.cmd                          = DATALOG_CHECK_AVAILABLE_DATA_CMD;
+    protocol_frame.cmd                          = DATALOG_GET_AVAILABLE_DATA_CMD;
     protocol_frame.motor_id                     = MOTOR_ID2;
     char name_string[]                          = "kp,ki,kd,system_id";
     uint8_t byte_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
@@ -146,17 +146,17 @@ MU_TEST(protocol_multiple_frames_parse_test)
     init_test_protocol_frame(&protocol_frame3);
     init_test_protocol_frame(&protocol_frame4);
 
-    protocol_frame1.cmd = DATALOG_CHECK_AVAILABLE_DATA_CMD;
-    protocol_frame2.cmd = SET_VEL_PID_CMD;
+    protocol_frame1.cmd = DATALOG_GET_AVAILABLE_DATA_CMD;
+    protocol_frame2.cmd = DATALOG_RUNNING_CMD;
 
-    protocol_frame3.cmd                         = DATALOG_ECHO_LOG_DATA_CMD;
+    protocol_frame3.cmd                         = DATALOG_ECHO_SET_LOG_DATA_CMD;
     protocol_frame3.motor_id                    = MOTOR_ID2;
     char name_string[]                          = "kp,ki,kd,system_id";
     uint8_t byte_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
     name_string_to_uint8_array(name_string, byte_array, strlen(name_string));
     set_frame_data(&protocol_frame3, byte_array, strlen(name_string));
 
-    protocol_frame4.cmd = DATALOG_ECHO_LOG_START_CMD;
+    protocol_frame4.cmd = DATALOG_RUNNING_CMD;
 
     serialize_frame_data(protocol_frame_byte_buffer, &protocol_frame1);
     protocol_data_receive(&parser, protocol_frame_byte_buffer, protocol_frame1.len);
@@ -194,7 +194,7 @@ MU_TEST(protocol_50_frames_parse_test)
     name_string_to_uint8_array(name_string, byte_array, strlen(name_string));
 
     for (uint16_t i = 0; i < 20; i++) {
-        protocol_frame.cmd = DATALOG_CHECK_AVAILABLE_DATA_CMD;
+        protocol_frame.cmd = DATALOG_GET_AVAILABLE_DATA_CMD;
         set_frame_data(&protocol_frame, byte_array, strlen(name_string));
 
         serialize_frame_data(protocol_frame_byte_buffer, &protocol_frame);

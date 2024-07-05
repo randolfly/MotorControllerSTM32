@@ -57,30 +57,29 @@ typedef struct
 #define MOTOR_ID2 0x02
 
 /* command definition */
-/* stm32 board to computer commands*/
-#define SEND_VEL_PID_CMD                0x0001 // send pid command of velocity loop in client
-#define SEND_POS_PID_CMD                0x0002 // send pid command of position loop in client
-#define SEND_STATE_ID_CMD               0x0003 // send current system state id(statemachine) in client
 
-#define DATALOG_SEND_AVAILABLE_DATA_CMD 0x2001 // send available log data
-#define DATALOG_ECHO_LOG_DATA_CMD       0x2002 // send all log data
-#define DATALOG_ECHO_LOG_START_CMD      0x2003
-#define DATALOG_RUNNING_CMD             0x2004 // send in high-speed uart port
+/* ========= CONTROL ============ */
 
-/* computer to stm32 board commands*/
-#define SET_VEL_PID_CMD                  0x1001 // set pid command of velocity loop in server
-#define SET_POS_PID_CMD                  0x1002 // set pid command of position loop in server
-#define START_SYSTEM_CMD                 0x1003 // start the system
-#define STOP_SYSTEM_CMD                  0x1004 // stop the system
-#define EMERGENCY_STOP_CMD               0x1005 // emergency stop the system
-#define RESET_SYSTEM_CMD                 0x1006 // reset the system
+/* ========= GET ============ */
+#define GET_SYMBOL_DATA_CMD      0x1001 // get symbol data
+#define GET_ECHO_SYMBOL_DATA_CMD 0x1101 // echo symbol data
 
-#define DATALOG_CHECK_AVAILABLE_DATA_CMD 0x3001 // check available log data
-#define DATALOG_SET_LOG_DATA_CMD         0x3002 // set log data name
-#define DATALOG_START_LOG_CMD            0x3003 // start log
-#define DATALOG_STOP_LOG_CMD             0x3004 // stop log
+/* ========= SET ============ */
 
-/* null command*/
+#define SET_SYMBOL_DATA_CMD 0x2001 // set symbol data
+
+/* ========= DATALOG ============ */
+
+#define DATALOG_GET_AVAILABLE_DATA_CMD      0x3001 // check available log data
+#define DATALOG_SET_LOG_DATA_CMD            0x3002 // set log data name
+#define DATALOG_START_LOG_CMD               0x3003 // start log
+#define DATALOG_STOP_LOG_CMD                0x3004 // stop log
+
+#define DATALOG_ECHO_GET_AVAILABLE_DATA_CMD 0x3101 // send available log data
+#define DATALOG_ECHO_SET_LOG_DATA_CMD       0x3102 // send all log data
+#define DATALOG_RUNNING_CMD                 0x3103 // send in high-speed uart port
+
+/* ========= OTHER ============ */
 #define NULL_CMD 0xFFFF // null command
 
 /**
