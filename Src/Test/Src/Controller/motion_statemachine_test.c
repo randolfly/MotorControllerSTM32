@@ -76,6 +76,34 @@ MU_TEST(motion_state_machine_test)
     mu_check(msm.state == MOTION_EXIT);
 }
 
+MU_TEST(motion_state_machine_wrong_cmd)
+{
+    mu_check(msm.state == MOTION_INIT);
+    msm.event.idle_to_exit = 1;
+    update_motion_state_machine(&msm);
+    mu_check(msm.state == MOTION_INIT);
+
+    mu_check(msm.state == MOTION_INIT);
+    msm.event.idle_to_pos = 1;
+    update_motion_state_machine(&msm);
+    mu_check(msm.state == MOTION_INIT);
+
+    mu_check(msm.state == MOTION_INIT);
+    msm.event.idle_to_vel = 1;
+    update_motion_state_machine(&msm);
+    mu_check(msm.state == MOTION_INIT);
+
+    mu_check(msm.state == MOTION_INIT);
+    msm.event.idle_to_torque = 1;
+    update_motion_state_machine(&msm);
+    mu_check(msm.state == MOTION_INIT);
+
+    mu_check(msm.state == MOTION_INIT);
+    msm.event.init_to_poweron = 1;
+    update_motion_state_machine(&msm);
+    mu_check(msm.state == MOTION_POWERON);
+}
+
 MU_TEST_SUITE(test_suite)
 {
     MU_SUITE_CONFIGURE(&test_setup, &test_teardown);

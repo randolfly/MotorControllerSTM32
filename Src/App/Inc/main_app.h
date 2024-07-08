@@ -17,6 +17,7 @@ extern "C" {
 #include "Util/string_operator.h"
 #include "Util/dictionary.h"
 #include "Motion/motor.h"
+#include "Controller/motion_statemachine.h"
 
 /**
  * @brief init the bsp layer provided app functions

@@ -10,6 +10,9 @@ int datalog_target_symbol_size = 0;
 // motor instance
 motor_t motor1;
 
+// state machine instance
+motion_state_machine_t msm;
+
 /* =============== MAIN WORK ====================*/
 static void MAIN_WORK(void);
 
@@ -59,6 +62,7 @@ void Init_App_Functions()
     Init_Datalog_Send_Frame();     // init the datalog send frame
     Start_Command_Frame_Receive(); // command uart receive dma frames
     init_motor(&motor1);           // init the motor1
+    init_motion_state_machine(&msm);
 
     // log data params(place after all params are initialized)
     Init_Datalog_Param_Dict(); // init the datalog parameters dictionary
@@ -80,6 +84,8 @@ static void MAIN_WORK(void)
 {
     // update motor1 encoder info
     encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
+    // update motor1 state machine
+    update_motion_state_machine(&msm);
 }
 
 /* =============== TASK SCHEDULER ====================*/
@@ -100,9 +106,22 @@ static void Init_Task_Scheduler_Tasks(void)
 static void Init_Datalog_Param_Dict(void)
 {
     init_dictionary(&datalog_available_symbol_dict);
+
+    // encoder
     add_key_value_pair(&datalog_available_symbol_dict, "rotation_num", &(motor1.encoder->rotation_num), INT32_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &(motor1.encoder->position), DOUBLE_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &(motor1.encoder->velocity), DOUBLE_TYPE_RANDOLF);
+
+    // motor state machine
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_state", &(msm.state), UINT16_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_init_to_poweron", &(msm.event.init_to_poweron), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_idle_to_exit", &(msm.event.idle_to_exit), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_idle_to_pos", &(msm.event.idle_to_pos), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_idle_to_vel", &(msm.event.idle_to_vel), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_idle_to_torque", &(msm.event.idle_to_torque), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_pos_to_idle", &(msm.event.pos_to_idle), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_vel_to_idle", &(msm.event.vel_to_idle), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_torque_to_idle", &(msm.event.torque_to_idle), UINT8_TYPE_RANDOLF);
 }
 
 static void Command_Frames_Handler(void)

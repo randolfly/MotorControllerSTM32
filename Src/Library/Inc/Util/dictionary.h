@@ -25,9 +25,10 @@ extern "C" {
 #endif
 
 #define DICT_MAX_SIZE  50
-#define KEY_MAX_LENGTH 30
+#define KEY_MAX_LENGTH 40
 
 typedef enum {
+    UINT8_TYPE_RANDOLF,
     UINT16_TYPE_RANDOLF,
     UINT32_TYPE_RANDOLF,
     INT32_TYPE_RANDOLF,

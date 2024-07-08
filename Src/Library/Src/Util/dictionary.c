@@ -20,6 +20,9 @@ void set_dictionary_value(dictionary_t *dict, const char *key, float value)
     for (int i = 0; i < dict->size; i++) {
         if (strcmp(dict->pairs[i].key, key) == 0) {
             switch (dict->pairs[i].value_type) {
+                case UINT8_TYPE_RANDOLF:
+                    *((uint8_t *)dict->pairs[i].value) = (uint8_t)value;
+                    break;
                 case UINT16_TYPE_RANDOLF:
                     *((uint16_t *)dict->pairs[i].value) = (uint16_t)value;
                     break;
@@ -52,6 +55,9 @@ float get_dictionary_value(dictionary_t *dict, const char *key)
     for (int i = 0; i < dict->size; i++) {
         if (strcmp(dict->pairs[i].key, key) == 0) {
             switch (dict->pairs[i].value_type) {
+                case UINT8_TYPE_RANDOLF:
+                    tmp = (float)(*((uint8_t *)dict->pairs[i].value));
+                    break;
                 case UINT16_TYPE_RANDOLF:
                     tmp = (float)(*((uint16_t *)dict->pairs[i].value));
                     break;

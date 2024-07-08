@@ -38,7 +38,7 @@ typedef struct
 } protocol_frame_t;
 
 // protocol recursive buffer size;
-#define PROTOCOL_FRAME_MAX_SIZE 100
+#define PROTOCOL_FRAME_MAX_SIZE 500
 
 /* frame index definition */
 #define FRAME_INDEX_HEAD     0x0u // frame head index
