@@ -6,6 +6,7 @@ dictionary_t datalog_target_symbol_dict;
 
 char *datalog_target_symbol_name[DICT_MAX_SIZE];
 int datalog_target_symbol_size = 0;
+int datalog_task_handle        = 1;
 
 // motor instance
 motor_t motor1;
@@ -95,8 +96,7 @@ static void Init_Task_Scheduler_Tasks(void)
     // send/receive command frames with 10Hz frequency
     task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
     // log data with 2kHz frequency
-    // task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
-    task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
+    datalog_task_handle = task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
     task_scheduler_add_task(MAIN_WORK, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
 }
@@ -213,11 +213,11 @@ static void Command_Frames_Handler(void)
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
     } else if (command_receive_frame.cmd == DATALOG_START_LOG_CMD) {
         // start send log data
-        task_scheduler_enable_task(1); // enable datalog task(id = 1)
+        task_scheduler_enable_task(datalog_task_handle); // enable datalog task(id = 1)
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
     } else if (command_receive_frame.cmd == DATALOG_STOP_LOG_CMD) {
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-        task_scheduler_disable_task(1); // disable datalog task(id = 1)
+        task_scheduler_disable_task(datalog_task_handle); // disable datalog task(id = 1)
     }
 }
 
