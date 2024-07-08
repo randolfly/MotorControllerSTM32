@@ -11,6 +11,8 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
+#include <string.h>
+#include <stdlib.h>
 #include "Motion/motor_util.h"
 
 #ifdef STM32H743xx
@@ -54,13 +56,6 @@ void poweron_motor(motor_t *motor);
  * @param  motor: target motor
  */
 void poweroff_motor(motor_t *motor);
-
-/**
- * @brief set the target execution torque
- * @param  motor: target motor object
- * @param  target_torque: target torque(Nm), clock-wise is +
- */
-void set_motor_torque(motor_t *motor, float target_torque);
 
 #ifdef _cplusplus
 }

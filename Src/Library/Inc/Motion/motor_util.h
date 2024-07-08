@@ -40,11 +40,15 @@ typedef struct
     motion_limit_t *motion_limit;
 } motor_config_t;
 
+typedef struct
+{
+    float target_torque; /* target torque (unit: 1/1000 rated-torque), clock-wise -> + */
+
+} motor_param_t;
+
 typedef struct {
     /* data region */
-    float target_torque; /* target torque executed(Nm), clock-wise -> + */
-    float actual_torque; /* actual torque */
-
+    motor_param_t *motor_param;
     /* hardware(wire-pin, sensor) region */
     encoder_t *encoder;
 

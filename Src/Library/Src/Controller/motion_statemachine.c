@@ -1,4 +1,12 @@
 #include "Controller/motion_statemachine.h"
+#include "Util/task_scheduler.h"
+
+// exten task scheduler handles
+// ! note: also can define the actions as function pointer, init them in
+// main_app.c and pass them to the state machine. here we just use the extern handles
+extern int motion_torque_loop_handle;
+extern int motion_vel_loop_handle;
+extern int motion_pos_loop_handle;
 
 void init_motion_state_machine(motion_state_machine_t *motion_state_machine)
 {
@@ -85,14 +93,22 @@ void update_motion_state_machine(motion_state_machine_t *motion_state_machine)
 
 void init_action(motor_t *motor)
 {
+    // clear the motor command
+    motor->motor_param->target_torque = 0;
+    // stop all control loops
+    task_scheduler_disable_task(motion_torque_loop_handle);
+    task_scheduler_disable_task(motion_vel_loop_handle);
+    task_scheduler_disable_task(motion_pos_loop_handle);
 }
 
 void poweron_action(motor_t *motor)
 {
+    // todo: enable the motor power, use digital io (24V)
 }
 
 void idle_action(motor_t *motor)
 {
+    init_action(motor);
 }
 
 void posmode_action(motor_t *motor)
@@ -105,10 +121,13 @@ void velmode_action(motor_t *motor)
 
 void torquemode_action(motor_t *motor)
 {
+    task_scheduler_enable_task(motion_torque_loop_handle);
 }
 
 void exit_action(motor_t *motor)
 {
+    init_action(motor);
+    // todo: decide if need to power off the motor and shutdown electric power
 }
 
 void testmode_torque_step_action(motor_t *motor)

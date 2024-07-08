@@ -6,7 +6,6 @@ dictionary_t datalog_target_symbol_dict;
 
 char *datalog_target_symbol_name[DICT_MAX_SIZE];
 int datalog_target_symbol_size = 0;
-int datalog_task_handle        = 1;
 
 // motor instance
 motor_t motor1;
@@ -14,8 +13,19 @@ motor_t motor1;
 // state machine instance
 motion_state_machine_t msm;
 
+// task scheduler handles
+int datalog_task_handle       = 1;
+int main_logic_handle         = 2;
+int motion_torque_loop_handle = 3;
+int motion_vel_loop_handle    = 4;
+int motion_pos_loop_handle    = 5;
+
 /* =============== MAIN WORK ====================*/
-static void MAIN_WORK(void);
+static void Main_Logic(void);
+
+static void Motion_Torque_Loop(void);
+static void Motion_Vel_Loop(void);
+static void Motion_Pos_Loop(void);
 
 /* =============== TASK SCHEDULER ====================*/
 /**
@@ -81,12 +91,28 @@ void Run_App_Functions(void)
 
 /* =============== MAIN WORK ====================*/
 
-static void MAIN_WORK(void)
+static void Main_Logic(void)
 {
     // update motor1 encoder info
     encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
     // update motor1 state machine
     update_motion_state_machine(&msm);
+}
+
+static void Motion_Torque_Loop(void)
+{
+    // simple torque loop: just send the target torque to the motor
+    static uint16_t torque_dac = 0;
+    torque_dac                 = torque_permillage_to_dac(motor1.motor_param->target_torque);
+    set_dac_value(DAC_A, torque_dac);
+}
+
+static void Motion_Vel_Loop(void)
+{
+}
+
+static void Motion_Pos_Loop(void)
+{
 }
 
 /* =============== TASK SCHEDULER ====================*/
@@ -98,7 +124,10 @@ static void Init_Task_Scheduler_Tasks(void)
     // log data with 2kHz frequency
     datalog_task_handle = task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
-    task_scheduler_add_task(MAIN_WORK, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
+    main_logic_handle         = task_scheduler_add_task(Main_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
+    motion_torque_loop_handle = task_scheduler_add_task(Motion_Torque_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 0);
+    motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(4000), 0);
+    motion_pos_loop_handle    = task_scheduler_add_task(Motion_Pos_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 }
 
 /* =============== PROTOCOL ====================*/
@@ -111,6 +140,9 @@ static void Init_Datalog_Param_Dict(void)
     add_key_value_pair(&datalog_available_symbol_dict, "rotation_num", &(motor1.encoder->rotation_num), INT32_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_pos", &(motor1.encoder->position), DOUBLE_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &(motor1.encoder->velocity), DOUBLE_TYPE_RANDOLF);
+
+    // motor param
+    add_key_value_pair(&datalog_available_symbol_dict, "target_torque", &(motor1.motor_param->target_torque), FLOAT_TYPE_RANDOLF);
 
     // motor state machine
     add_key_value_pair(&datalog_available_symbol_dict, "msm_state", &(msm.state), UINT16_TYPE_RANDOLF);
