@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include "Util/type_def_protocol.h"
+#include "Motion/motor.h"
 
 #ifdef STM32H743xx
 #include "main.h"
@@ -39,6 +40,8 @@ typedef struct {
     motion_event_t event;
 } motion_state_machine_t;
 
+extern motor_t motor1;
+
 /**
  * @brief init the motion state machine with INIT state
  * @param  motion_state_machine
@@ -50,6 +53,42 @@ void init_motion_state_machine(motion_state_machine_t *motion_state_machine);
  * @param  motion_state_machine
  */
 void update_motion_state_machine(motion_state_machine_t *motion_state_machine);
+
+/* ============= STATE ACTIONS ============= */
+
+void init_action(motor_t *motor);
+
+void poweron_action(motor_t *motor);
+
+void idle_action(motor_t *motor);
+
+void posmode_action(motor_t *motor);
+
+void velmode_action(motor_t *motor);
+
+void torquemode_action(motor_t *motor);
+
+void exit_action(motor_t *motor);
+
+void testmode_torque_step_action(motor_t *motor);
+
+/* ============= STATE TRANSLATION ACTIONS ============= */
+
+void init_to_poweron_action(motor_t *motor);
+
+void idle_to_pos_action(motor_t *motor);
+
+void idle_to_vel_action(motor_t *motor);
+
+void idle_to_torque_action(motor_t *motor);
+
+void pos_to_idle_action(motor_t *motor);
+
+void vel_to_idle_action(motor_t *motor);
+
+void torque_to_idle_action(motor_t *motor);
+
+void idle_to_exit_action(motor_t *motor);
 
 #ifdef _cplusplus
 }

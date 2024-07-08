@@ -18,7 +18,7 @@ void init_test_protocol_frame(protocol_frame_t *frame)
 {
     frame->header   = PROTOCOL_FRAME_HEADER;
     frame->motor_id = MOTOR_ID1;
-    frame->cmd      = SEND_VEL_PID_CMD;
+    frame->cmd      = GET_ECHO_SYMBOL_DATA_CMD;
     frame->data     = NULL;
     frame->len      = PROTOCOL_FRAME_HEADER_SIZE + PROTOCOL_FRAME_CHECKSUM_SIZE + 0;
 }
