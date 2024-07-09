@@ -96,7 +96,7 @@ static void Main_Logic(void)
     // update motor1 encoder info
     encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
     // update motor1 state machine
-    // update_motion_state_machine(&msm);
+    update_motion_state_machine(&msm);
 }
 
 static void Motion_Torque_Loop(void)
@@ -115,23 +115,6 @@ static void Motion_Pos_Loop(void)
 {
 }
 
-static void Test_Work(void)
-{
-    static uint16_t torque_dac = 0;
-    static float test_torque   = 0;
-    static float add_num       = 0.01;
-    if (test_torque >= 1000) {
-        add_num = -0.01;
-    }
-    if (test_torque <= -1000) {
-        add_num = 0.01;
-    }
-    test_torque += add_num;
-
-    torque_dac = torque_permillage_to_dac(test_torque);
-    set_dac_value(DAC_A, torque_dac);
-}
-
 /* =============== TASK SCHEDULER ====================*/
 
 static void Init_Task_Scheduler_Tasks(void)
@@ -145,7 +128,6 @@ static void Init_Task_Scheduler_Tasks(void)
     motion_torque_loop_handle = task_scheduler_add_task(Motion_Torque_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 0);
     motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(4000), 0);
     motion_pos_loop_handle    = task_scheduler_add_task(Motion_Pos_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
-    task_scheduler_add_task(Test_Work, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
 }
 
 /* =============== PROTOCOL ====================*/
