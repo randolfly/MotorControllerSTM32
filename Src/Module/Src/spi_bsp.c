@@ -36,7 +36,7 @@ void reset_dac(void)
 
 static void set_dac_register(uint8_t command, uint16_t channel, uint16_t data)
 {
-    uint8_t reg[3] = {0};
+    static uint8_t reg[3] = {0};
 
     reg[0] = (command << 4) | channel;
     reg[1] = (data >> 8) & 0xFF;
@@ -46,7 +46,7 @@ static void set_dac_register(uint8_t command, uint16_t channel, uint16_t data)
     delay();
     HAL_SPI_Transmit(&DAC_SPI, reg, 3, 0xF);
     delay();
-    SYNC_L;
+    SYNC_H;
 }
 
 static void delay(void)
