@@ -1,14 +1,11 @@
 #include "Controller/model_excitation.h"
 
+float excitation_signal;
+
 void set_model_excitation_params(real_T magnitude, real_T gain)
 {
-    rtU.gain      = gain;
-    rtU.magnitude = magnitude;
-}
-
-float get_model_excitation_output()
-{
-    return (float)(rtY.output);
+    Excitation_rtU.gain      = gain;
+    Excitation_rtU.magnitude = magnitude;
 }
 
 void init_model_excitation(void)
@@ -25,7 +22,7 @@ uint8_t step_model_excitation(void)
 
     /* Check for overrun */
     if (OverrunFlag) {
-        rtmSetErrorStatus(rtM, "Overrun");
+        rtmSetErrorStatus(Excitation_rtM, "Overrun");
         return 2;
     }
 
@@ -37,14 +34,14 @@ uint8_t step_model_excitation(void)
 
     /* Step the model */
     Excitation_step();
-
+    excitation_signal = Excitation_rtY.output;
     /* Get model outputs here */
 
     /* Indicate task complete */
     OverrunFlag = false;
 
     // if some error handler is needed, extend this function
-    if (rtY.output == 0) {
+    if (Excitation_rtY.output == 0) {
         return 1;
     } else {
         return 0;

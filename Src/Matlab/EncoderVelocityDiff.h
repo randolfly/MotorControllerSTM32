@@ -29,21 +29,21 @@
 /* Model Code Variants */
 
 /* Forward declaration for rtModel */
-typedef struct tag_RTM RT_MODEL;
+typedef struct Encoder_tag_RTM Encoder_RT_MODEL;
 
 /* Block signals and states (default storage) for system '<Root>' */
 typedef struct {
     real_T DiscreteTransferFcn_states; /* '<S1>/Discrete Transfer Fcn' */
-} DW;
+} Encoder_DW;
 
 /* Real-time Model Data Structure */
-struct tag_RTM {
-    DW *dwork;
+struct Encoder_tag_RTM {
+    Encoder_DW *dwork;
 };
 
 /* Model entry point functions */
-extern void EncoderVelocityDiff_initialize(RT_MODEL *const rtM);
-extern void EncoderVelocityDiff_step(RT_MODEL *const rtM, real_T rtU_position,
+extern void EncoderVelocityDiff_initialize(Encoder_RT_MODEL *const rtM);
+extern void EncoderVelocityDiff_step(Encoder_RT_MODEL *const rtM, real_T rtU_position,
                                      real_T *rtY_velocity);
 
 /*-

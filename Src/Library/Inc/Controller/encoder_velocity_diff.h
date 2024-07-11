@@ -19,8 +19,8 @@ extern "C" {
 #endif
 
 typedef struct {
-    RT_MODEL *model;
-    DW *state;
+    Encoder_RT_MODEL *model;
+    Encoder_DW *state;
 } encoder_velocity_diff_t;
 
 /**

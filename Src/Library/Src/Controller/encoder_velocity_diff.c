@@ -2,8 +2,8 @@
 
 void init_encoder_velocity_diff(encoder_velocity_diff_t *velocity_diff)
 {
-    velocity_diff->model        = (RT_MODEL *)malloc(sizeof(RT_MODEL));
-    velocity_diff->state        = (DW *)malloc(sizeof(DW));
+    velocity_diff->model        = (Encoder_RT_MODEL *)malloc(sizeof(Encoder_RT_MODEL));
+    velocity_diff->state        = (Encoder_DW *)malloc(sizeof(Encoder_DW));
     velocity_diff->model->dwork = (velocity_diff->state);
     EncoderVelocityDiff_initialize(velocity_diff->model);
 }

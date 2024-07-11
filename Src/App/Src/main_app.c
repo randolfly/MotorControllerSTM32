@@ -119,9 +119,12 @@ static void Motion_Pos_Loop(void)
 
 static void Motion_Test_TorqueBs(void)
 {
-    step_model_excitation();
-    float model_excitation_output = 0;
-    model_excitation_output       = get_model_excitation_output();
+    static uint8_t result = 0;
+    result                = step_model_excitation();
+    if (result == 1) {
+        task_scheduler_disable_task(motion_test_torquebs_handle);
+        msm.event.test_torquebs_to_idle = 1;
+    }
 }
 
 /* =============== TASK SCHEDULER ====================*/
@@ -155,6 +158,11 @@ static void Init_Datalog_Param_Dict(void)
 
     // motor param
     add_key_value_pair(&datalog_available_symbol_dict, "target_torque", &(motor1.motor_param->target_torque), FLOAT_TYPE_RANDOLF);
+
+    // control param
+
+    // test param
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal", &excitation_signal, FLOAT_TYPE_RANDOLF);
 
     // motor state machine
     add_key_value_pair(&datalog_available_symbol_dict, "msm_state", &(msm.state), UINT16_TYPE_RANDOLF);

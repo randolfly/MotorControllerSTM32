@@ -24,7 +24,7 @@
 #ifndef Excitation_COMMON_INCLUDES_
 #define Excitation_COMMON_INCLUDES_
 #include "rtwtypes.h"
-#endif                                 /* Excitation_COMMON_INCLUDES_ */
+#endif /* Excitation_COMMON_INCLUDES_ */
 
 #include <math.h>
 
@@ -32,69 +32,69 @@
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
-#define rtmGetErrorStatus(rtm)         ((rtm)->errorStatus)
+#define rtmGetErrorStatus(rtm) ((rtm)->errorStatus)
 #endif
 
 #ifndef rtmSetErrorStatus
-#define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
+#define rtmSetErrorStatus(rtm, val) ((rtm)->errorStatus = (val))
 #endif
 
 /* Forward declaration for rtModel */
-typedef struct tag_RTM RT_MODEL;
+typedef struct Excitation_tag_RTM Excitation_RT_MODEL;
 
 /* Block signals and states (default storage) for system '<Root>' */
 typedef struct {
-  struct {
-    int_T PrevIndex;
-  } FromWorkspace_IWORK;               /* '<S2>/From Workspace' */
+    struct {
+        int_T PrevIndex;
+    } FromWorkspace_IWORK; /* '<S2>/From Workspace' */
 
-  struct {
-    void *TimePtr;
-    void *DataPtr;
-    void *RSimInfoPtr;
-  } FromWorkspace_PWORK;               /* '<S2>/From Workspace' */
-} DW;
+    struct {
+        void *TimePtr;
+        void *DataPtr;
+        void *RSimInfoPtr;
+    } FromWorkspace_PWORK; /* '<S2>/From Workspace' */
+} Excitation_DW;
 
 /* External inputs (root inport signals with default storage) */
 typedef struct {
-  real_T magnitude;                    /* '<Root>/magnitude' */
-  real_T gain;                         /* '<Root>/gain' */
-} ExtU;
+    real_T magnitude; /* '<Root>/magnitude' */
+    real_T gain;      /* '<Root>/gain' */
+} Excitation_ExtU;
 
 /* External outputs (root outports fed by signals with default storage) */
 typedef struct {
-  real_T output;                       /* '<Root>/output' */
-} ExtY;
+    real_T output; /* '<Root>/output' */
+} Excitation_ExtY;
 
 /* Real-time Model Data Structure */
-struct tag_RTM {
-  const char_T * volatile errorStatus;
+struct Excitation_tag_RTM {
+    const char_T *volatile errorStatus;
 
-  /*
-   * Timing:
-   * The following substructure contains information regarding
-   * the timing information for the model.
-   */
-  struct {
-    uint32_T clockTick0;
-  } Timing;
+    /*
+     * Timing:
+     * The following substructure contains information regarding
+     * the timing information for the model.
+     */
+    struct {
+        uint32_T clockTick0;
+    } Timing;
 };
 
 /* Block signals and states (default storage) */
-extern DW rtDW;
+extern Excitation_DW Excitation_rtDW;
 
 /* External inputs (root inport signals with default storage) */
-extern ExtU rtU;
+extern Excitation_ExtU Excitation_rtU;
 
 /* External outputs (root outports fed by signals with default storage) */
-extern ExtY rtY;
+extern Excitation_ExtY Excitation_rtY;
 
 /* Model entry point functions */
 extern void Excitation_initialize(void);
 extern void Excitation_step(void);
 
 /* Real-time Model object */
-extern RT_MODEL *const rtM;
+extern Excitation_RT_MODEL *const Excitation_rtM;
 
 /*-
  * The generated code includes comments that allow you to trace directly
@@ -117,7 +117,7 @@ extern RT_MODEL *const rtM;
  * '<S1>'   : 'prbs_model/Excitation System'
  * '<S2>'   : 'prbs_model/Excitation System/Input Binary Signal'
  */
-#endif                                 /* RTW_HEADER_Excitation_h_ */
+#endif /* RTW_HEADER_Excitation_h_ */
 
 /*
  * File trailer for generated code.

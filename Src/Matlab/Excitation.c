@@ -32,17 +32,17 @@
 #endif
 
 /* Block signals and states (default storage) */
-DW rtDW;
+Excitation_DW Excitation_rtDW;
 
 /* External inputs (root inport signals with default storage) */
-ExtU rtU;
+Excitation_ExtU Excitation_rtU;
 
 /* External outputs (root outports fed by signals with default storage) */
-ExtY rtY;
+Excitation_ExtY Excitation_rtY;
 
 /* Real-time model */
-static RT_MODEL rtM_;
-RT_MODEL *const rtM = &rtM_;
+static Excitation_RT_MODEL rtM_;
+Excitation_RT_MODEL *const Excitation_rtM = &rtM_;
 
 /* Model step function */
 void Excitation_step(void)
@@ -52,8 +52,8 @@ void Excitation_step(void)
 
     /* FromWorkspace: '<S2>/From Workspace' */
     {
-        int_T currIndex     = rtDW.FromWorkspace_IWORK.PrevIndex + 1;
-        real_T *pDataValues = (real_T *)rtDW.FromWorkspace_PWORK.DataPtr;
+        int_T currIndex     = Excitation_rtDW.FromWorkspace_IWORK.PrevIndex + 1;
+        real_T *pDataValues = (real_T *)Excitation_rtDW.FromWorkspace_PWORK.DataPtr;
         if (currIndex < 4096) {
             pDataValues += currIndex;
             rtb_FromWorkspace = *pDataValues;
@@ -61,7 +61,7 @@ void Excitation_step(void)
             rtb_FromWorkspace = 0.0;
         }
 
-        rtDW.FromWorkspace_IWORK.PrevIndex = currIndex;
+        Excitation_rtDW.FromWorkspace_IWORK.PrevIndex = currIndex;
     }
 
     /* Outport: '<Root>/output' incorporates:
@@ -70,7 +70,7 @@ void Excitation_step(void)
      *  Product: '<S1>/Product'
      *  Product: '<S1>/Product1'
      */
-    rtY.output = rtb_FromWorkspace * rtU.magnitude * rtU.gain;
+    Excitation_rtY.output = rtb_FromWorkspace * Excitation_rtU.magnitude * Excitation_rtU.gain;
 
     /* Update absolute time for base rate */
     /* The "clockTick0" counts the number of times the code of this task has
@@ -78,7 +78,7 @@ void Excitation_step(void)
      * of the task. Size of "clockTick0" ensures timer will not overflow during the
      * application lifespan selected.
      */
-    rtM->Timing.clockTick0++;
+    Excitation_rtM->Timing.clockTick0++;
 }
 
 /* Model initialize function */
@@ -395,9 +395,9 @@ void Excitation_initialize(void)
                                         1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                         1.0, 1.0, 1.0, 1.0};
 
-        rtDW.FromWorkspace_PWORK.TimePtr   = (void *)0;
-        rtDW.FromWorkspace_PWORK.DataPtr   = (void *)pDataValues0;
-        rtDW.FromWorkspace_IWORK.PrevIndex = -1;
+        Excitation_rtDW.FromWorkspace_PWORK.TimePtr   = (void *)0;
+        Excitation_rtDW.FromWorkspace_PWORK.DataPtr   = (void *)pDataValues0;
+        Excitation_rtDW.FromWorkspace_IWORK.PrevIndex = -1;
     }
 }
 

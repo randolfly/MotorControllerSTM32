@@ -51,9 +51,9 @@
 #endif
 
 /* Model step function */
-void EncoderVelocityDiff_step(RT_MODEL *const rtM, real_T rtU_position, real_T *rtY_velocity)
+void EncoderVelocityDiff_step(Encoder_RT_MODEL *const rtM, real_T rtU_position, real_T *rtY_velocity)
 {
-    DW *rtDW = rtM->dwork;
+    Encoder_DW *rtDW = rtM->dwork;
     real_T DiscreteTransferFcn_tmp;
 
     /* DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn' incorporates:
@@ -73,7 +73,7 @@ void EncoderVelocityDiff_step(RT_MODEL *const rtM, real_T rtU_position, real_T *
 }
 
 /* Model initialize function */
-void EncoderVelocityDiff_initialize(RT_MODEL *const rtM)
+void EncoderVelocityDiff_initialize(Encoder_RT_MODEL *const rtM)
 {
     /* (no initialization code required) */
     UNUSED_PARAMETER(rtM);

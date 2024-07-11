@@ -10,8 +10,10 @@
 #include "main.h"
 #endif
 
+extern float excitation_signal;
+
 /**
- * @brief init the model
+ * @brief Construct a new init model excitation object
  */
 void init_model_excitation(void);
 
@@ -27,12 +29,6 @@ uint8_t step_model_excitation(void);
  * @param  gain: gain of the signal, such as 1 , 1.1
  */
 void set_model_excitation_params(real_T magnitude, real_T gain);
-
-/**
- * @brief Get the model output object
- * @param  output: binary signal output
- */
-float get_model_excitation_output();
 
 #ifdef __cplusplus
 extern "C" {

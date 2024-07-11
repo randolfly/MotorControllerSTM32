@@ -1,5 +1,6 @@
 #include "Controller/motion_statemachine.h"
 #include "Util/task_scheduler.h"
+#include "Controller/motion_statemachine.h"
 
 // exten task scheduler handles
 // ! note: also can define the actions as function pointer, init them in
@@ -92,7 +93,7 @@ void update_motion_state_machine(motion_state_machine_t *motion_state_machine)
             }
             break;
         case TestMode_TorqueBS:
-            testmode_torque_step_action(&motor1);
+            testmode_torquebs_action(&motor1);
             if (motion_state_machine->event.test_torquebs_to_idle == 1) {
                 motion_state_machine->state                       = MOTION_IDLE;
                 motion_state_machine->event.test_torquebs_to_idle = 0;
@@ -183,5 +184,13 @@ void torque_to_idle_action(motor_t *motor)
 }
 
 void idle_to_exit_action(motor_t *motor)
+{
+}
+
+void idle_to_test_torquebs_action(motor_t *motor)
+{
+}
+
+void test_torquebs_to_idle_action(motor_t *motor)
 {
 }
