@@ -123,6 +123,7 @@ static void Motion_Test_TorqueBs(void)
     result                = step_model_excitation();
     if (result == 1) {
         task_scheduler_disable_task(motion_test_torquebs_handle);
+        excitation_signal               = 0;
         msm.event.test_torquebs_to_idle = 1;
     }
 }
@@ -163,6 +164,8 @@ static void Init_Datalog_Param_Dict(void)
 
     // test param
     add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal", &excitation_signal, FLOAT_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_magnitude", &excitation_signal_magnitude, FLOAT_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_gain", &excitation_signal_gain, FLOAT_TYPE_RANDOLF);
 
     // motor state machine
     add_key_value_pair(&datalog_available_symbol_dict, "msm_state", &(msm.state), UINT16_TYPE_RANDOLF);

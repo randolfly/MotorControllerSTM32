@@ -1,6 +1,6 @@
 #include "Controller/motion_statemachine.h"
 #include "Util/task_scheduler.h"
-#include "Controller/motion_statemachine.h"
+#include "Controller/model_excitation.h"
 
 // exten task scheduler handles
 // ! note: also can define the actions as function pointer, init them in
@@ -111,6 +111,9 @@ void init_action(motor_t *motor)
 {
     // clear the motor command
     motor->motor_param->target_torque = 0;
+
+    // clear test command
+    excitation_signal = 0;
     // stop all control loops
     task_scheduler_disable_task(motion_torque_loop_handle);
     task_scheduler_disable_task(motion_vel_loop_handle);

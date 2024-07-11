@@ -11,6 +11,8 @@
 #endif
 
 extern float excitation_signal;
+extern float excitation_signal_magnitude;
+extern float excitation_signal_gain;
 
 /**
  * @brief Construct a new init model excitation object
@@ -28,7 +30,7 @@ uint8_t step_model_excitation(void);
  * @param  magnitude: magnitude of the signal, such as 200
  * @param  gain: gain of the signal, such as 1 , 1.1
  */
-void set_model_excitation_params(real_T magnitude, real_T gain);
+// void set_model_excitation_params(real_T magnitude, real_T gain);
 
 #ifdef __cplusplus
 extern "C" {

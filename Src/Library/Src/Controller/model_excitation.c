@@ -1,23 +1,21 @@
 #include "Controller/model_excitation.h"
 
-float excitation_signal;
-
-void set_model_excitation_params(real_T magnitude, real_T gain)
-{
-    Excitation_rtU.gain      = gain;
-    Excitation_rtU.magnitude = magnitude;
-}
+float excitation_signal           = 0;
+float excitation_signal_magnitude = 200;
+float excitation_signal_gain      = 1;
 
 void init_model_excitation(void)
 {
     Excitation_initialize();
-    set_model_excitation_params(200, 1);
+    Excitation_rtU.magnitude = excitation_signal_magnitude;
+    Excitation_rtU.gain      = excitation_signal_gain;
 }
 
 uint8_t step_model_excitation(void)
 {
     static boolean_T OverrunFlag = false;
-
+    Excitation_rtU.magnitude     = excitation_signal_magnitude;
+    Excitation_rtU.gain          = excitation_signal_gain;
     /* Disable interrupts here */
 
     /* Check for overrun */
@@ -42,6 +40,10 @@ uint8_t step_model_excitation(void)
 
     // if some error handler is needed, extend this function
     if (Excitation_rtY.output == 0) {
+        // clear prev index, for next excitation
+        Excitation_rtDW.FromWorkspace_IWORK.PrevIndex = -1;
+        Excitation_rtY.output                         = 0;
+        excitation_signal                             = 0;
         return 1;
     } else {
         return 0;
