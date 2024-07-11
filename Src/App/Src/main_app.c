@@ -14,11 +14,12 @@ motor_t motor1;
 motion_state_machine_t msm;
 
 // task scheduler handles
-int datalog_task_handle       = 1;
-int main_logic_handle         = 2;
-int motion_torque_loop_handle = 3;
-int motion_vel_loop_handle    = 4;
-int motion_pos_loop_handle    = 5;
+int datalog_task_handle         = 1;
+int main_logic_handle           = 2;
+int motion_torque_loop_handle   = 3;
+int motion_vel_loop_handle      = 4;
+int motion_pos_loop_handle      = 5;
+int motion_test_torquebs_handle = 6;
 
 /* =============== MAIN WORK ====================*/
 static void Main_Logic(void);
@@ -74,6 +75,7 @@ void Init_App_Functions()
     Start_Command_Frame_Receive(); // command uart receive dma frames
     init_motor(&motor1);           // init the motor1
     init_motion_state_machine(&msm);
+    init_model_excitation();
 
     // log data params(place after all params are initialized)
     Init_Datalog_Param_Dict(); // init the datalog parameters dictionary
@@ -115,6 +117,13 @@ static void Motion_Pos_Loop(void)
 {
 }
 
+static void Motion_Test_TorqueBs(void)
+{
+    step_model_excitation();
+    float model_excitation_output = 0;
+    model_excitation_output       = get_model_excitation_output();
+}
+
 /* =============== TASK SCHEDULER ====================*/
 
 static void Init_Task_Scheduler_Tasks(void)
@@ -128,6 +137,9 @@ static void Init_Task_Scheduler_Tasks(void)
     motion_torque_loop_handle = task_scheduler_add_task(Motion_Torque_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 0);
     motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(4000), 0);
     motion_pos_loop_handle    = task_scheduler_add_task(Motion_Pos_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
+
+    // test functions
+    motion_test_torquebs_handle = task_scheduler_add_task(Motion_Test_TorqueBs, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 }
 
 /* =============== PROTOCOL ====================*/
@@ -154,6 +166,8 @@ static void Init_Datalog_Param_Dict(void)
     add_key_value_pair(&datalog_available_symbol_dict, "msm_pos_to_idle", &(msm.event.pos_to_idle), UINT8_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "msm_vel_to_idle", &(msm.event.vel_to_idle), UINT8_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "msm_torque_to_idle", &(msm.event.torque_to_idle), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_test_torquebs_to_idle", &(msm.event.test_torquebs_to_idle), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "msm_idle_to_test_torquebs", &(msm.event.idle_to_test_torquebs), UINT8_TYPE_RANDOLF);
 }
 
 static void Command_Frames_Handler(void)

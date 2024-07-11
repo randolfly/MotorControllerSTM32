@@ -7,18 +7,21 @@
 extern int motion_torque_loop_handle;
 extern int motion_vel_loop_handle;
 extern int motion_pos_loop_handle;
+extern int motion_test_torquebs_handle;
 
 void init_motion_state_machine(motion_state_machine_t *motion_state_machine)
 {
-    motion_state_machine->state                 = MOTION_INIT;
-    motion_state_machine->event.idle_to_exit    = 0;
-    motion_state_machine->event.idle_to_pos     = 0;
-    motion_state_machine->event.idle_to_torque  = 0;
-    motion_state_machine->event.idle_to_vel     = 0;
-    motion_state_machine->event.init_to_poweron = 0;
-    motion_state_machine->event.pos_to_idle     = 0;
-    motion_state_machine->event.torque_to_idle  = 0;
-    motion_state_machine->event.vel_to_idle     = 0;
+    motion_state_machine->state                       = MOTION_INIT;
+    motion_state_machine->event.idle_to_exit          = 0;
+    motion_state_machine->event.idle_to_pos           = 0;
+    motion_state_machine->event.idle_to_torque        = 0;
+    motion_state_machine->event.idle_to_vel           = 0;
+    motion_state_machine->event.init_to_poweron       = 0;
+    motion_state_machine->event.pos_to_idle           = 0;
+    motion_state_machine->event.torque_to_idle        = 0;
+    motion_state_machine->event.vel_to_idle           = 0;
+    motion_state_machine->event.idle_to_test_torquebs = 0;
+    motion_state_machine->event.test_torquebs_to_idle = 0;
 }
 
 void update_motion_state_machine(motion_state_machine_t *motion_state_machine)
@@ -55,6 +58,10 @@ void update_motion_state_machine(motion_state_machine_t *motion_state_machine)
                 motion_state_machine->state                = MOTION_TORQUEMODE;
                 motion_state_machine->event.idle_to_torque = 0;
                 idle_to_torque_action(&motor1);
+            } else if (motion_state_machine->event.idle_to_test_torquebs == 1) {
+                motion_state_machine->state                       = TestMode_TorqueBS;
+                motion_state_machine->event.idle_to_test_torquebs = 0;
+                idle_to_test_torquebs_action(&motor1);
             }
             break;
         case MOTION_EXIT:
@@ -84,6 +91,14 @@ void update_motion_state_machine(motion_state_machine_t *motion_state_machine)
                 torque_to_idle_action(&motor1);
             }
             break;
+        case TestMode_TorqueBS:
+            testmode_torque_step_action(&motor1);
+            if (motion_state_machine->event.test_torquebs_to_idle == 1) {
+                motion_state_machine->state                       = MOTION_IDLE;
+                motion_state_machine->event.test_torquebs_to_idle = 0;
+                test_torquebs_to_idle_action(&motor1);
+            }
+            break;
         default:
             break;
     }
@@ -99,6 +114,7 @@ void init_action(motor_t *motor)
     task_scheduler_disable_task(motion_torque_loop_handle);
     task_scheduler_disable_task(motion_vel_loop_handle);
     task_scheduler_disable_task(motion_pos_loop_handle);
+    task_scheduler_disable_task(motion_test_torquebs_handle);
 }
 
 void poweron_action(motor_t *motor)
@@ -130,8 +146,10 @@ void exit_action(motor_t *motor)
     // todo: decide if need to power off the motor and shutdown electric power
 }
 
-void testmode_torque_step_action(motor_t *motor)
+void testmode_torquebs_action(motor_t *motor)
 {
+    // task_scheduler_enable_task(motion_torque_loop_handle);
+    task_scheduler_enable_task(motion_test_torquebs_handle);
 }
 
 /* ============= STATE TRANSLATION ACTIONS ============= */

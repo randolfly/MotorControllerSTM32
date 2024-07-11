@@ -21,7 +21,7 @@ typedef enum {
     MOTION_VELMODE,
     MOTION_TORQUEMODE,
     MOTION_EXIT,
-    MOTION_TESTMODE_TORQUE_STEP,
+    TestMode_TorqueBS,
 } motion_state_t;
 
 typedef struct {
@@ -33,6 +33,8 @@ typedef struct {
     uint8_t vel_to_idle;
     uint8_t torque_to_idle;
     uint8_t idle_to_exit;
+    uint8_t test_torquebs_to_idle;
+    uint8_t idle_to_test_torquebs;
 } motion_event_t;
 
 typedef struct {
@@ -70,7 +72,7 @@ void torquemode_action(motor_t *motor);
 
 void exit_action(motor_t *motor);
 
-void testmode_torque_step_action(motor_t *motor);
+void testmode_torquebs_action(motor_t *motor);
 
 /* ============= STATE TRANSLATION ACTIONS ============= */
 
@@ -89,6 +91,10 @@ void vel_to_idle_action(motor_t *motor);
 void torque_to_idle_action(motor_t *motor);
 
 void idle_to_exit_action(motor_t *motor);
+
+void idle_to_test_torquebs_action(motor_t *motor);
+
+void test_torquebs_to_idle_action(motor_t *motor);
 
 #ifdef _cplusplus
 }
