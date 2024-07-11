@@ -1,7 +1,8 @@
 % 定义参数
 N = 4096; % 信号长度
-fs = 2000; % 采样频率
-frequencies = [50, 150, 300]; % 期望频率列表
+fs = 1000; % 采样频率
+frequencies = primes(31) * fs / N; % 期望频率
+frequencies = frequencies(2:end);
 
 % 初始化频谱
 spectrum = zeros(1, N);
@@ -31,6 +32,7 @@ signal = signal / max(abs(signal));
 
 % 将信号二值化
 binary_signal = signal > 0;
+binary_signal = 2 * binary_signal - 1; % 将二进制信号转换为+1和-1
 
 % 绘制信号
 figure;

@@ -1,4 +1,5 @@
 Doc/SimulinkController/
+*_rtw/
 Data/
 
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,vs,c
