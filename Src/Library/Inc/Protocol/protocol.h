@@ -113,7 +113,7 @@ void deserialize_frame_data(uint8_t *data_src, protocol_frame_t *frame);
  * @param  len: data length
  * @return uint8_t: checksum value
  */
-uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len);
+uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint16_t len);
 
 /**
  * @brief deep copy the frame from src to dest

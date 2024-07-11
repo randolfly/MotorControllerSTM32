@@ -40,6 +40,17 @@ MU_TEST(checksum_calculation_test)
     mu_check(tmp_checksum == target_checksum);
 }
 
+MU_TEST(calculate_checksum_test)
+{
+    uint8_t checksum  = 0x00;
+    uint8_t data[400] = {0x00};
+    for (uint16_t i = 0; i < 400; i++) {
+        data[i] = 0x3f;
+    }
+    checksum = calculate_checksum(0, data, 400);
+    mu_check(checksum == 0x70);
+}
+
 MU_TEST(protocol_frame_serialize_test)
 {
     printf("start serialize_deserialize_frame_data_test\n");
@@ -63,6 +74,7 @@ MU_TEST_SUITE(test_suite)
     MU_SUITE_CONFIGURE(&test_setup, &test_teardown);
     MU_RUN_TEST(protocol_frame_serialize_test);
     MU_RUN_TEST(checksum_calculation_test);
+    MU_RUN_TEST(calculate_checksum_test);
 }
 
 int main()

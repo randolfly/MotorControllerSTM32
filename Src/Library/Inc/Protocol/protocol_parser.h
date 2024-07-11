@@ -24,7 +24,7 @@ typedef struct
     uint16_t next_frame_len; /** next frame length, used as an indicator of */
 } protocol_frame_parser_t;
 
-#define PROTOCOL_RECURSIVE_BUFFER_SIZE 1024
+#define PROTOCOL_RECURSIVE_BUFFER_SIZE 4096
 
 /**
  * @brief initialize the protocol parser

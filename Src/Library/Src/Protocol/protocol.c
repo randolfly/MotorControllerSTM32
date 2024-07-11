@@ -35,7 +35,7 @@ void deserialize_frame_data(uint8_t *data_src, protocol_frame_t *frame)
     frame->checksum = get_frame_checksum(data_src, 0, frame->len);
 }
 
-uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint8_t len)
+uint8_t calculate_checksum(uint8_t init, uint8_t *ptr, uint16_t len)
 {
     uint8_t sum = init;
 
