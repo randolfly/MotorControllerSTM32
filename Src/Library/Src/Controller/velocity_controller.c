@@ -6,6 +6,8 @@ void init_velocity_controller(velocity_controller_t *velocity_controller)
     velocity_controller->state        = (VelocityController_DW *)malloc(sizeof(VelocityController_DW));
     velocity_controller->model->dwork = (velocity_controller->state);
     VelocityController_initialize(velocity_controller->model);
+    velocity_controller->model->dwork->Filter_DSTATE     = 0.0;
+    velocity_controller->model->dwork->Integrator_DSTATE = 0.0;
 }
 
 void deinit_velocity_controller(velocity_controller_t *velocity_controller)

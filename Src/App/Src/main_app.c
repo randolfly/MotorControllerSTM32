@@ -115,6 +115,13 @@ static void Motion_Torque_Loop(void)
 
 static void Motion_Vel_Loop(void)
 {
+    static double torque_command = 0;
+    step_velocity_controller(&velocity_controller,
+                             motor1.motor_param->target_velocity,
+                             motor1.encoder->velocity,
+                             &torque_command);
+    motor1.motor_param->target_torque = torque_command;
+    Motion_Torque_Loop();
 }
 
 static void Motion_Pos_Loop(void)
@@ -146,7 +153,7 @@ static void Init_Task_Scheduler_Tasks(void)
 
     main_logic_handle         = task_scheduler_add_task(Main_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
     motion_torque_loop_handle = task_scheduler_add_task(Motion_Torque_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 0);
-    motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(4000), 0);
+    motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
     motion_pos_loop_handle    = task_scheduler_add_task(Motion_Pos_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
     // test functions
@@ -166,6 +173,8 @@ static void Init_Datalog_Param_Dict(void)
 
     // motor param
     add_key_value_pair(&datalog_available_symbol_dict, "target_torque", &(motor1.motor_param->target_torque), DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "target_vel", &(motor1.motor_param->target_velocity), DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "target_pos", &(motor1.motor_param->target_position), DOUBLE_TYPE_RANDOLF);
 
     // control param
 

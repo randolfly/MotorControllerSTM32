@@ -138,6 +138,7 @@ void posmode_action(motor_t *motor)
 
 void velmode_action(motor_t *motor)
 {
+    task_scheduler_enable_task(motion_vel_loop_handle);
 }
 
 void torquemode_action(motor_t *motor)
@@ -153,7 +154,6 @@ void exit_action(motor_t *motor)
 
 void testmode_torquebs_action(motor_t *motor)
 {
-    // task_scheduler_enable_task(motion_torque_loop_handle);
     task_scheduler_enable_task(motion_test_torquebs_handle);
 }
 
