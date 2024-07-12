@@ -122,6 +122,7 @@ static void Motion_Test_TorqueBs(void)
     static uint8_t result             = 0;
     result                            = step_model_excitation();
     motor1.motor_param->target_torque = excitation_signal;
+    Motion_Torque_Loop();
     if (result == 1) {
         task_scheduler_disable_task(motion_test_torquebs_handle);
         excitation_signal                 = 0;

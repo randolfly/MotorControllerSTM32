@@ -1,7 +1,7 @@
 #include "Controller/model_excitation.h"
 
 float excitation_signal           = 0;
-float excitation_signal_magnitude = 200;
+float excitation_signal_magnitude = 250;
 float excitation_signal_gain      = 1;
 
 void init_model_excitation(void)
