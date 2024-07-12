@@ -10,6 +10,9 @@ int datalog_target_symbol_size = 0;
 // motor instance
 motor_t motor1;
 
+// controller instance
+velocity_controller_t velocity_controller;
+
 // state machine instance
 motion_state_machine_t msm;
 
@@ -76,6 +79,7 @@ void Init_App_Functions()
     init_motor(&motor1);           // init the motor1
     init_motion_state_machine(&msm);
     init_model_excitation();
+    init_velocity_controller(&velocity_controller);
 
     // log data params(place after all params are initialized)
     Init_Datalog_Param_Dict(); // init the datalog parameters dictionary
@@ -161,14 +165,14 @@ static void Init_Datalog_Param_Dict(void)
     add_key_value_pair(&datalog_available_symbol_dict, "encoder_vel", &(motor1.encoder->velocity), DOUBLE_TYPE_RANDOLF);
 
     // motor param
-    add_key_value_pair(&datalog_available_symbol_dict, "target_torque", &(motor1.motor_param->target_torque), FLOAT_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "target_torque", &(motor1.motor_param->target_torque), DOUBLE_TYPE_RANDOLF);
 
     // control param
 
     // test param
-    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal", &excitation_signal, FLOAT_TYPE_RANDOLF);
-    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_magnitude", &excitation_signal_magnitude, FLOAT_TYPE_RANDOLF);
-    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_gain", &excitation_signal_gain, FLOAT_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal", &excitation_signal, DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_magnitude", &excitation_signal_magnitude, DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal_gain", &excitation_signal_gain, DOUBLE_TYPE_RANDOLF);
 
     // motor state machine
     add_key_value_pair(&datalog_available_symbol_dict, "msm_state", &(msm.state), UINT16_TYPE_RANDOLF);

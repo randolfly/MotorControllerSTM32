@@ -57,7 +57,7 @@
 void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_ref, real_T rtU_v,
                              real_T *rtY_u)
 {
-    DW *rtDW = rtM->dwork;
+    VelocityController_DW *rtDW = rtM->dwork;
     real_T rtb_DeadZone;
     real_T rtb_DeadZone_0;
     real_T rtb_FilterCoefficient;

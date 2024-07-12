@@ -10,9 +10,9 @@
 #include "main.h"
 #endif
 
-extern float excitation_signal;
-extern float excitation_signal_magnitude;
-extern float excitation_signal_gain;
+extern double excitation_signal;
+extern double excitation_signal_magnitude;
+extern double excitation_signal_gain;
 
 /**
  * @brief Construct a new init model excitation object

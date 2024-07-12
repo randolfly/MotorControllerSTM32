@@ -46,12 +46,12 @@ typedef struct VelocityController_tag_RTM VelocityController_RT_MODEL;
 typedef struct {
     real_T Integrator_DSTATE; /* '<S37>/Integrator' */
     real_T Filter_DSTATE;     /* '<S32>/Filter' */
-} DW;
+} VelocityController_DW;
 
 /* Real-time Model Data Structure */
 struct VelocityController_tag_RTM {
     const char_T *volatile errorStatus;
-    DW *dwork;
+    VelocityController_DW *dwork;
 };
 
 /* Model entry point functions */

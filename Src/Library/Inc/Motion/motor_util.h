@@ -27,12 +27,12 @@ typedef struct {
     uint8_t enable_velocity_limit;
     uint8_t enable_position_limit;
 
-    float max_torque;
-    float min_torque;
-    float max_velocity;
-    float min_velocity;
-    float max_position;
-    float min_position;
+    double max_torque;
+    double min_torque;
+    double max_velocity;
+    double min_velocity;
+    double max_position;
+    double min_position;
 } motion_limit_t;
 
 typedef struct
@@ -42,7 +42,9 @@ typedef struct
 
 typedef struct
 {
-    float target_torque; /* target torque (unit: 1/1000 rated-torque), clock-wise -> + */
+    double target_torque;   /* target torque (unit: 1/1000 rated-torque), clock-wise -> + */
+    double target_velocity; /* target velocity (unit: rad/s), clock-wise -> + */
+    double target_position; /* target position (unit: rad), clock-wise -> + */
 
 } motor_param_t;
 
@@ -70,7 +72,7 @@ uint8_t check_motion_limit(motor_t *motor, motion_limit_t *motion_limit);
  * @param torque_permillage: torque permillage: 1000->0xFF, -1000->0x00
  * @return uint32_t: dac target value, [0x00, 0xFF] (2^16)
  */
-uint16_t torque_permillage_to_dac(float torque_permillage);
+uint16_t torque_permillage_to_dac(double torque_permillage);
 
 #ifdef _cplusplus
 }

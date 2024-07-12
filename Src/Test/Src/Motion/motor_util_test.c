@@ -14,9 +14,9 @@ void test_teardown(void)
 
 MU_TEST(torque_permillage_to_dac_test)
 {
-    float torque_cmd1 = -1000.0;
-    float torque_cmd2 = 1000.0;
-    float torque_cmd3 = 0.0;
+    double torque_cmd1 = -1000.0;
+    double torque_cmd2 = 1000.0;
+    double torque_cmd3 = 0.0;
 
     mu_check(torque_permillage_to_dac(torque_cmd1) == 0);
     mu_check(torque_permillage_to_dac(torque_cmd2) == 0xFFFF);
