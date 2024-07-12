@@ -119,12 +119,14 @@ static void Motion_Pos_Loop(void)
 
 static void Motion_Test_TorqueBs(void)
 {
-    static uint8_t result = 0;
-    result                = step_model_excitation();
+    static uint8_t result             = 0;
+    result                            = step_model_excitation();
+    motor1.motor_param->target_torque = excitation_signal;
     if (result == 1) {
         task_scheduler_disable_task(motion_test_torquebs_handle);
-        excitation_signal               = 0;
-        msm.event.test_torquebs_to_idle = 1;
+        excitation_signal                 = 0;
+        motor1.motor_param->target_torque = 0;
+        msm.event.test_torquebs_to_idle   = 1;
     }
 }
 

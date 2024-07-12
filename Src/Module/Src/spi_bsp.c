@@ -29,7 +29,8 @@ void set_dac_value(uint16_t channel, uint16_t data)
 
 void reset_dac(void)
 {
-    set_dac_register(CMD_RESET, DAC_ALL, 0);
+    // set_dac_register(CMD_RESET, DAC_ALL, 0);
+    set_dac_value(DAC_A, 32767);
 }
 
 /* ========= STATIC FUNCTIONS ================= */
