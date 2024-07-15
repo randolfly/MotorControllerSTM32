@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['reset_5fdac_0',['reset_dac',['../spi__bsp_8h.html#a369b304bff91ffa30dcfd8c4539aefd6',1,'spi_bsp.c']]],
+  ['ring_5fbuffer_5fdequeue_1',['ring_buffer_dequeue',['../ringbuffer_8h.html#a9877ededf02cce479530455fa7bf9d05',1,'ring_buffer_dequeue(ring_buffer_t *buffer, uint8_t *data):&#160;ringbuffer.c'],['../ringbuffer_8c.html#a9877ededf02cce479530455fa7bf9d05',1,'ring_buffer_dequeue(ring_buffer_t *buffer, uint8_t *data):&#160;ringbuffer.c']]],
+  ['ring_5fbuffer_5fdequeue_5farr_2',['ring_buffer_dequeue_arr',['../ringbuffer_8h.html#a4386ed352e4e0c21c67bf2c11c6d1a5c',1,'ring_buffer_dequeue_arr(ring_buffer_t *buffer, uint8_t *data, ring_buffer_size_t len):&#160;ringbuffer.c'],['../ringbuffer_8c.html#a4386ed352e4e0c21c67bf2c11c6d1a5c',1,'ring_buffer_dequeue_arr(ring_buffer_t *buffer, uint8_t *data, ring_buffer_size_t len):&#160;ringbuffer.c']]],
+  ['ring_5fbuffer_5fis_5fempty_3',['ring_buffer_is_empty',['../ringbuffer_8h.html#a334f546bfc200c9e96ebf77813b048fc',1,'ring_buffer_is_empty(ring_buffer_t *buffer):&#160;ringbuffer.h'],['../ringbuffer_8c.html#a334f546bfc200c9e96ebf77813b048fc',1,'ring_buffer_is_empty(ring_buffer_t *buffer):&#160;ringbuffer.h']]],
+  ['ring_5fbuffer_5fis_5ffull_4',['ring_buffer_is_full',['../ringbuffer_8h.html#ab64dec2b238a8ab986bff1f4915fbc48',1,'ring_buffer_is_full(ring_buffer_t *buffer):&#160;ringbuffer.h'],['../ringbuffer_8c.html#ab64dec2b238a8ab986bff1f4915fbc48',1,'ring_buffer_is_full(ring_buffer_t *buffer):&#160;ringbuffer.h']]],
+  ['ring_5fbuffer_5fis_5fpower_5fof_5ftwo_5',['RING_BUFFER_IS_POWER_OF_TWO',['../ringbuffer_8h.html#a8297e5a5819ceeac19f290534a9e9af6',1,'ringbuffer.h']]],
+  ['ring_5fbuffer_5fmask_6',['RING_BUFFER_MASK',['../ringbuffer_8h.html#a98f1ed40f401ae1ee4ba5ade157e3c3f',1,'ringbuffer.h']]],
+  ['ring_5fbuffer_5fnum_5fitems_7',['ring_buffer_num_items',['../ringbuffer_8h.html#ae8b491aa0f865070f9beb5d9d709d037',1,'ring_buffer_num_items(ring_buffer_t *buffer):&#160;ringbuffer.h'],['../ringbuffer_8c.html#ae8b491aa0f865070f9beb5d9d709d037',1,'ring_buffer_num_items(ring_buffer_t *buffer):&#160;ringbuffer.h']]],
+  ['ring_5fbuffer_5fpeek_8',['ring_buffer_peek',['../ringbuffer_8h.html#a23073884ba6fe32256b26aca48d5a76c',1,'ring_buffer_peek(ring_buffer_t *buffer, uint8_t *data, ring_buffer_size_t index):&#160;ringbuffer.c'],['../ringbuffer_8c.html#a23073884ba6fe32256b26aca48d5a76c',1,'ring_buffer_peek(ring_buffer_t *buffer, uint8_t *data, ring_buffer_size_t index):&#160;ringbuffer.c']]],
+  ['ring_5fbuffer_5fqueue_9',['ring_buffer_queue',['../ringbuffer_8h.html#a54511f183efa2d825047d14c91a93f80',1,'ring_buffer_queue(ring_buffer_t *buffer, uint8_t data):&#160;ringbuffer.c'],['../ringbuffer_8c.html#a54511f183efa2d825047d14c91a93f80',1,'ring_buffer_queue(ring_buffer_t *buffer, uint8_t data):&#160;ringbuffer.c']]],
+  ['ring_5fbuffer_5fqueue_5farr_10',['ring_buffer_queue_arr',['../ringbuffer_8h.html#ab85567eee22ee8618287a8b4e0b75030',1,'ring_buffer_queue_arr(ring_buffer_t *buffer, const uint8_t *data, ring_buffer_size_t size):&#160;ringbuffer.c'],['../ringbuffer_8c.html#ab85567eee22ee8618287a8b4e0b75030',1,'ring_buffer_queue_arr(ring_buffer_t *buffer, const uint8_t *data, ring_buffer_size_t size):&#160;ringbuffer.c']]],
+  ['ring_5fbuffer_5fsize_5ft_11',['ring_buffer_size_t',['../ringbuffer_8h.html#a52ec5f4714183db21259b6f7ea22db4e',1,'ringbuffer.h']]],
+  ['ring_5fbuffer_5ft_12',['ring_buffer_t',['../structring__buffer__t.html',1,'ring_buffer_t'],['../ringbuffer_8h.html#a054d5f240a701c13d64e9a2a058fef93',1,'ring_buffer_t:&#160;ringbuffer.h']]],
+  ['ringbuffer_2ec_13',['ringbuffer.c',['../ringbuffer_8c.html',1,'']]],
+  ['ringbuffer_2eh_14',['ringbuffer.h',['../ringbuffer_8h.html',1,'']]],
+  ['run_5fapp_5ffunctions_15',['Run_App_Functions',['../main__app_8h.html#a1f40df76ea24cbcb2c4d4fc6092e8d75',1,'main_app.c']]]
+];
