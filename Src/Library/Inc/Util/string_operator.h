@@ -1,3 +1,13 @@
+/**
+ * @file string_operator.h
+ * @brief this is a string operator, provide the string operation functions, such as split and join
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __STRING_OPERATOR_H__
 #define __STRING_OPERATOR_H__
 

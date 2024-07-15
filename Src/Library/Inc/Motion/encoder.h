@@ -1,3 +1,14 @@
+/**
+ * @file encoder.h
+ * @brief this is a interface of encoder, which is isolated with motor motion parts
+ * @details the encoder is a model to calculate the position, velocity and acceleration of encoder based on encoder counter
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __ENCODER_H__
 #define __ENCODER_H__
 

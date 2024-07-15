@@ -1,3 +1,13 @@
+/**
+ * @file spi_bsp.h
+ * @brief this is the bsp file for spi, which provides the dac control functions(the dac device is communicated by spi)
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __SPI_BSP_H__
 #define __SPI_BSP_H__
 

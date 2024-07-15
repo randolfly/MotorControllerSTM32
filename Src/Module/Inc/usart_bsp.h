@@ -1,3 +1,14 @@
+/**
+ * @file usart_bsp.h
+ * @brief the bsp file for usart, which provides the usart control functions
+ * @details the usart is used for the command and datalog communication
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __USART_BSP_H__
 #define __USART_BSP_H__
 

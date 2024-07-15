@@ -1,3 +1,14 @@
+/**
+ * @file tim_bsp.h
+ * @brief the bsp file for tim, which provides the timer control functions
+ * @details the tim is used for the task scheduler and encoder timer
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __TIM_BSP_H__
 #define __TIM_BSP_H__
 

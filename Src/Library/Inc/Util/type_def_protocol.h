@@ -1,3 +1,14 @@
+/**
+ * @file type_def_protocol.h
+ * @brief this file defines the type defination, which is used for the cross-platform compatibility
+ * @details the type defination is used for the cross-platform compatibility, which is used for the non-stm32 project, such as test project
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __TYPE_DEF_PROTOCOL_H__
 #define __TYPE_DEF_PROTOCOL_H__
 

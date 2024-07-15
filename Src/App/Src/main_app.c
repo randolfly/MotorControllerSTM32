@@ -1,5 +1,7 @@
 #include "main_app.h"
 
+/* =============== VARIABLES DEFINITION ====================*/
+
 // the variables can be logged
 dictionary_t datalog_available_symbol_dict;
 dictionary_t datalog_target_symbol_dict;

@@ -1,3 +1,13 @@
+/**
+ * @file gpio_bsp.h
+ * @brief this is the bsp file for gpio, which provides the switch control functions
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __GPIO_BSP_H__
 #define __GPIO_BSP_H__
 

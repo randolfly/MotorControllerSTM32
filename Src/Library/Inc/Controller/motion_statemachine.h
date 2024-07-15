@@ -1,3 +1,14 @@
+/**
+ * @file motion_statemachine.h
+ * @brief this file is to define the motion state machine, and the state actions and state translation actions
+ * @details the motion state machine is a finite state machine, which is used to control the motion of the motor
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __MOTION_STATEMACHINE_H__
 #define __MOTION_STATEMACHINE_H__
 

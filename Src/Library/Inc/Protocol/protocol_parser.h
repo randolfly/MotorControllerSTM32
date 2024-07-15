@@ -1,3 +1,14 @@
+/**
+ * @file protocol_parser.h
+ * @brief this is a protocol parser for the protocol frame
+ * @details the protocol parser is used to parse the protocol frame from the raw data
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __PROTOCOL_PARSER_H__
 #define __PROTOCOL_PARSER_H__
 

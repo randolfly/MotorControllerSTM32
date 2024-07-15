@@ -1,3 +1,14 @@
+/**
+ * @file task_scheduler.h
+ * @brief this file is to provide the task scheduler functions, which is used to schedule the tasks
+ * @details the task scheduler is a model to schedule the tasks with specified period and enable flag
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __TASK_SCHEDULER_H__
 #define __TASK_SCHEDULER_H__
 

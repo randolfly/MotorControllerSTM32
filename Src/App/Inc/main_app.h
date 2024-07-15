@@ -1,3 +1,13 @@
+/**
+ * @file main_app.h
+ * @brief assembly the app functions to a united app
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __MAIN_APP_H__
 #define __MAIN_APP_H__
 

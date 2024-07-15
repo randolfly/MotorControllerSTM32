@@ -1,6 +1,7 @@
 /**
  * @file motor.h
- * @brief provide the motor control functions
+ * @brief provide the motor control functions, which is isolated with the hardware
+ * @details the motor is a model to control the motor motion based on the encoder feedback
  * @author randolf (1665718426@qq.com)
  * @version 1.0.1
  * @date 2024-06-26
