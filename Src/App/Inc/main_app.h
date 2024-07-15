@@ -20,6 +20,7 @@ extern "C" {
 #include "Controller/motion_statemachine.h"
 #include "Controller/model_excitation.h"
 #include "Controller/velocity_controller.h"
+#include "Controller/position_controller.h"
 
 /**
  * @brief init the bsp layer provided app functions

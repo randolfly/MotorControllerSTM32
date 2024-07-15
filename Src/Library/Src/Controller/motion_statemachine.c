@@ -134,6 +134,8 @@ void idle_action(motor_t *motor)
 
 void posmode_action(motor_t *motor)
 {
+    task_scheduler_enable_task(motion_pos_loop_handle);
+    task_scheduler_enable_task(motion_vel_loop_handle);
 }
 
 void velmode_action(motor_t *motor)

@@ -12,6 +12,7 @@ motor_t motor1;
 
 // controller instance
 velocity_controller_t velocity_controller;
+position_controller_t position_controller;
 
 // state machine instance
 motion_state_machine_t msm;
@@ -80,6 +81,7 @@ void Init_App_Functions()
     init_motion_state_machine(&msm);
     init_model_excitation();
     init_velocity_controller(&velocity_controller);
+    init_position_controller(&position_controller);
 
     // log data params(place after all params are initialized)
     Init_Datalog_Param_Dict(); // init the datalog parameters dictionary
@@ -126,6 +128,13 @@ static void Motion_Vel_Loop(void)
 
 static void Motion_Pos_Loop(void)
 {
+    static double vel_command = 0;
+    step_position_controller(&position_controller,
+                             motor1.motor_param->target_position,
+                             motor1.encoder->position,
+                             &vel_command);
+    motor1.motor_param->target_velocity = vel_command;
+    // the velocity loop is executed in other tasks
 }
 
 static void Motion_Test_TorqueBs(void)
