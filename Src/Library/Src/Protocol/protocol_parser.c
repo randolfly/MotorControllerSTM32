@@ -1,3 +1,13 @@
+/**
+ * @file protocol_parser.c
+ * @brief Protocol parser implementation
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-15
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #include "Protocol/protocol_parser.h"
 
 void init_protocol_parser(protocol_frame_parser_t *parser)
