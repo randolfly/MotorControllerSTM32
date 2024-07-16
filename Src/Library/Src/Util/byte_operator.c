@@ -1,34 +1,34 @@
 #include "Util/byte_operator.h"
 
-float uint8_array_to_float(uint8_t *src_byte_array)
+double uint8_array_to_double(uint8_t *src_byte_array)
 {
-    float result = 0.0f;
-    memcpy(&result, src_byte_array, 4);
-    result = (float)result;
+    double result = 0.0f;
+    memcpy(&result, src_byte_array, DATALOG_DATA_TYPE_SIZE);
+    result = (double)result;
     return result;
 }
 
-void float_to_uint8_array(float src_float, uint8_t *dst)
+void double_to_uint8_array(double src_double, uint8_t *dst)
 {
     union {
-        float src_float;
-        uint8_t dst_byte_array[4];
+        double src_double;
+        uint8_t dst_byte_array[DATALOG_DATA_TYPE_SIZE];
     } tmp_union;
-    tmp_union.src_float = src_float;
-    memcpy(dst, tmp_union.dst_byte_array, 4);
+    tmp_union.src_double = src_double;
+    memcpy(dst, tmp_union.dst_byte_array, DATALOG_DATA_TYPE_SIZE);
 }
 
-void float_array_to_uint8_array(float *src_float_array, uint8_t *dst, uint16_t len)
+void double_array_to_uint8_array(double *src_double_array, uint8_t *dst, uint16_t len)
 {
     for (uint16_t i = 0; i < len; i++) {
-        float_to_uint8_array(src_float_array[i], dst + i * 4);
+        double_to_uint8_array(src_double_array[i], dst + i * DATALOG_DATA_TYPE_SIZE);
     }
 }
 
-void uint8_array_to_float_array(uint8_t *src_byte_array, float *dst, uint16_t byte_len)
+void uint8_array_to_double_array(uint8_t *src_byte_array, double *dst, uint16_t byte_len)
 {
-    for (uint16_t i = 0; i < byte_len / 4; i++) {
-        dst[i] = uint8_array_to_float(src_byte_array + i * 4);
+    for (uint16_t i = 0; i < byte_len / DATALOG_DATA_TYPE_SIZE; i++) {
+        dst[i] = uint8_array_to_double(src_byte_array + i * DATALOG_DATA_TYPE_SIZE);
     }
 }
 

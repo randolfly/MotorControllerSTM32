@@ -69,17 +69,17 @@ void add_key_value_pair(dictionary_t *dict, const char *key, void *value, value_
  * @brief Get the value object
  * @param  dict: dictionary instance
  * @param  key: key
- * @return float : target float value
+ * @return double : target double value
  */
-float get_dictionary_value(dictionary_t *dict, const char *key);
+double get_dictionary_value(dictionary_t *dict, const char *key);
 
 /**
  * @brief Set the dictionary value
  * @param  dict: dictionary instance
  * @param  key: key
- * @param  value: value to be set, always float type
+ * @param  value: value to be set, always double type
  */
-void set_dictionary_value(dictionary_t *dict, const char *key, float value);
+void set_dictionary_value(dictionary_t *dict, const char *key, double value);
 
 /**
  * @brief Get the all keys in dictionary

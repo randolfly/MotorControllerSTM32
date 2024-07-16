@@ -34,7 +34,7 @@ extern uint8_t command_param_data_array[PROTOCOL_FRAME_MAX_SIZE];
 
 /* ================== DATALOG ====================*/
 extern protocol_frame_t datalog_send_frame;
-extern float datalog_param_float_array[PROTOCOL_FRAME_MAX_SIZE];
+extern double datalog_param_double_array[PROTOCOL_FRAME_MAX_SIZE];
 extern uint8_t datalog_param_data_array[PROTOCOL_FRAME_MAX_SIZE];
 
 #define UART_COMMAND huart1

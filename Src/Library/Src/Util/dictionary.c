@@ -15,7 +15,7 @@ void add_key_value_pair(dictionary_t *dict, const char *key, void *value, value_
     }
 }
 
-void set_dictionary_value(dictionary_t *dict, const char *key, float value)
+void set_dictionary_value(dictionary_t *dict, const char *key, double value)
 {
     for (int i = 0; i < dict->size; i++) {
         if (strcmp(dict->pairs[i].key, key) == 0) {
@@ -42,42 +42,42 @@ void set_dictionary_value(dictionary_t *dict, const char *key, float value)
                     *((double *)dict->pairs[i].value) = (double)value;
                     break;
                 default:
-                    *((float *)dict->pairs[i].value) = value;
+                    *((double *)dict->pairs[i].value) = value;
                     break;
             }
         }
     }
 }
 
-float get_dictionary_value(dictionary_t *dict, const char *key)
+double get_dictionary_value(dictionary_t *dict, const char *key)
 {
-    float tmp = 0;
+    double tmp = 0;
     for (int i = 0; i < dict->size; i++) {
         if (strcmp(dict->pairs[i].key, key) == 0) {
             switch (dict->pairs[i].value_type) {
                 case UINT8_TYPE_RANDOLF:
-                    tmp = (float)(*((uint8_t *)dict->pairs[i].value));
+                    tmp = (double)(*((uint8_t *)dict->pairs[i].value));
                     break;
                 case UINT16_TYPE_RANDOLF:
-                    tmp = (float)(*((uint16_t *)dict->pairs[i].value));
+                    tmp = (double)(*((uint16_t *)dict->pairs[i].value));
                     break;
                 case UINT32_TYPE_RANDOLF:
-                    tmp = (float)(*((uint32_t *)dict->pairs[i].value));
+                    tmp = (double)(*((uint32_t *)dict->pairs[i].value));
                     break;
                 case INT32_TYPE_RANDOLF:
-                    tmp = (float)(*((int32_t *)dict->pairs[i].value));
+                    tmp = (double)(*((int32_t *)dict->pairs[i].value));
                     break;
                 case INT64_TYPE_RANDOLF:
-                    tmp = (float)(*((int64_t *)dict->pairs[i].value));
+                    tmp = (double)(*((int64_t *)dict->pairs[i].value));
                     break;
                 case INT_TYPE_RANDOLF:
-                    tmp = (float)(*((int *)dict->pairs[i].value));
+                    tmp = (double)(*((int *)dict->pairs[i].value));
                     break;
                 case DOUBLE_TYPE_RANDOLF:
-                    tmp = (float)(*((double *)dict->pairs[i].value));
+                    tmp = (double)(*((double *)dict->pairs[i].value));
                     break;
                 default:
-                    tmp = *((float *)dict->pairs[i].value);
+                    tmp = *((double *)dict->pairs[i].value);
                     break;
             }
             return tmp;

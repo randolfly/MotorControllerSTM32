@@ -16,9 +16,9 @@ static uint8_t command_receive_frame_data[PROTOCOL_FRAME_MAX_SIZE] = {0};
 static uint8_t command_send_frame_data[PROTOCOL_FRAME_MAX_SIZE]    = {0};
 
 /* ================== DATALOG ====================*/
-protocol_frame_t datalog_send_frame                       = {0};
-float datalog_param_float_array[PROTOCOL_FRAME_MAX_SIZE]  = {0};
-uint8_t datalog_param_data_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
+protocol_frame_t datalog_send_frame                        = {0};
+double datalog_param_double_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
+uint8_t datalog_param_data_array[PROTOCOL_FRAME_MAX_SIZE]  = {0};
 
 static uint8_t datalog_send_frame_data[PROTOCOL_FRAME_MAX_SIZE] = {0};
 

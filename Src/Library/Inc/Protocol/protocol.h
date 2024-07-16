@@ -40,6 +40,8 @@ typedef struct
 // protocol recursive buffer size;
 #define PROTOCOL_FRAME_MAX_SIZE 500
 
+#define DATALOG_DATA_TYPE_SIZE  8
+
 /* frame index definition */
 #define FRAME_INDEX_HEAD     0x0u // frame head index
 #define FRAME_INDEX_MOTOR_ID 0x4u // motor id index

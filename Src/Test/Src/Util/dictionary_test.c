@@ -3,7 +3,7 @@
 
 dictionary_t dict;
 
-float kp           = 1.0;
+double kp          = 1.0;
 double ki          = 2.0;
 int kd             = 3;
 uint32_t system_id = 4;

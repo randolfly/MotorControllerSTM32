@@ -86,7 +86,7 @@ MU_TEST(protocol_frame_nulldata_receive_test)
     check_parse_frame_result(&protocol_frame);
 }
 
-MU_TEST(protocol_frame_floatarray_receive_test)
+MU_TEST(protocol_frame_doublearray_receive_test)
 {
     uint8_t protocol_frame_byte_buffer[PROTOCOL_FRAME_MAX_SIZE] = {0};
     protocol_frame_t protocol_frame                             = {0};
@@ -94,10 +94,10 @@ MU_TEST(protocol_frame_floatarray_receive_test)
 
     protocol_frame.cmd                          = DATALOG_GET_AVAILABLE_DATA_CMD;
     protocol_frame.motor_id                     = MOTOR_ID2;
-    float data[]                                = {1.0, 2.0, 3.0};
+    double data[]                               = {1.0, 2.0, 3.0};
     uint8_t byte_array[PROTOCOL_FRAME_MAX_SIZE] = {0};
-    float_array_to_uint8_array(data, byte_array, 3);
-    set_frame_data(&protocol_frame, byte_array, 3 * 4);
+    double_array_to_uint8_array(data, byte_array, 3);
+    set_frame_data(&protocol_frame, byte_array, 3 * DATALOG_DATA_TYPE_SIZE);
 
     serialize_frame_data(protocol_frame_byte_buffer, &protocol_frame);
     protocol_data_receive(&parser, protocol_frame_byte_buffer, protocol_frame.len);
@@ -217,7 +217,7 @@ MU_TEST_SUITE(test_suite)
     MU_RUN_TEST(protocol_frame_parser_init_test);
     MU_RUN_TEST(protocol_frame_header_check_test);
     MU_RUN_TEST(protocol_frame_nulldata_receive_test);
-    MU_RUN_TEST(protocol_frame_floatarray_receive_test);
+    MU_RUN_TEST(protocol_frame_doublearray_receive_test);
     MU_RUN_TEST(protocol_frame_namestring_receive_test);
     MU_RUN_TEST(protocol_multiple_frames_parse_test);
     MU_RUN_TEST(protocol_50_frames_parse_test);
