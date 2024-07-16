@@ -86,23 +86,23 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
     /* Saturate: '<S43>/Saturation' incorporates:
      *  DeadZone: '<S29>/DeadZone'
      */
-    if (rtb_DeadZone > 3.0) {
+    if (rtb_DeadZone > 2.0) {
         /* Outport: '<Root>/vel_u' */
-        *rtY_vel_u = 3.0;
-        rtb_DeadZone -= 3.0;
+        *rtY_vel_u = 2.0;
+        rtb_DeadZone -= 2.0;
     } else {
-        if (rtb_DeadZone < -3.0) {
+        if (rtb_DeadZone < -2.0) {
             /* Outport: '<Root>/vel_u' */
-            *rtY_vel_u = -3.0;
+            *rtY_vel_u = -2.0;
         } else {
             /* Outport: '<Root>/vel_u' */
             *rtY_vel_u = rtb_DeadZone;
         }
 
-        if (rtb_DeadZone >= -3.0) {
+        if (rtb_DeadZone >= -2.0) {
             rtb_DeadZone = 0.0;
         } else {
-            rtb_DeadZone -= -3.0;
+            rtb_DeadZone -= -2.0;
         }
     }
 

@@ -90,14 +90,14 @@ void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_
     /* MATLAB Function: '<S1>/friction compensation' incorporates:
      *  Inport: '<Root>/ref'
      */
-    if (fabs(rtU_ref) > 0.05) {
+    if (fabs(rtU_ref) > 0.005) {
         if (rtU_ref > 0.0) {
             rtb_y = 154.0;
         } else {
-            rtb_y = -153.0;
+            rtb_y = -154.0;
         }
     } else {
-        rtb_y = tanh(rtU_ref / 0.05) * 154.0 / 0.76159415595576485;
+        rtb_y = tanh(rtU_ref / 0.005) * 154.0 / 0.76159415595576485;
     }
 
     /* End of MATLAB Function: '<S1>/friction compensation' */
