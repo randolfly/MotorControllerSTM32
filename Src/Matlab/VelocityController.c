@@ -54,7 +54,7 @@
 #endif
 
 /* Model step function */
-void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_ref, real_T rtU_v,
+void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_targetvel, real_T rtU_v,
                              real_T *rtY_u)
 {
     VelocityController_DW *rtDW = rtM->dwork;
@@ -70,34 +70,34 @@ void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_
      *  Inport: '<Root>/feed'
      *  Inport: '<Root>/ref'
      */
-    rtb_IntegralGain = rtU_ref - rtU_v;
+    rtb_IntegralGain = rtU_targetvel - rtU_v;
 
     /* Gain: '<S40>/Filter Coefficient' incorporates:
      *  DiscreteIntegrator: '<S32>/Filter'
      *  Gain: '<S31>/Derivative Gain'
      *  Sum: '<S32>/SumD'
      */
-    rtb_FilterCoefficient = (4.2147290716762766 * rtb_IntegralGain -
+    rtb_FilterCoefficient = (1.45672350385708 * rtb_IntegralGain -
                              rtDW->Filter_DSTATE) *
-                            62.325491381092448;
+                            98.7705129393937;
 
     /* Sum: '<S46>/Sum' incorporates:
      *  DiscreteIntegrator: '<S37>/Integrator'
      *  Gain: '<S42>/Proportional Gain'
      */
-    rtb_DeadZone = (179.291238637091 * rtb_IntegralGain + rtDW->Integrator_DSTATE) + rtb_FilterCoefficient;
+    rtb_DeadZone = (992.697353800287 * rtb_IntegralGain + rtDW->Integrator_DSTATE) + rtb_FilterCoefficient;
 
     /* MATLAB Function: '<S1>/friction compensation' incorporates:
      *  Inport: '<Root>/ref'
      */
-    if (fabs(rtU_ref) > 0.005) {
-        if (rtU_ref > 0.0) {
+    if (fabs(rtU_targetvel) > 0.005) {
+        if (rtU_targetvel > 0.0) {
             rtb_y = 154.0;
         } else {
             rtb_y = -154.0;
         }
     } else {
-        rtb_y = tanh(rtU_ref / 0.005) * 154.0 / 0.76159415595576485;
+        rtb_y = tanh(rtU_targetvel / 0.005) * 154.0 / 0.76159415595576485;
     }
 
     /* End of MATLAB Function: '<S1>/friction compensation' */
@@ -129,10 +129,10 @@ void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_
      *  Inport: '<Root>/ref'
      *  Sum: '<S1>/Add1'
      */
-    *rtY_u = (0.98 * rtU_ref + rtb_DeadZone_0) + rtb_y;
+    *rtY_u = (0.99 * rtU_targetvel + rtb_DeadZone_0) + rtb_y;
 
     /* Gain: '<S34>/Integral Gain' */
-    rtb_IntegralGain *= 1466.51894550374;
+    rtb_IntegralGain *= 9306.57767463189;
 
     /* Switch: '<S28>/Switch1' incorporates:
      *  Constant: '<S28>/Constant'
@@ -176,10 +176,10 @@ void VelocityController_step(VelocityController_RT_MODEL *const rtM, real_T rtU_
     /* End of Switch: '<S28>/Switch' */
 
     /* Update for DiscreteIntegrator: '<S37>/Integrator' */
-    rtDW->Integrator_DSTATE += 0.0005 * rtb_IntegralGain;
+    rtDW->Integrator_DSTATE += 0.00025 * rtb_IntegralGain;
 
     /* Update for DiscreteIntegrator: '<S32>/Filter' */
-    rtDW->Filter_DSTATE += 0.0005 * rtb_FilterCoefficient;
+    rtDW->Filter_DSTATE += 0.00025 * rtb_FilterCoefficient;
 }
 
 /* Model initialize function */

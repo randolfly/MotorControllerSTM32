@@ -164,7 +164,7 @@ static void Init_Task_Scheduler_Tasks(void)
 
     main_logic_handle         = task_scheduler_add_task(Main_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 1);
     motion_torque_loop_handle = task_scheduler_add_task(Motion_Torque_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(5000), 0);
-    motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(2000), 0);
+    motion_vel_loop_handle    = task_scheduler_add_task(Motion_Vel_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(4000), 0);
     motion_pos_loop_handle    = task_scheduler_add_task(Motion_Pos_Loop, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
     // test functions
