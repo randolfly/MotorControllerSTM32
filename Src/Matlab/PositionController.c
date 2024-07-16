@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PositionController'.
  *
- * Model version                  : 1.59
+ * Model version                  : 1.61
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Jul 16 15:47:40 2024
+ * C/C++ source code generated on : Tue Jul 16 16:08:31 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -22,45 +22,44 @@
 #include "PositionController.h"
 #include "rtwtypes.h"
 
-/*===========*
- * Constants *
- *===========*/
-#define RT_PI      3.14159265358979323846
-#define RT_PIF     3.1415927F
-#define RT_LN_10   2.30258509299404568402
-#define RT_LN_10F  2.3025851F
-#define RT_LOG10E  0.43429448190325182765
-#define RT_LOG10EF 0.43429449F
-#define RT_E       2.7182818284590452354
-#define RT_EF      2.7182817F
+/* Forward declaration for local functions */
+static void SystemCore_setup(dsp_simulink_MovingAverage *obj);
+static void SystemCore_setup(dsp_simulink_MovingAverage *obj)
+{
+    real_T varargin_2;
+    boolean_T flag;
+    obj->isSetupComplete      = false;
+    obj->isInitialized        = 1;
+    obj->NumChannels          = 1;
+    varargin_2                = obj->ForgettingFactor;
+    obj->_pobj0.isInitialized = 0;
+    obj->_pobj0.isInitialized = 0;
+    flag                      = (obj->_pobj0.isInitialized == 1);
+    if (flag) {
+        obj->_pobj0.TunablePropsChanged = true;
+    }
 
-/*
- * UNUSED_PARAMETER(x)
- *   Used to specify that a function parameter (argument) is required but not
- *   accessed by the function body.
- */
-#ifndef UNUSED_PARAMETER
-#if defined(__LCC__)
-#define UNUSED_PARAMETER(x) /* do nothing */
-#else
-
-/*
- * This is the semi-ANSI standard way of indicating that an
- * unused function parameter is required.
- */
-#define UNUSED_PARAMETER(x) (void)(x)
-#endif
-#endif
+    obj->_pobj0.ForgettingFactor = varargin_2;
+    obj->pStatistic              = &obj->_pobj0;
+    obj->isSetupComplete         = true;
+    obj->TunablePropsChanged     = false;
+}
 
 /* Model step function */
 void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_targetpos, real_T rtU_p, real_T *rtY_vel_u)
 {
     PositionController_DW *rtDW = rtM->dwork;
+    g_dsp_internal_ExponentialMovin *obj;
+    real_T lambda;
+    real_T pmLocal;
+    real_T pwLocal;
     real_T rtb_DeadZone;
+    real_T rtb_DeadZone_0;
     real_T rtb_FilterCoefficient;
     real_T rtb_IntegralGain;
-    int8_T rtb_DeadZone_0;
+    int8_T rtb_DeadZone_1;
     int8_T rtb_IntegralGain_0;
+    boolean_T flag;
 
     /* Sum: '<S1>/Add' incorporates:
      *  Inport: '<Root>/feed_pos'
@@ -83,30 +82,80 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
      */
     rtb_DeadZone = (36.642474191183 * rtb_IntegralGain + rtDW->Integrator_DSTATE) + rtb_FilterCoefficient;
 
-    /* Saturate: '<S43>/Saturation' incorporates:
-     *  DeadZone: '<S29>/DeadZone'
-     */
-    if (rtb_DeadZone > 2.0) {
-        /* Outport: '<Root>/vel_u' */
-        *rtY_vel_u = 2.0;
-        rtb_DeadZone -= 2.0;
-    } else {
-        if (rtb_DeadZone < -2.0) {
-            /* Outport: '<Root>/vel_u' */
-            *rtY_vel_u = -2.0;
-        } else {
-            /* Outport: '<Root>/vel_u' */
-            *rtY_vel_u = rtb_DeadZone;
+    /* MATLABSystem: '<S1>/Moving Average' */
+    if (rtDW->obj.ForgettingFactor != 0.9) {
+        flag = (rtDW->obj.isInitialized == 1);
+        if (flag) {
+            rtDW->obj.TunablePropsChanged = true;
         }
 
-        if (rtb_DeadZone >= -2.0) {
-            rtb_DeadZone = 0.0;
-        } else {
-            rtb_DeadZone -= -2.0;
+        rtDW->obj.ForgettingFactor = 0.9;
+    }
+
+    if (rtDW->obj.TunablePropsChanged) {
+        rtDW->obj.TunablePropsChanged = false;
+        obj                           = rtDW->obj.pStatistic;
+        flag                          = (obj->isInitialized == 1);
+        if (flag) {
+            obj->TunablePropsChanged = true;
         }
+
+        rtDW->obj.pStatistic->ForgettingFactor = rtDW->obj.ForgettingFactor;
+    }
+
+    obj = rtDW->obj.pStatistic;
+    if (obj->isInitialized != 1) {
+        obj->isSetupComplete     = false;
+        obj->isInitialized       = 1;
+        obj->pwN                 = 1.0;
+        obj->pmN                 = 0.0;
+        obj->plambda             = obj->ForgettingFactor;
+        obj->isSetupComplete     = true;
+        obj->TunablePropsChanged = false;
+        obj->pwN                 = 1.0;
+        obj->pmN                 = 0.0;
+    }
+
+    if (obj->TunablePropsChanged) {
+        obj->TunablePropsChanged = false;
+        obj->plambda             = obj->ForgettingFactor;
+    }
+
+    pwLocal = obj->pwN;
+    pmLocal = obj->pmN;
+    lambda  = obj->plambda;
+
+    /* Saturate: '<S43>/Saturation' */
+    if (rtb_DeadZone > 2.0) {
+        rtb_DeadZone_0 = 2.0;
+    } else if (rtb_DeadZone < -2.0) {
+        rtb_DeadZone_0 = -2.0;
+    } else {
+        rtb_DeadZone_0 = rtb_DeadZone;
     }
 
     /* End of Saturate: '<S43>/Saturation' */
+
+    /* MATLABSystem: '<S1>/Moving Average' */
+    pmLocal  = (1.0 - 1.0 / pwLocal) * pmLocal + 1.0 / pwLocal * rtb_DeadZone_0;
+    obj->pwN = lambda * pwLocal + 1.0;
+    obj->pmN = pmLocal;
+
+    /* Outport: '<Root>/vel_u' incorporates:
+     *  MATLABSystem: '<S1>/Moving Average'
+     */
+    *rtY_vel_u = pmLocal;
+
+    /* DeadZone: '<S29>/DeadZone' */
+    if (rtb_DeadZone > 2.0) {
+        rtb_DeadZone -= 2.0;
+    } else if (rtb_DeadZone >= -2.0) {
+        rtb_DeadZone = 0.0;
+    } else {
+        rtb_DeadZone -= -2.0;
+    }
+
+    /* End of DeadZone: '<S29>/DeadZone' */
 
     /* Gain: '<S33>/Integral Gain' */
     rtb_IntegralGain *= 260.6538729316;
@@ -118,9 +167,9 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
      *  RelationalOperator: '<S27>/fix for DT propagation issue'
      */
     if (rtb_DeadZone > 0.0) {
-        rtb_DeadZone_0 = 1;
+        rtb_DeadZone_1 = 1;
     } else {
-        rtb_DeadZone_0 = -1;
+        rtb_DeadZone_1 = -1;
     }
 
     /* End of Switch: '<S27>/Switch1' */
@@ -146,7 +195,7 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
      *  RelationalOperator: '<S27>/Equal1'
      *  RelationalOperator: '<S27>/Relational Operator'
      */
-    if ((rtb_DeadZone != 0.0) && (rtb_DeadZone_0 == rtb_IntegralGain_0)) {
+    if ((rtb_DeadZone != 0.0) && (rtb_DeadZone_1 == rtb_IntegralGain_0)) {
         rtb_IntegralGain = 0.0;
     }
 
@@ -162,8 +211,36 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
 /* Model initialize function */
 void PositionController_initialize(PositionController_RT_MODEL *const rtM)
 {
-    /* (no initialization code required) */
-    UNUSED_PARAMETER(rtM);
+    PositionController_DW *rtDW = rtM->dwork;
+
+    {
+        g_dsp_internal_ExponentialMovin *obj;
+        boolean_T flag;
+
+        /* Start for MATLABSystem: '<S1>/Moving Average' */
+        rtDW->obj.matlabCodegenIsDeleted = true;
+        rtDW->obj.isInitialized          = 0;
+        rtDW->obj.NumChannels            = -1;
+        rtDW->obj.matlabCodegenIsDeleted = false;
+        flag                             = (rtDW->obj.isInitialized == 1);
+        if (flag) {
+            rtDW->obj.TunablePropsChanged = true;
+        }
+
+        rtDW->obj.ForgettingFactor = 0.9;
+        SystemCore_setup(&rtDW->obj);
+
+        /* End of Start for MATLABSystem: '<S1>/Moving Average' */
+
+        /* InitializeConditions for MATLABSystem: '<S1>/Moving Average' */
+        obj = rtDW->obj.pStatistic;
+        if (obj->isInitialized == 1) {
+            obj->pwN = 1.0;
+            obj->pmN = 0.0;
+        }
+
+        /* End of InitializeConditions for MATLABSystem: '<S1>/Moving Average' */
+    }
 }
 
 /*

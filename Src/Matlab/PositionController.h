@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PositionController'.
  *
- * Model version                  : 1.59
+ * Model version                  : 1.61
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Jul 16 15:47:40 2024
+ * C/C++ source code generated on : Tue Jul 16 16:08:31 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -42,10 +42,73 @@
 /* Forward declaration for rtModel */
 typedef struct PositionController_tag_RTM PositionController_RT_MODEL;
 
+#ifndef struct_tag_xm5q3dGCROLmOPhUk992jB
+#define struct_tag_xm5q3dGCROLmOPhUk992jB
+
+struct tag_xm5q3dGCROLmOPhUk992jB {
+    int32_T isInitialized;
+    boolean_T isSetupComplete;
+    boolean_T TunablePropsChanged;
+    real_T ForgettingFactor;
+    real_T pwN;
+    real_T pmN;
+    real_T plambda;
+};
+
+#endif /* struct_tag_xm5q3dGCROLmOPhUk992jB */
+
+#ifndef typedef_g_dsp_internal_ExponentialMovin
+#define typedef_g_dsp_internal_ExponentialMovin
+
+typedef struct tag_xm5q3dGCROLmOPhUk992jB g_dsp_internal_ExponentialMovin;
+
+#endif /* typedef_g_dsp_internal_ExponentialMovin */
+
+#ifndef struct_tag_BlgwLpgj2bjudmbmVKWwDE
+#define struct_tag_BlgwLpgj2bjudmbmVKWwDE
+
+struct tag_BlgwLpgj2bjudmbmVKWwDE {
+    uint32_T f1[8];
+};
+
+#endif /* struct_tag_BlgwLpgj2bjudmbmVKWwDE */
+
+#ifndef typedef_cell_wrap
+#define typedef_cell_wrap
+
+typedef struct tag_BlgwLpgj2bjudmbmVKWwDE cell_wrap;
+
+#endif /* typedef_cell_wrap */
+
+#ifndef struct_tag_pmAt41n5P4e5ZrUZ2FlM9G
+#define struct_tag_pmAt41n5P4e5ZrUZ2FlM9G
+
+struct tag_pmAt41n5P4e5ZrUZ2FlM9G {
+    boolean_T matlabCodegenIsDeleted;
+    int32_T isInitialized;
+    boolean_T isSetupComplete;
+    boolean_T TunablePropsChanged;
+    cell_wrap inputVarSize;
+    real_T ForgettingFactor;
+    g_dsp_internal_ExponentialMovin *pStatistic;
+    int32_T NumChannels;
+    g_dsp_internal_ExponentialMovin _pobj0;
+};
+
+#endif /* struct_tag_pmAt41n5P4e5ZrUZ2FlM9G */
+
+#ifndef typedef_dsp_simulink_MovingAverage
+#define typedef_dsp_simulink_MovingAverage
+
+typedef struct tag_pmAt41n5P4e5ZrUZ2FlM9G dsp_simulink_MovingAverage;
+
+#endif /* typedef_dsp_simulink_MovingAverage */
+
 /* Block signals and states (default storage) for system '<Root>' */
 typedef struct {
-    real_T Integrator_DSTATE; /* '<S36>/Integrator' */
-    real_T Filter_DSTATE;     /* '<S31>/Filter' */
+    dsp_simulink_MovingAverage obj; /* '<S1>/Moving Average' */
+    real_T Integrator_DSTATE;       /* '<S36>/Integrator' */
+    real_T Filter_DSTATE;           /* '<S31>/Filter' */
 } PositionController_DW;
 
 /* Real-time Model Data Structure */
