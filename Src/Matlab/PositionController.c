@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PositionController'.
  *
- * Model version                  : 1.53
+ * Model version                  : 1.59
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Jul 16 14:37:23 2024
+ * C/C++ source code generated on : Tue Jul 16 15:47:40 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -56,12 +56,9 @@
 void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_targetpos, real_T rtU_p, real_T *rtY_vel_u)
 {
     PositionController_DW *rtDW = rtM->dwork;
-    real_T acc1;
     real_T rtb_DeadZone;
     real_T rtb_FilterCoefficient;
-    real_T rtb_Filter_b;
     real_T rtb_IntegralGain;
-    int32_T n;
     int8_T rtb_DeadZone_0;
     int8_T rtb_IntegralGain_0;
 
@@ -86,53 +83,30 @@ void PositionController_step(PositionController_RT_MODEL *const rtM, real_T rtU_
      */
     rtb_DeadZone = (36.642474191183 * rtb_IntegralGain + rtDW->Integrator_DSTATE) + rtb_FilterCoefficient;
 
-    /* Saturate: '<S43>/Saturation' */
+    /* Saturate: '<S43>/Saturation' incorporates:
+     *  DeadZone: '<S29>/DeadZone'
+     */
     if (rtb_DeadZone > 2.0) {
-        /* DiscreteFir: '<S1>/Filter' */
-        rtb_Filter_b = 2.0;
-    } else if (rtb_DeadZone < -2.0) {
-        /* DiscreteFir: '<S1>/Filter' */
-        rtb_Filter_b = -2.0;
+        /* Outport: '<Root>/vel_u' */
+        *rtY_vel_u = 2.0;
+        rtb_DeadZone -= 2.0;
     } else {
-        /* DiscreteFir: '<S1>/Filter' */
-        rtb_Filter_b = rtb_DeadZone;
+        if (rtb_DeadZone < -2.0) {
+            /* Outport: '<Root>/vel_u' */
+            *rtY_vel_u = -2.0;
+        } else {
+            /* Outport: '<Root>/vel_u' */
+            *rtY_vel_u = rtb_DeadZone;
+        }
+
+        if (rtb_DeadZone >= -2.0) {
+            rtb_DeadZone = 0.0;
+        } else {
+            rtb_DeadZone -= -2.0;
+        }
     }
 
     /* End of Saturate: '<S43>/Saturation' */
-
-    /* DiscreteFir: '<S1>/Filter' */
-    acc1 = 0.0;
-
-    /* load input sample */
-    for (n = 0; n < 60; n++) {
-        real_T zCurr;
-
-        /* shift state */
-        zCurr                  = rtb_Filter_b;
-        rtb_Filter_b           = rtDW->Filter_states[n];
-        rtDW->Filter_states[n] = zCurr;
-
-        /* compute one tap */
-        acc1 += PositionController_rtConstP.Filter_Coefficients[n] * zCurr;
-    }
-
-    /* Outport: '<Root>/vel_u' incorporates:
-     *  DiscreteFir: '<S1>/Filter'
-     */
-    /* compute last tap */
-    /* store output sample */
-    *rtY_vel_u = PositionController_rtConstP.Filter_Coefficients[n] * rtb_Filter_b + acc1;
-
-    /* DeadZone: '<S29>/DeadZone' */
-    if (rtb_DeadZone > 2.0) {
-        rtb_DeadZone -= 2.0;
-    } else if (rtb_DeadZone >= -2.0) {
-        rtb_DeadZone = 0.0;
-    } else {
-        rtb_DeadZone -= -2.0;
-    }
-
-    /* End of DeadZone: '<S29>/DeadZone' */
 
     /* Gain: '<S33>/Integral Gain' */
     rtb_IntegralGain *= 260.6538729316;
