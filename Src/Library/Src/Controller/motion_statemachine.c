@@ -9,6 +9,7 @@
 extern int motion_torque_loop_handle;
 extern int motion_vel_loop_handle;
 extern int motion_pos_loop_handle;
+extern int motion_pos_loop_s_profile_handle;
 extern int motion_test_torquebs_handle;
 
 void init_motion_state_machine(motion_state_machine_t *motion_state_machine)
@@ -119,6 +120,7 @@ void init_action(motor_t *motor)
     task_scheduler_disable_task(motion_torque_loop_handle);
     task_scheduler_disable_task(motion_vel_loop_handle);
     task_scheduler_disable_task(motion_pos_loop_handle);
+    task_scheduler_disable_task(motion_pos_loop_s_profile_handle);
     task_scheduler_disable_task(motion_test_torquebs_handle);
 }
 
@@ -134,6 +136,7 @@ void idle_action(motor_t *motor)
 
 void posmode_action(motor_t *motor)
 {
+    task_scheduler_enable_task(motion_pos_loop_s_profile_handle);
     task_scheduler_enable_task(motion_pos_loop_handle);
     task_scheduler_enable_task(motion_vel_loop_handle);
 }

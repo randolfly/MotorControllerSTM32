@@ -31,6 +31,7 @@ extern "C" {
 #include "Controller/model_excitation.h"
 #include "Controller/velocity_controller.h"
 #include "Controller/position_controller.h"
+#include "Controller/s_profile_generator.h"
 
 /**
  * @brief init the bsp layer provided app functions
