@@ -9,7 +9,7 @@ void init_s_profile_generator(s_profile_generator_t *s_profile_generator)
     SProfileGenerator_initialize(s_profile_generator->model);
     s_profile_generator->param->start_vel = 0;
     s_profile_generator->param->end_vel   = 0;
-    s_profile_generator->param->execute   = 1;
+    s_profile_generator->param->execute   = 0;
     s_profile_generator->param->max_acc   = 1;
     s_profile_generator->param->max_jerk  = 1;
     s_profile_generator->param->max_vel   = 2;
@@ -53,7 +53,6 @@ void step_s_profile_generator(s_profile_generator_t *s_profile_generator)
                            s_profile_generator->param->max_jerk,
                            s_profile_generator->param->execute,
                            &(s_profile_generator->param->pos));
-
     /* Get model outputs here */
 
     /* Indicate task complete */

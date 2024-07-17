@@ -200,6 +200,7 @@ static void Init_Datalog_Param_Dict(void)
     add_key_value_pair(&datalog_available_symbol_dict, "max_vel", &(s_profile_generator.param->max_vel), DOUBLE_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "max_acc", &(s_profile_generator.param->max_acc), DOUBLE_TYPE_RANDOLF);
     add_key_value_pair(&datalog_available_symbol_dict, "max_jerk", &(s_profile_generator.param->max_jerk), DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "profile_execute", &(s_profile_generator.param->execute), DOUBLE_TYPE_RANDOLF);
 
     // control param
 

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SProfileGenerator'.
  *
- * Model version                  : 1.26
+ * Model version                  : 1.31
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Wed Jul 17 14:41:52 2024
+ * C/C++ source code generated on : Wed Jul 17 21:04:13 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -365,7 +365,7 @@ void SProfileGenerator_step(SProfileGenerator_RT_MODEL *const rtM, real_T rtU_st
         switch (rtDW->is_c3_SProfileGenerator) {
             case IN_GeneratePos:
                 rtb_current_time -= rtDW->start_t;
-                if (rtb_current_time > rtDW->T) {
+                if ((rtU_execute == 0.0) && (rtb_current_time > rtDW->T)) {
                     rtDW->is_c3_SProfileGenerator = IN_HoldOn;
                     rtDW->T                       = 5.0;
                     rtDW->current_pos             = rtU_startpos;
@@ -446,7 +446,7 @@ void SProfileGenerator_step(SProfileGenerator_RT_MODEL *const rtM, real_T rtU_st
 
             case IN_HoldOn:
                 sigma = rtU_end_pos - rtU_startpos;
-                if ((rtU_execute == 1.0) && (fabs(sigma) > 0.0000005)) {
+                if ((rtU_execute == 1.0) && (fabs(sigma) > 5.0E-7)) {
                     rtDW->is_c3_SProfileGenerator = IN_InitParam;
                     rtDW->start_t                 = rtb_current_time;
                     rtDW->sigma                   = sigma;
