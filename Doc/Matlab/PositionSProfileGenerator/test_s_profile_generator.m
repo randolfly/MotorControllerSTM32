@@ -1,6 +1,6 @@
 clear SProfilePlanner;
 % 边界条件
-q0 = 0; q1 = 0.1;
+q0 = 0; q1 = 0.0000005;
 v0 = 0; v1 = 0;
 vmax = 2; amax = 1; jmax = 1;
 

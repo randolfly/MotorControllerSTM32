@@ -11,7 +11,7 @@ function pos = SProfilePlanner(execute, t, q0, q1, v0, v1, vmax, amax, jmax)
     
     pos = q1;
 
-    if abs(q0-q1)<1e-4 
+    if abs(q0-q1)<5e-7 
         return;
     end
     
