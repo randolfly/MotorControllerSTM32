@@ -446,7 +446,7 @@ void SProfileGenerator_step(SProfileGenerator_RT_MODEL *const rtM, real_T rtU_st
 
             case IN_HoldOn:
                 sigma = rtU_end_pos - rtU_startpos;
-                if ((rtU_execute == 1.0) && (fabs(sigma) > 0.0001)) {
+                if ((rtU_execute == 1.0) && (fabs(sigma) > 0.0000005)) {
                     rtDW->is_c3_SProfileGenerator = IN_InitParam;
                     rtDW->start_t                 = rtb_current_time;
                     rtDW->sigma                   = sigma;
