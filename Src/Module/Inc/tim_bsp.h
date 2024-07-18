@@ -39,7 +39,7 @@ void Start_PWM_Timer(void);
 
 /**
  * @brief set the pwm compare value, modify pwm duty cycle
- * @param  pwm_value: compare value
+ * @param  pwm_value: compare value, 0<=value<=(PWM_TIM_COUNTER_MAX)
  */
 void Set_PWM_Value(uint16_t pwm_value);
 

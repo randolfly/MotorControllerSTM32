@@ -57,40 +57,40 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define STATE_TIM_PRESCALER 120-1
-#define STATE_TIM_COUNTER_MAX 100-1
-#define ENCODER_RESOLUTION (63000 * 1024)
-#define PWM_TIM_PRESCALER 12-1
-#define PWM_TIM_COUNTER_MAX 2000-1
-#define GPIO_SWITCH_CH1_Pin GPIO_PIN_5
+#define STATE_TIM_PRESCALER       120 - 1
+#define STATE_TIM_COUNTER_MAX     100 - 1
+#define ENCODER_RESOLUTION        (63000 * 1024)
+#define PWM_TIM_PRESCALER         12 - 1
+#define PWM_TIM_COUNTER_MAX       2000 - 1
+#define GPIO_SWITCH_CH1_Pin       GPIO_PIN_5
 #define GPIO_SWITCH_CH1_GPIO_Port GPIOE
-#define ENCODER_A_Pin GPIO_PIN_10
-#define ENCODER_A_GPIO_Port GPIOH
-#define ENCODER_B_Pin GPIO_PIN_11
-#define ENCODER_B_GPIO_Port GPIOH
-#define DATALOG_UART_TX_Pin GPIO_PIN_8
+#define ENCODER_A_Pin             GPIO_PIN_10
+#define ENCODER_A_GPIO_Port       GPIOH
+#define ENCODER_B_Pin             GPIO_PIN_11
+#define ENCODER_B_GPIO_Port       GPIOH
+#define DATALOG_UART_TX_Pin       GPIO_PIN_8
 #define DATALOG_UART_TX_GPIO_Port GPIOD
-#define DATALOG_UART_RX_Pin GPIO_PIN_9
+#define DATALOG_UART_RX_Pin       GPIO_PIN_9
 #define DATALOG_UART_RX_GPIO_Port GPIOD
-#define GPIO_SWITCH_CH2_Pin GPIO_PIN_8
+#define GPIO_SWITCH_CH2_Pin       GPIO_PIN_8
 #define GPIO_SWITCH_CH2_GPIO_Port GPIOG
-#define DAC_SPI_SYNC_Pin GPIO_PIN_0
-#define DAC_SPI_SYNC_GPIO_Port GPIOI
-#define DAC_SPI_SCLK_Pin GPIO_PIN_1
-#define DAC_SPI_SCLK_GPIO_Port GPIOI
-#define DAC_SPI_SDO_Pin GPIO_PIN_2
-#define DAC_SPI_SDO_GPIO_Port GPIOI
-#define DAC_SPI_SDIN_Pin GPIO_PIN_3
-#define DAC_SPI_SDIN_GPIO_Port GPIOI
-#define LED_1_Pin GPIO_PIN_15
-#define LED_1_GPIO_Port GPIOA
-#define COMMAND_UART_TX_Pin GPIO_PIN_6
+#define DAC_SPI_SYNC_Pin          GPIO_PIN_0
+#define DAC_SPI_SYNC_GPIO_Port    GPIOI
+#define DAC_SPI_SCLK_Pin          GPIO_PIN_1
+#define DAC_SPI_SCLK_GPIO_Port    GPIOI
+#define DAC_SPI_SDO_Pin           GPIO_PIN_2
+#define DAC_SPI_SDO_GPIO_Port     GPIOI
+#define DAC_SPI_SDIN_Pin          GPIO_PIN_3
+#define DAC_SPI_SDIN_GPIO_Port    GPIOI
+#define LED_1_Pin                 GPIO_PIN_15
+#define LED_1_GPIO_Port           GPIOA
+#define COMMAND_UART_TX_Pin       GPIO_PIN_6
 #define COMMAND_UART_TX_GPIO_Port GPIOB
-#define COMMAND_UART_RX_Pin GPIO_PIN_7
+#define COMMAND_UART_RX_Pin       GPIO_PIN_7
 #define COMMAND_UART_RX_GPIO_Port GPIOB
-#define ENCODER_Z_Pin GPIO_PIN_7
-#define ENCODER_Z_GPIO_Port GPIOI
-#define ENCODER_Z_EXTI_IRQn EXTI9_5_IRQn
+#define ENCODER_Z_Pin             GPIO_PIN_7
+#define ENCODER_Z_GPIO_Port       GPIOI
+#define ENCODER_Z_EXTI_IRQn       EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 // time4: state machine timer-> 240M/120/100 = 20KHz

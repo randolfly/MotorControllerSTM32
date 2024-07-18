@@ -2,6 +2,7 @@
 #include "Util/task_scheduler.h"
 #include "Controller/model_excitation.h"
 #include "spi_bsp.h"
+#include "tim_bsp.h"
 
 // exten task scheduler handles
 // ! note: also can define the actions as function pointer, init them in
@@ -113,7 +114,9 @@ void init_action(motor_t *motor)
 {
     // clear the motor command
     motor->motor_param->target_torque = 0;
-    set_dac_value(DAC_A, torque_permillage_to_dac(0));
+    // set_dac_value(DAC_A, torque_permillage_to_dac(0));
+    Set_PWM_Value(torque_permillage_to_pwm(0));
+
     // clear test command
     excitation_signal = 0;
     // stop all control loops

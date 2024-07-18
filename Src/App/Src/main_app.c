@@ -117,9 +117,12 @@ static void Main_Logic(void)
 static void Motion_Torque_Loop(void)
 {
     // simple torque loop: just send the target torque to the motor
-    static uint16_t torque_dac = 0;
-    torque_dac                 = torque_permillage_to_dac(motor1.motor_param->target_torque);
-    set_dac_value(DAC_A, torque_dac);
+    // static uint16_t torque_dac = 0;
+    // torque_dac                 = torque_permillage_to_dac(motor1.motor_param->target_torque);
+    // set_dac_value(DAC_A, torque_dac);
+    static uint16_t torque_pwm = 0;
+    torque_pwm                 = torque_permillage_to_pwm(motor1.motor_param->target_torque);
+    Set_PWM_Value(torque_pwm);
 }
 
 static void Motion_Vel_Loop(void)

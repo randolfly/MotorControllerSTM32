@@ -74,6 +74,13 @@ uint8_t check_motion_limit(motor_t *motor, motion_limit_t *motion_limit);
  */
 uint16_t torque_permillage_to_dac(double torque_permillage);
 
+/**
+ * @brief convert torque ratio() to actual pwm output
+ * @param  torque_permillage: torque permillage: 1000->PWM_TIM_COUNTER_MAX, -1000->0
+ * @return uint16_t
+ */
+uint16_t torque_permillage_to_pwm(double torque_permillage);
+
 #ifdef _cplusplus
 }
 #endif

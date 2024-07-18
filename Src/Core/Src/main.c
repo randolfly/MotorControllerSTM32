@@ -109,6 +109,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
     Init_App_Functions();
+    // Set_PWM_Value(1500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
