@@ -10,3 +10,5 @@ uint16_t torque_permillage_to_dac(double torque_permillage)
 
     return (uint16_t)(torque_permillage * (double)(0xFFFF) / 2000.0 + (double)(0xFFFF) / 2.0);
 }
+
+// todo: torque permillage to pwm

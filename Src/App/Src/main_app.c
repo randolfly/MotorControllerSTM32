@@ -95,6 +95,7 @@ void Init_App_Functions()
     // init timers and tasks
     Start_Task_Scheduler_Timer(); // start the tasks scheduler timer
     Start_Encoder_Timer();        // start the encoder timer
+    Start_PWM_Timer();            // start the pwm timer
     Init_Task_Scheduler_Tasks();  // init the tasks scheduler tasks
 }
 

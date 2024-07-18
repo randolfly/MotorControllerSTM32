@@ -18,6 +18,7 @@ extern "C" {
 
 #include "tim.h"
 
+#define PWM_TIMER            htim1
 #define ENCODER_TIMER        htim5
 #define TASK_SCHEDULER_TIMER htim4
 
@@ -30,6 +31,17 @@ void Start_Task_Scheduler_Timer(void);
  * @brief start the encoder timer
  */
 void Start_Encoder_Timer(void);
+
+/**
+ * @brief start the pwm output
+ */
+void Start_PWM_Timer(void);
+
+/**
+ * @brief set the pwm compare value, modify pwm duty cycle
+ * @param  pwm_value: compare value
+ */
+void Set_PWM_Value(uint16_t pwm_value);
 
 /**
  * @brief initialize the task scheduler
