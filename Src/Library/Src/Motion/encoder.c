@@ -31,7 +31,7 @@ void encoder_update(encoder_t *encoder, uint32_t encoder_counter)
         encoder->rotation_num -= 1;
     }
 
-    encoder->position = encoder->encoder_config->start_position +
+    encoder->position = -encoder->encoder_config->start_position +
                         (((double)(encoder_counter) + 1) / ENCODER_RESOLUTION + encoder->rotation_num) * 2 * PI;
 
     encoder->last_counter = encoder_counter;

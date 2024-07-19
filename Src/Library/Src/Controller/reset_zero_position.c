@@ -95,7 +95,7 @@ void fetch_zero_to_holdon_action(reset_zero_position_machine_t *reset_zero_posit
 {
     // update encoder setting
     msm.event.pos_to_idle                          = 1;
-    motor->encoder->encoder_config->start_position = -motor->encoder->position;
+    motor->encoder->encoder_config->start_position = motor->encoder->position;
     motor->motor_param->target_position            = 0;
     s_profile_generator.param->end_pos             = 0;
     msm.event.idle_to_pos                          = 1;
