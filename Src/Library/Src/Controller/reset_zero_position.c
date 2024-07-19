@@ -10,9 +10,8 @@ void init_reset_zero_position_machine(reset_zero_position_machine_t *reset_zero_
 {
     reset_zero_position_machine->state                     = RESET_ZERO_HOLDON;
     reset_zero_position_machine->event.execute             = 0;
-    reset_zero_position_machine->event.reach_ideal_zero    = 0;
-    reset_zero_position_machine->param.ideal_zero_position = 1000;
-    reset_zero_position_machine->param.target_velocity     = 0;
+    reset_zero_position_machine->param.ideal_zero_position = 10;
+    reset_zero_position_machine->param.target_velocity     = 0.5;
 }
 
 void update_reset_zero_position_machine(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
@@ -30,22 +29,14 @@ void update_reset_zero_position_machine(reset_zero_position_machine_t *reset_zer
             movement_action(reset_zero_position_machine, motor);
             // note: update in gpio_bsp.c nvic callback
             if (reset_zero_position_machine->event.reach_ideal_zero == 1) {
-                reset_zero_position_machine->state                  = RESET_ZERO_FETCH_ZERO;
+                reset_zero_position_machine->state                  = RESET_ZERO_UPDATE_POS;
                 reset_zero_position_machine->event.reach_ideal_zero = 0;
-                movement_to_fetch_zero_action(reset_zero_position_machine, motor);
+                movement_to_update_pos_action(reset_zero_position_machine, motor);
             }
             break;
-
-        case RESET_ZERO_FETCH_ZERO:
-            fetch_zero_action(reset_zero_position_machine, motor);
-            // reset the zero position
-            if (fabs(motor->encoder->position - reset_zero_position_machine->param.ideal_zero_position) < 5e-7) {
-                reset_zero_position_machine->state         = RESET_ZERO_HOLDON;
-                reset_zero_position_machine->event.execute = 0;
-                // reset motor position
-                fetch_zero_to_holdon_action(reset_zero_position_machine, motor);
-            }
-            break;
+        case RESET_ZERO_UPDATE_POS:
+            update_pos_action(reset_zero_position_machine, motor);
+            reset_zero_position_machine->state = RESET_ZERO_HOLDON;
         default:
             break;
     }
@@ -63,15 +54,13 @@ void movement_action(reset_zero_position_machine_t *reset_zero_position_machine,
     motor->motor_param->target_velocity = reset_zero_position_machine->param.target_velocity;
 }
 
-void fetch_zero_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
+void update_pos_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
 {
-    // motor->motor_param->target_position = reset_zero_position_machine->param.ideal_zero_position;
-    s_profile_generator.param->execute  = 0;
-    s_profile_generator.param->max_vel  = 1;
-    s_profile_generator.param->max_acc  = 1;
-    s_profile_generator.param->max_jerk = 1;
-    s_profile_generator.param->end_pos  = reset_zero_position_machine->param.ideal_zero_position;
-    s_profile_generator.param->execute  = 1;
+    // update pos
+    motor->encoder->encoder_config->start_position += reset_zero_position_machine->param.ideal_zero_position;
+    motor->motor_param->target_position = 0;
+    s_profile_generator.param->end_pos  = 0;
+    msm.event.idle_to_pos               = 1;
 }
 
 /* ============= STATE TRANSLATION ACTIONS ============= */
@@ -82,21 +71,10 @@ void holdon_to_movement_action(reset_zero_position_machine_t *reset_zero_positio
     msm.event.idle_to_vel = 1;
 }
 
-void movement_to_fetch_zero_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
+void movement_to_update_pos_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
 {
     // stop motor
     motor->motor_param->target_velocity = 0;
     motor->motor_param->target_torque   = 0;
     msm.event.vel_to_idle               = 1;
-    msm.event.idle_to_pos               = 1;
-}
-
-void fetch_zero_to_holdon_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor)
-{
-    // update encoder setting
-    msm.event.pos_to_idle                          = 1;
-    motor->encoder->encoder_config->start_position = motor->encoder->position;
-    motor->motor_param->target_position            = 0;
-    s_profile_generator.param->end_pos             = 0;
-    msm.event.idle_to_pos                          = 1;
 }

@@ -16,12 +16,12 @@ extern "C" {
 typedef enum {
     RESET_ZERO_HOLDON,
     RESET_ZERO_MOVEMENT,
-    RESET_ZERO_FETCH_ZERO,
+    RESET_ZERO_UPDATE_POS,
 } reset_zero_position_state_t;
 
 typedef struct {
-    uint8_t execute;          // execute the reset zero position
-    uint8_t reach_ideal_zero; // reach the ideal zero position(z signal)
+    uint8_t execute; // execute the reset zero position
+    uint8_t reach_ideal_zero;
 } reset_zero_position_event_t;
 
 typedef struct
@@ -55,15 +55,13 @@ void holdon_action(reset_zero_position_machine_t *reset_zero_position_machine, m
 
 void movement_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
 
-void fetch_zero_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
+void update_pos_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
 
 /* ============= STATE TRANSLATION ACTIONS ============= */
 
 void holdon_to_movement_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
 
-void movement_to_fetch_zero_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
-
-void fetch_zero_to_holdon_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
+void movement_to_update_pos_action(reset_zero_position_machine_t *reset_zero_position_machine, motor_t *motor);
 
 #ifdef _cplusplus
 }

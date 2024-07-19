@@ -32,6 +32,7 @@ int motion_test_torquebs_handle      = 7;
 
 /* =============== MAIN WORK ====================*/
 static void Main_Logic(void);
+static void Slow_Logic(void);
 
 static void Motion_Torque_Loop(void);
 static void Motion_Vel_Loop(void);
@@ -113,6 +114,10 @@ static void Main_Logic(void)
     encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
     // update motor1 state machine
     update_motion_state_machine(&msm);
+}
+
+static void Slow_Logic(void)
+{
     update_reset_zero_position_machine(&reset_zero_position_machine, &motor1);
 }
 
@@ -186,6 +191,7 @@ static void Init_Task_Scheduler_Tasks(void)
     motion_pos_loop_s_profile_handle = task_scheduler_add_task(Motion_Pos_Loop_S_Profile, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
     // test functions
     motion_test_torquebs_handle = task_scheduler_add_task(Motion_Test_TorqueBs, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
+    // task_scheduler_add_task(Slow_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 0);
 }
 
 /* =============== PROTOCOL ====================*/
