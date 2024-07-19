@@ -16,6 +16,7 @@ motor_t motor1;
 velocity_controller_t velocity_controller;
 position_controller_t position_controller;
 s_profile_generator_t s_profile_generator;
+reset_zero_position_machine_t reset_zero_position_machine;
 
 // state machine instance
 motion_state_machine_t msm;
@@ -112,6 +113,7 @@ static void Main_Logic(void)
     encoder_update(motor1.encoder, __HAL_TIM_GET_COUNTER(&ENCODER_TIMER));
     // update motor1 state machine
     update_motion_state_machine(&msm);
+    update_reset_zero_position_machine(&reset_zero_position_machine, &motor1);
 }
 
 static void Motion_Torque_Loop(void)
@@ -207,6 +209,9 @@ static void Init_Datalog_Param_Dict(void)
     add_key_value_pair(&datalog_available_symbol_dict, "profile_execute", &(s_profile_generator.param->execute), DOUBLE_TYPE_RANDOLF);
 
     // control param
+    add_key_value_pair(&datalog_available_symbol_dict, "reset_pos_target_vel", &(reset_zero_position_machine.param.target_velocity), DOUBLE_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "reset_pos_execute", &(reset_zero_position_machine.event.execute), UINT8_TYPE_RANDOLF);
+    add_key_value_pair(&datalog_available_symbol_dict, "reset_pos_reach_ideal", &(reset_zero_position_machine.event.reach_ideal_zero), UINT8_TYPE_RANDOLF);
 
     // test param
     add_key_value_pair(&datalog_available_symbol_dict, "excitation_signal", &excitation_signal, DOUBLE_TYPE_RANDOLF);

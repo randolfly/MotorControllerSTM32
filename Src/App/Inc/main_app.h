@@ -32,6 +32,7 @@ extern "C" {
 #include "Controller/velocity_controller.h"
 #include "Controller/position_controller.h"
 #include "Controller/s_profile_generator.h"
+#include "Controller/reset_zero_position.h"
 
 /**
  * @brief init the bsp layer provided app functions
