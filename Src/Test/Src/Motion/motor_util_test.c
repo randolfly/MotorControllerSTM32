@@ -40,16 +40,16 @@ MU_TEST(torque_permillage_to_pwm_test)
     double torque_cmd3 = 0.0;
 
     mu_check(torque_permillage_to_pwm(torque_cmd1) == 0);
-    mu_check(torque_permillage_to_pwm(torque_cmd2) == PWM_TIM_COUNTER_MAX);
-    mu_check(torque_permillage_to_pwm(torque_cmd3) == ((PWM_TIM_COUNTER_MAX - 1) / 2));
+    mu_check(torque_permillage_to_pwm(torque_cmd2) == PWM_TIM_COUNTER_MAX - 1);
+    mu_check(torque_permillage_to_pwm(torque_cmd3) == (PWM_TIM_COUNTER_MAX - 1) / 2);
 
     torque_cmd1 = -10000.0;
     torque_cmd2 = 10000.0;
     torque_cmd3 = 1001.0;
 
     mu_check(torque_permillage_to_pwm(torque_cmd1) == 0);
-    mu_check(torque_permillage_to_pwm(torque_cmd2) == PWM_TIM_COUNTER_MAX);
-    mu_check(torque_permillage_to_pwm(torque_cmd3) == PWM_TIM_COUNTER_MAX);
+    mu_check(torque_permillage_to_pwm(torque_cmd2) == PWM_TIM_COUNTER_MAX - 1);
+    mu_check(torque_permillage_to_pwm(torque_cmd3) == PWM_TIM_COUNTER_MAX - 1);
 }
 
 MU_TEST_SUITE(test_suite)

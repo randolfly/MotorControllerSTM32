@@ -27,8 +27,8 @@ void Start_PWM_Timer(void)
 
 void Set_PWM_Value(uint16_t pwm_value)
 {
-    if (pwm_value > PWM_TIM_COUNTER_MAX) {
-        pwm_value = PWM_TIM_COUNTER_MAX;
+    if (pwm_value > PWM_TIM_COUNTER_MAX - 1) {
+        pwm_value = PWM_TIM_COUNTER_MAX - 1;
     }
     __HAL_TIM_SET_COMPARE(&PWM_TIMER, TIM_CHANNEL_1, pwm_value);
 }
