@@ -180,7 +180,7 @@ static void Motion_Test_TorqueBs(void)
 static void Init_Task_Scheduler_Tasks(void)
 {
     // send/receive command frames with 10Hz frequency
-    task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 1);
+    task_scheduler_add_task(Command_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(50), 1);
     // log data with 2kHz frequency
     datalog_task_handle = task_scheduler_add_task(Datalog_Frames_Handler, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
 
@@ -191,7 +191,7 @@ static void Init_Task_Scheduler_Tasks(void)
     motion_pos_loop_s_profile_handle = task_scheduler_add_task(Motion_Pos_Loop_S_Profile, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
     // test functions
     motion_test_torquebs_handle = task_scheduler_add_task(Motion_Test_TorqueBs, GET_TASK_SCHEDULER_IDEAL_TICKS(1000), 0);
-    // task_scheduler_add_task(Slow_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(10), 0);
+    task_scheduler_add_task(Slow_Logic, GET_TASK_SCHEDULER_IDEAL_TICKS(5), 1);
 }
 
 /* =============== PROTOCOL ====================*/

@@ -1,3 +1,13 @@
+/**
+ * @file reset_zero_position.h
+ * @brief start reset in position mode
+ * @author randolf (1665718426@qq.com)
+ * @version 1.0.1
+ * @date 2024-07-23
+ *
+ * @copyright Copyright (c) 2024  randolf
+ *
+ */
 #ifndef __RESET_ZERO_POSITION_H__
 #define __RESET_ZERO_POSITION_H__
 
